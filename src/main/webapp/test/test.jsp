@@ -4,9 +4,9 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>테스트 페이지</title>
 </head>
 <body>
-
+<h2>성공하면 여기로 오길.. 제발!</h2>
 </body>
 </html>
