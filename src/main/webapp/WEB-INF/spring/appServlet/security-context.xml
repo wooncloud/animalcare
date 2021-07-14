@@ -24,11 +24,11 @@
 	<security:global-method-security secured-annotations="enabled" />
 	
 	<!-- provider -->
-	<security:authentication-manager>
-		<security:authentication-provider ref="userAuthHelper">
+<!-- 	<security:authentication-manager> -->
+<!-- 		<security:authentication-provider ref="userAuthHelper"> -->
 			
-		</security:authentication-provider>
-	</security:authentication-manager>
+<!-- 		</security:authentication-provider> -->
+<!-- 	</security:authentication-manager> -->
 	
 	<bean id="loginSuccessHandler" class="com.pet.care.security.LoginSuccessHandler">
 		<property name="defaultTargetUrl" value="/" />

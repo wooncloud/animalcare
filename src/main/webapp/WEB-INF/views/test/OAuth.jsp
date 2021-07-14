@@ -3,12 +3,11 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>HELLO PET CARE</title>
+<title>OAuth</title>
 </head>
 <body>
-	<h1>HELLO PET CARE</h1>
-	
-	<a href="./test/sms.do">SMS</a>
-	<a href="./test/oauth.do">OAuth</a>
+	<a href="${apiURL}">
+		<img height="50" src="http://static.nid.naver.com/oauth/small_g_in.PNG" />
+	</a>
 </body>
 </html>
