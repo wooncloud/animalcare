@@ -1,1 +1,14 @@
 @charset "UTF-8";
+.body-height {
+    height: 100vh;
+}
+
+header {
+    background-color: lavender;
+    border-bottom: 1px solid lightgray;
+}
+
+footer {
+    background-color: lavender;
+    border-top: 1px solid lightgray;
+}
