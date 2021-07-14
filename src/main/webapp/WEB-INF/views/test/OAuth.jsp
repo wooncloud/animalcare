@@ -3,11 +3,11 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>OAuth</title>
 </head>
 <body>
-
+	<a href="${apiURL}">
+		<img height="50" src="http://static.nid.naver.com/oauth/small_g_in.PNG" />
+	</a>
 </body>
-<script type="text/javascript">
-</script>
 </html>
