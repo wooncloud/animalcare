@@ -11,6 +11,9 @@
     <input type="button" onClick="sendLinkCustom();" value="Custom"/>
     <input type="button" onClick="sendLinkDefault();" value="Default"/> 
 </body>
+
+
+
 <script type="text/javascript">
     function sendLinkCustom() {
         Kakao.init("8c0bec293f2a255385d5e6c885db5822");

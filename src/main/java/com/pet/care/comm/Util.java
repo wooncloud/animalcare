@@ -1,8 +1,12 @@
 package com.pet.care.comm;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
+import java.io.Reader;
 import java.util.List;
+import java.util.Properties;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -57,15 +61,15 @@ public class Util {
 //	}
 
 	/**
-	 * 랜덤으로 8자리의 문자+숫자를 만들어주는 메서드입니다.
+	 * 랜덤으로 지정한 자릿수의 문자+숫자를 만들어주는 메서드입니다.
 	 * 
-	 * @return 랜덤 발생한 8자리의 문자+숫자
+	 * @return 랜덤 발생한 지정한 자릿수의 문자+숫자
 	 * @author Lee Gu Sung
 	 */
-	public static String randomVal() {
+	public static String randomVal(int len) {
 		String randomval = "";
 
-		for (int i = 0; i < 8; i++) {
+		for (int i = 0; i < len; i++) {
 			int rndVal = (int) (Math.random() * 62);
 			if (rndVal < 10) {
 				randomval += rndVal;
@@ -78,4 +82,29 @@ public class Util {
 		return randomval;
 	}
 
+	/**
+	 * prop.getProperty("key"); 로 값을 가져올 수 있도록 Properties를 읽어 Properties 객체로
+	 * 반환합니다.<br>
+	 * 기본 경로 : src/main/resources/
+	 * 
+	 * @param propFileName : 파일명 (경로 : properties/파일명)
+	 * @throws FileNotFoundException
+	 * @author WOO SEONG HO
+	 */
+	public Properties readProperties(String propFileName) {
+		Properties prop = new Properties();
+		InputStream inputStream = getClass().getClassLoader().getResourceAsStream(propFileName);
+
+		try {
+			if (inputStream != null) {
+				prop.load(inputStream);
+				return prop;
+			} else {
+				throw new FileNotFoundException("프로퍼티 파일 '" + propFileName + "'을 resource에서 찾을 수 없습니다.");
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 }
