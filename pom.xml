@@ -182,6 +182,19 @@
 			<artifactId>spring-context-support</artifactId>
 			<version>${spring}</version>
 		</dependency>
+		<!-- 웹소캣 -->
+		<dependency>
+		    <groupId>javax.websocket</groupId>
+		    <artifactId>javax.websocket-api</artifactId>
+		    <version>1.1</version>
+		    <scope>provided</scope>
+		</dependency>
+		<!-- spring websocket -->
+		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-websocket</artifactId>
+		    <version>${spring}</version>
+		</dependency>
 
 		<dependency>
 		    <groupId>com.googlecode.json-simple</groupId>
