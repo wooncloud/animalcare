@@ -21,13 +21,17 @@ import javax.servlet.http.HttpSession;
 import org.codehaus.jackson.JsonParser;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pet.care.comm.Util;
 
 import net.nurigo.java_sdk.api.Message;
@@ -90,24 +94,36 @@ public class TestController {
 	public String oauthPage(Model model, HttpSession session) {
 		Properties prop = new Util().readProperties("properties/oauth_naver.properties");
 
-		String clientId = prop.getProperty("id");
 		SecureRandom random = new SecureRandom();
 		String state = new BigInteger(130, random).toString();
 		String redirectURI = "";
-		String apiURL = "https://nid.naver.com/oauth2.0/authorize?response_type=code";
-
+		String naverApiURL = "https://nid.naver.com/oauth2.0/authorize?response_type=code";
+		
 		try {
 			redirectURI = URLEncoder.encode(prop.getProperty("url"), "UTF-8");
 
-			apiURL += "&client_id=" + clientId;
-			apiURL += "&redirect_uri=" + redirectURI;
-			apiURL += "&state=" + state;
+			naverApiURL += "&client_id=" + prop.getProperty("id");
+			naverApiURL += "&redirect_uri=" + redirectURI;
+			naverApiURL += "&state=" + state;
+			
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
 
-		model.addAttribute("apiURL", apiURL);
+		model.addAttribute("naver", naverApiURL);
 		session.setAttribute("state", state);
+		
+		// ----------------------------------------- Google
+		prop = new Util().readProperties("properties/oauth_google.properties");
+		
+		String googleApiURL = "https://accounts.google.com/o/oauth2/v2/auth?";
+		googleApiURL += "client_id=" + prop.getProperty("id");
+		googleApiURL += "&redirect_uri=http://localhost:8099/PetCare/user/google/callback.do";
+		googleApiURL += "&response_type=code";
+		googleApiURL += "&scope=+email%20profile%20openid";
+		googleApiURL += "&access_type=offline";
+		
+		model.addAttribute("google", googleApiURL);
 
 		return "test/OAuth";
 	}
@@ -163,21 +179,20 @@ public class TestController {
 			br.close();
 
 			if (responseCode == 200) {
-				JSONParser jParser = new JSONParser();
-				JSONObject jsonObj = (JSONObject) jParser.parse(res.toString());
-
+				JSONParser parser = new JSONParser();
+				JSONObject jsonObj = (JSONObject) parser.parse(res.toString());
+				
 				getNaverUserInfoOAuth((String) jsonObj.get("access_token"));
 			}
 		} catch (Exception e) {
 			System.out.println(e);
 		}
 
-		return "test/OAuth";
+		return "/";
 	}
 
 	private void getNaverUserInfoOAuth(String accessToken) {
-		String token = accessToken;
-		String header = "Bearer " + token;
+		String header = "Bearer " + accessToken;
 
 		String apiURL = "https://openapi.naver.com/v1/nid/me";
 
@@ -185,6 +200,7 @@ public class TestController {
 		requestHeaders.put("Authorization", header);
 		String responseBody = get(apiURL, requestHeaders);
 
+		System.out.println("----------------------");
 		System.out.println(responseBody);
 	}
 
@@ -235,5 +251,11 @@ public class TestController {
 		} catch (IOException e) {
 			throw new RuntimeException("API 응답을 읽는데 실패했습니다.", e);
 		}
+	}
+	
+	@RequestMapping(value = "/user/google/callback.do", method = RequestMethod.GET)
+	public String oauthGoogleCallBack(@RequestParam(value = "code") String authCode, Model model) {
+		
+		return "/";
 	}
 }
