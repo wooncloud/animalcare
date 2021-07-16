@@ -1,14 +1,133 @@
 @charset "UTF-8";
+:root {
+    --pet-care-color1: #C8D09D;
+    --pet-care-color2: #8A7A86;
+    --pet-care-color2-text: #504b4f;
+    --pet-care-color3: #AEB3B9;
+    --pet-care-color4: #CCDFDE;
+    --pet-care-color5: #D9E8E7;
+    --pet-care-color6: #ECEAE7;
+    --primary-color: #5499C7;
+    --secondary-color: #808B96;
+    --success-color: #52BE80;
+    --danger-color: #EC7063;
+    --warning-color: #F7DC6F;
+    --warning-text-color: #9A7D0A;
+    --info-color: #AED6F1;
+    --info-text-color: #21618C;
+    --light-color: #E5E7E9;
+    --light-text-color: #979A9A;
+    --dark-color: #2E4053;
+}
+
 .body-height {
     height: 100vh;
 }
 
+/* bootstrap override */
+
+/* button outline */
+
+.btn-outline-primary {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.btn-outline-secondary {
+    border-color: var(--secondary-color);
+    color: var(--secondary-color);
+}
+
+.btn-outline-success {
+    border-color: var(--success-color);
+    color: var(--success-color);
+}
+
+.btn-outline-danger {
+    border-color: var(--danger-color);
+    color: var(--danger-color);
+}
+
+.btn-outline-warning {
+    border-color: var(--warning-color);
+    color: var(--warning-text-color);
+}
+
+.btn-outline-info {
+    border-color: var(--info-color);
+    color: var(--info-text-color);
+}
+
+.btn-outline-light {
+    border-color: var(--light-color);
+    color: var(--light-text-color);
+}
+
+.btn-outline-dark {
+    border-color: var(--dark-color);
+    color: var(--dark-color);
+}
+
+/* button */
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: #fff;
+}
+
+.btn-secondary {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+    color: #fff;
+}
+
+.btn-success {
+    background-color: var(--success-color);
+    border-color: var(--success-color);
+    color: #fff;
+}
+
+.btn-danger {
+    background-color: var(--danger-color);
+    border-color: var(--danger-color);
+    color: #fff;
+}
+
+.btn-warning {
+    background-color: var(--warning-color);
+    border-color: var(--warning-color);
+    color: var(--warning-text-color);
+}
+
+.btn-info {
+    background-color: var(--info-color);
+    border-color: var(--info-color);
+    color: var(--info-text-color);
+}
+
+.btn-light {
+    background-color: var(--light-color);
+    border-color: var(--light-color);
+    color:  var(--light-text-color);
+}
+
+.btn-dark {
+    background-color: var(--dark-color);
+    border-color: var(--dark-color);
+    color: #fff;
+}
+
+/* include part css */
+
 header {
-    background-color: lavender;
-    border-bottom: 1px solid lightgray;
+    background-color: var(--pet-care-color5);
+    border-bottom: 1px solid var(--pet-care-color3) !important;
+    color: var(--pet-care-color2);
 }
 
 footer {
-    background-color: lavender;
-    border-top: 1px solid lightgray;
+    background-color: var(--pet-care-color5);
+    border-top: 1px solid var(--pet-care-color3) !important;
+    color: var(--pet-care-color3);
 }
