@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pet.care.model.dao.code.ICodeDao">
+	
+	<select id="allCodeSelect" resultType="CodeDto">
+		SELECT CODEID, CODETYPE, CODENAME, DELFLAG 
+			FROM TYPECODE t
+	</select>
+	
+	<select id="categoryCodeSelect" parameterType="java.lang.String" resultType="CodeDto">
+		SELECT CODEID, CODETYPE, CODENAME, DELFLAG
+			FROM TYPECODE t 
+			WHERE CODETYPE = #{codetype}
+			ORDER BY CODEID ASC
+	</select>
+	
+	<select id="oneCodeSelect" parameterType="java.lang.String" resultType="CodeDto">
+		SELECT CODEID, CODETYPE, CODENAME, DELFLAG
+			FROM TYPECODE t 
+			WHERE CODEID = #{codeid}
+	</select>
+	
+</mapper>

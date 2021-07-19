@@ -1,12 +1,12 @@
 @charset "UTF-8";
 :root {
-    --pet-care-color1: #C8D09D;
-    --pet-care-color2: #8A7A86;
-    --pet-care-color2-text: #504b4f;
-    --pet-care-color3: #AEB3B9;
-    --pet-care-color4: #CCDFDE;
-    --pet-care-color5: #D9E8E7;
-    --pet-care-color6: #ECEAE7;
+    --theme-color1: #C8D09D;
+    --theme-color2: #8A7A86;
+    --theme-color2-text: #504b4f;
+    --theme-color3: #AEB3B9;
+    --theme-color4: #CCDFDE;
+    --theme-color5: #D9E8E7;
+    --theme-color6: #ECEAE7;
     --primary-color: #5499C7;
     --secondary-color: #808B96;
     --success-color: #52BE80;
@@ -121,13 +121,13 @@
 /* include part css */
 
 header {
-    background-color: var(--pet-care-color5);
-    border-bottom: 1px solid var(--pet-care-color3) !important;
-    color: var(--pet-care-color2);
+    background-color: var(--theme-color5);
+    border-bottom: 1px solid var(--theme-color3) !important;
+    color: var(--theme-color2);
 }
 
 footer {
-    background-color: var(--pet-care-color5);
-    border-top: 1px solid var(--pet-care-color3) !important;
-    color: var(--pet-care-color3);
+    background-color: var(--theme-color5);
+    border-top: 1px solid var(--theme-color3) !important;
+    color: var(--theme-color3);
 }

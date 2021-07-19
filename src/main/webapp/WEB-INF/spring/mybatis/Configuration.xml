@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd" >
 <configuration>
-
 	<typeAliases>
+		<typeAlias type="com.pet.care.dto.CodeDto" alias="CodeDto"/>
+		<typeAlias type="com.pet.care.dto.UserDto" alias="UserDto"/>
 	</typeAliases>
 
 	<mappers>
+		<mapper resource="/sqls/Code_Statement.xml"/>
 	</mappers>
 
 </configuration>
