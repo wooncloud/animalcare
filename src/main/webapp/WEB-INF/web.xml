@@ -8,15 +8,19 @@
 		<welcome-file>index.jsp</welcome-file>
 	</welcome-file-list>
  	<error-page>
+		<error-code>403</error-code>
+		<location>/error/error403.do</location>
+	</error-page>
+ 	<error-page>
 		<error-code>404</error-code>
-		<location>/error404.do</location>
+		<location>/error/error404.do</location>
 	</error-page>
 	<error-page>
 		<error-code>500</error-code>
-		<location>/error500.do</location>
+		<location>/error/error500.do</location>
 	</error-page>
 	<error-page>
-		<location>/error.do</location>
+		<location>/error/error.do</location>
 	</error-page>
 	
 	
