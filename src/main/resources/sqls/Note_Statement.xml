@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pet.care.model.dao.note.INoteDao">
+
+<resultMap type="com.pet.care.dto.NoteDto" id="PetNoteDto">
+	<result property="seq" column="SEQ"/>
+	<result property="pet_id" column="PET_ID"/>
+	<result property="title" column="TITLE"/>
+	<result property="content" column="CONTENT"/>
+	<result property="photo" column="PHOTO"/>
+	<result property="delflag" column="DELFLAG"/>
+	<result property="regdate" column="REGDATE"/>
+	<collection property="pdto" resultMap="petDto"></collection>
+</resultMap>
+
+<resultMap type="com.pet.care.dto.PetDto" id="petDto">
+	<result property="name" column="NAME"/>
+</resultMap>
+
+
+
+</mapper>

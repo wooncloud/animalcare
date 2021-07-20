@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pet.care.model.dao.pet.IPetDao">
+	<!-- 애완동물조회 -->
+	<select id="petList" parameterType="java.lang.String" resultType="PetDto">
+		SELECT ID, NAME, GENDER, TYPEINFO
+			FROM PETINFO
+			WHERE USER_EMAIL =#{user_email}
+	</select>
+	
+	<!-- 애완동물등록 -->
+	<insert id="insertPet" parameterType="PetDto">
+		INSERT INTO PETINFO
+        	(ID, USER_EMAIL, NAME, BIRTH, 
+        	WEIGHT, GENDER, "TYPE", TYPEINFO, 
+        	ANIREGISTNUM, NOTIFICATION, PROFILE, DELFLAG)
+		VALUES(#{id}, #{user_email}, #{name}, #{birth}, 
+				#{weight}, #{gender}, #{type}, #{typeinfo}, 
+				#{aniregistnum}, #{notification}, #{profile}, 'N')
+	</insert>
+
+	<!-- 애완동물 수정 -->
+	<update id="modifyPet" parameterType="PetDto">
+		UPDATE PETINFO
+			SET NAME=#{name}, BIRTH=#{birth}, WEIGHT=#{weight}, 
+			        GENDER=#{gender}, "TYPE"=#{type}, TYPEINFO=#{typeinfo}, 
+			        NOTIFICATION=#{notification}, PROFILE=#{profile}
+			WHERE ID=#{id}
+	</update>
+
+	<!-- 애완동물 삭제 -->
+	<update id="deletePet" parameterType="java.lang.String">
+		UPDATE PETINFO
+			SET DELFLAG='Y'
+			WHERE ID=#{id}
+	</update>
+
+	<!-- 애완동물 상세조회 -->
+	<select id="detailPet" parameterType="java.lang.String" resultType="PetDto">
+		SELECT ID, NAME, BIRTH, WEIGHT, 
+	        GENDER, "TYPE", TYPEINFO, NOTIFICATION, 
+	        PROFILE 
+		FROM PETINFO p 
+	    WHERE ID =#{id}
+	</select>
+
+</mapper>

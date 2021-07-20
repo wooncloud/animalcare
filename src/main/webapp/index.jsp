@@ -187,6 +187,14 @@
 		<hr class="my-3">
 		<br>
 	</div>
+	
+	<div>
+	<form method="post" action="./test/upload.do" enctype="multipart/form-data">
+         <label>파일:</label>
+         <input type="file" name="file1">
+         <input type="submit" value="upload">
+  	</form>
+	</div>
 	<a href="./payment/payList.do">결제내역</a>
 	<a href="./payment/payment.do">결제</a>
 
