@@ -8,9 +8,18 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @RequestMapping("/login")
 public class UserController {
 
-	@RequestMapping(value = "/loginPage.do", method = RequestMethod.GET)
-	public String loginPage() {
+	@RequestMapping(value = "/loginForm.do", method = RequestMethod.GET)
+	public String loginForm() {
 		return "login/login";
 	}
 	
+	@RequestMapping(value = "/login.do", method = RequestMethod.GET)
+	public String login() {
+		return "home";
+	}
+	
+	@RequestMapping(value = "/logout.do", method = RequestMethod.GET)
+	public String logout() {
+		return "home";
+	}
 }

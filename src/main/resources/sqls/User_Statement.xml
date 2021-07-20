@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pet.care.model.dao.user.IUserDao.">
+
+    <!-- 로그인 - 이메일, 비밀번호 입력하여 조회 -->
+	<select id="userLogin" parameterType="java.lang.String" resultType="UserDto">
+    
+    </select>
+
+
+    <!-- 이메일 중복검사 - 중복된 이메일 조회 -->
+	<select id="emailDuplCheck" parameterType="java.lang.String">
+    
+    </select>
+
+
+    <!-- 회원 등록 - 이메일, 이름, 비밀번호, 전화번호, 주소, 상세주소 입력 -->
+	<insert id="insertUser" parameterType="UserDto">
+    
+    </insert>
+
+
+    <!-- 병원관계자 가입 신청 - 이메일, 이름, 비밀번호, 전화번호, 사업자 등록번호, 면허번호 입력, 가입신청 기본 비허가 -->
+	<insert id="insertOper" parameterType="UserDto">
+    
+    </insert>
+
+
+    <!-- 가입신청 병원관계자 조회 - 가입신청 비허가 처리된 병원관계자 조회 -->
+	<select id="grantWaitList" resultType="UserDto">
+    
+    </select>
+
+
+    <!-- 가입신청 처리 - 가입신청을 승인 or 거부 로 변경 -->
+	<update id="grantOper" parameterType="java.lang.String">
+    
+    </update>
+
+
+    <!-- 병원관계자 정보 조회 - 회원 정보 조회 -->
+	<select id="detailOper" parameterType="java.lang.String" resultType="UserDto">
+    
+    </select>
+
+
+    <!-- 병원관계자 정보 수정 - 회원 정보 수정 -->
+	<update id="modifyOper" parameterType="java.util.Map">
+    
+    </update>
+
+
+    <!-- 병원관계자  탈퇴 - 회원 휴면 처리 -->
+	<update id="dormancyOper" parameterType="java.lang.String">
+    
+    </update>
+
+
+    <!-- 병원관계자  삭제 - 회원 진짜 삭제 -->
+	<delete id="deleteOper" parameterType="java.lang.String">
+    
+    </delete>
+
+
+    <!-- 회원 정보 조회 - 회원 정보 조회 -->
+	<select id="detailUser" parameterType="java.lang.String" resultType="UserDto">
+    
+    </select>
+
+
+    <!-- 회원 정보 수정 - 회원 정보 수정 -->
+	<update id="modifyUser" parameterType="java.util.Map">
+    
+    </update>
+
+
+    <!-- 회원 탈퇴 - 회원 휴면 처리 -->
+	<update id="dormancyUser" parameterType="java.lang.String">
+    
+    </update>
+
+
+    <!-- 회원 삭제 - 회원 진짜 삭제 -->
+	<delete id="deleteUser" parameterType="java.lang.String">
+    
+    </delete>
+</mapper>

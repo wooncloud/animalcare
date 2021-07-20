@@ -7,18 +7,27 @@
 
 	<security:http auto-config="true" use-expressions="true">
 		<security:csrf disabled="true" />
-		<security:intercept-url pattern="/**" access="permitAll" />
+		<security:intercept-url pattern="/home.do" access="permitAll" />
+		<security:intercept-url pattern="/login/**" access="permitAll" />
+		<security:intercept-url pattern="/payment/**" access="hasAnyRole('USER, OPER')" />
+		<security:intercept-url pattern="/reservation/**" access="hasAnyRole('USER, OPER')" />
+		<security:intercept-url pattern="/admin/**" access="hasRole('ADMIN')" />
 		
 <!-- 		<security:intercept-url pattern="/security/member" access="hasRole('ROLE_MEMBER')" /> -->
-		<security:form-login login-page="/loginPage.do"
+		
+		<security:form-login login-page="/loginForm.do"
+			default-target-url="/home.do"
 			authentication-success-handler-ref="loginSuccessHandler"
 			authentication-failure-handler-ref="loginFailureHandler"
-			login-processing-url="/auth" username-parameter="id"
+			login-processing-url="/auth" 
+			username-parameter="id"
 			password-parameter="pw" />
 			
-		<security:logout logout-url="/logout.do" invalidate-session="true" logout-success-url="/login.do?status=logout" />
+		<security:logout logout-url="/logout.do" invalidate-session="true" logout-success-url="/login.do" />
 		
-		<security:session-management invalid-session-url="/login.do">
+		<security:access-denied-handler error-page="error/error403.do"/>
+		
+		<security:session-management invalid-session-url="/home.do">
 			<security:concurrency-control max-sessions="1" error-if-maximum-exceeded="false" />
 		</security:session-management>
 	</security:http>
@@ -26,13 +35,7 @@
 	<!-- secured method -->
 	<security:global-method-security secured-annotations="enabled" />
 	
-	<!-- provider -->
-<!-- 	<security:authentication-manager> -->
-<!-- 		<security:authentication-provider ref="userAuthHelper"> -->
-			
-<!-- 		</security:authentication-provider> -->
-<!-- 	</security:authentication-manager> -->
-	
+	<!-- login Handler -->
 	<bean id="loginSuccessHandler" class="com.pet.care.security.LoginSuccessHandler">
 		<property name="defaultTargetUrl" value="/" />
 		<property name="alwaysUseDefaultTargetUrl" value="true" />
@@ -40,6 +43,11 @@
 	
 	<bean id="loginFailureHandler" class="com.pet.care.security.LoginFailureHandler">
 		<property name="defaultFailureUrl" value="/login?status=fail" />
+	</bean>
+	
+	
+	<bean id="jdbcDaoImpl" class="org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl">
+		<property name="dataSource" ref="dataSource" />
 	</bean>
 	
 	<bean id="userAuthService" class="com.pet.care.security.UserAuthService" />
@@ -50,4 +58,10 @@
 		<property name="userDetailsService" ref="userAuthService" />
 		<property name="passwordEncoder" ref="passwordEncoder" />
 	</bean>
+	
+	<!-- provider -->
+	<security:authentication-manager>
+		<security:authentication-provider user-service-ref="userAuthService" />
+		<security:authentication-provider ref="userAuthProvider" />
+	</security:authentication-manager>
 </beans>
