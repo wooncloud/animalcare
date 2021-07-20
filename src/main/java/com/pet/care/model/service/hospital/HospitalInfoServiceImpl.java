@@ -56,7 +56,7 @@ public class HospitalInfoServiceImpl implements IHospitalInfoService {
 	
 	//병원 상세정보 조회 
 	@Override
-	public HospitalInfoDto detailHospital(int seq) {
+	public HospitalJoinDto detailHospital(int seq) {
 		logger.info("[detailHospital - {}] : 병원 상세정보 조회", seq);
 		return dao.detailHospital(seq);
 	}

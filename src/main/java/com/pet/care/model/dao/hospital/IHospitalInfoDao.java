@@ -24,7 +24,7 @@ public interface IHospitalInfoDao {
 	public boolean insertHospital(HospitalInfoDto dto);
 	
 	//병원 상세정보 조회 
-	public HospitalInfoDto detailHospital(int seq);
+	public HospitalJoinDto detailHospital(int seq);
 	
 	//병원 정보 수정
 	public boolean modifyHospital(HospitalInfoDto dto);
