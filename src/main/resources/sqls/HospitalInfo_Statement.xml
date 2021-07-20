@@ -22,24 +22,20 @@
 <!-- 	</resultMap> -->
 
 <!-- 	회원 병원 리스트 조회  -->
-	<select id="hospitalList" resultMap="">
+	<select id="hospitalList" parameterType="java.util.Map" resultType="HospitalJoinDto">
 		SELECT HOSPITAL_SEQ , NAME , CONTENT ,
-                ADDRESS1 , ADDRESS2 , OPENTIME , PETTYPE
+                ADDRESS1 , ADDRESS2 , OPENTIME , TEL , PETTYPE
         	FROM (                
 					SELECT p.HOSPITAL_SEQ , h.NAME , h.CONTENT ,
-      	    		     h.ADDRESS1 , h.ADDRESS2 , h.OPENTIME ,
+      	    		     h.ADDRESS1 , h.ADDRESS2 , h.OPENTIME , h.TEL,
       	     		     LISTAGG(p.PETTYPE,',') PETTYPE ,
         	    		 ROW_NUMBER() OVER(ORDER BY p.HOSPITAL_SEQ DESC) AS RN
         			FROM HOSPITALINFO h 
-        	       		JOIN USERINFO u 
-        	     		 	ON SUBSTR(h.ADDRESS1 , 0, INSTR(h.ADDRESS1, ' ', 1, 2)) =
-        	       			    SUBSTR(u.ADDRESS1 , 0, INSTR(u.ADDRESS1, ' ', 1, 2))
         	      		JOIN PETTYPE p 
         	      			ON h.SEQ = p.HOSPITAL_SEQ 
-       				WHERE u.EMAIL = #{email}
-        	     	   AND h.DELFLAG = 'N'
+       				WHERE h.DELFLAG = 'N'
       				GROUP BY p.HOSPITAL_SEQ , h.NAME , h.CONTENT ,
-                         h.ADDRESS1 , h.ADDRESS2 , h.OPENTIME
+                         h.ADDRESS1 , h.ADDRESS2 , h.OPENTIME , h.TEL
                         )
 			WHERE RN BETWEEN #{first} AND #{last}
 			ORDER BY HOSPITAL_SEQ DESC     
@@ -53,13 +49,9 @@
             					h.ADDRESS1 , h.ADDRESS2 , h.OPENTIME ,
             					LISTAGG(p.PETTYPE,',') PETTYPE
   					FROM HOSPITALINFO h 
-    					JOIN USERINFO u 
-    					ON SUBSTR(h.ADDRESS1 , 0, INSTR(h.ADDRESS1, ' ', 1, 2)) =
-       						 SUBSTR(u.ADDRESS1 , 0, INSTR(u.ADDRESS1, ' ', 1, 2))
      					JOIN PETTYPE p 
       					ON h.SEQ = p.HOSPITAL_SEQ 
-  					WHERE u.EMAIL = #{email}
-        				AND h.DELFLAG = 'N'
+  					WHERE h.DELFLAG = 'N'
         GROUP BY p.HOSPITAL_SEQ , h.NAME , h.CONTENT ,
                          h.ADDRESS1 , h.ADDRESS2 , h.OPENTIME
                         )

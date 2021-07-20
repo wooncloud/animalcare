@@ -53,7 +53,7 @@
 				</a>
 				<ul class="nav col-12 col-lg-auto me-lg-auto mb-2 ms-5 justify-content-center mb-md-0">
 					<li>
-						<a href="./searchHospital.do" class="nav-link px-4 link-dark">
+						<a href="./hospital/searchHospital.do" class="nav-link px-4 link-dark">
 							<i class="fas fa-search"></i> 병원찾기
 						</a>
 					</li>
