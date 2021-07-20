@@ -38,7 +38,7 @@
 	<!-- Root Logger -->
 <!-- 	설정 및 선언된 appender 객체의 사용 // 설정-> 선언 -->
 	<root>
-		<priority value="debug" />
+		<priority value="info" />
 		<appender-ref ref="console" />
 	</root>
 	

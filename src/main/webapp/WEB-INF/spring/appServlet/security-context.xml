@@ -10,7 +10,7 @@
 		<security:intercept-url pattern="/**" access="permitAll" />
 		
 <!-- 		<security:intercept-url pattern="/security/member" access="hasRole('ROLE_MEMBER')" /> -->
-		<security:form-login login-page="/login.do"
+		<security:form-login login-page="/loginPage.do"
 			authentication-success-handler-ref="loginSuccessHandler"
 			authentication-failure-handler-ref="loginFailureHandler"
 			login-processing-url="/auth" username-parameter="id"

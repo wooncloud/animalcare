@@ -18,6 +18,9 @@ public class AccessLogFilter implements Filter {
 
 	private Logger logger = LoggerFactory.getLogger(AccessLogFilter.class);
 
+	public AccessLogFilter() {
+	}
+	
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
 		logger.info("[ * Access Log * ] Filter Init");
