@@ -3,6 +3,8 @@ package com.pet.care.dto;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.apache.catalina.User;
+
 public class ReservationDto implements Serializable {
 	
 	
@@ -19,8 +21,10 @@ public class ReservationDto implements Serializable {
 	private String paynum;
 	private String reservetime;
 	private String commnet;
-	
-	
+	private String name;
+	private String address1;
+	private String phone;
+
 	
 	public ReservationDto() {
 		super();
@@ -29,7 +33,8 @@ public class ReservationDto implements Serializable {
 
 
 	public ReservationDto(int seq, int hospital_seq, String user_email, String pet_name, String reservetype,
-			Date regdate, String reservedate, String status, String paynum, String reservetime, String commnet) {
+			Date regdate, String reservedate, String status, String paynum, String reservetime, String commnet,
+			String name, String address1, String phone) {
 		super();
 		this.seq = seq;
 		this.hospital_seq = hospital_seq;
@@ -42,8 +47,12 @@ public class ReservationDto implements Serializable {
 		this.paynum = paynum;
 		this.reservetime = reservetime;
 		this.commnet = commnet;
-		
+		this.name = name;
+		this.address1 = address1;
+		this.phone = phone;
 	}
+
+
 
 
 	@Override
@@ -51,7 +60,7 @@ public class ReservationDto implements Serializable {
 		return "ReservationDto [seq=" + seq + ", hospital_seq=" + hospital_seq + ", user_email=" + user_email
 				+ ", pet_name=" + pet_name + ", reservetype=" + reservetype + ", regdate=" + regdate + ", reservedate="
 				+ reservedate + ", status=" + status + ", paynum=" + paynum + ", reservetime=" + reservetime
-				+ ", commnet=" + commnet + "]";
+				+ ", commnet=" + commnet + ", name=" + name + ", address1=" + address1 + ", phone=" + phone + "]";
 	}
 
 
@@ -163,9 +172,38 @@ public class ReservationDto implements Serializable {
 	public void setCommnet(String commnet) {
 		this.commnet = commnet;
 	}
-	
-	
-	
+
+
+	public String getName() {
+		return name;
+	}
+
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+
+	public String getAddress1() {
+		return address1;
+	}
+
+
+	public void setAddress1(String address1) {
+		this.address1 = address1;
+	}
+
+
+	public String getPhone() {
+		return phone;
+	}
+
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+
 	
 	
 }

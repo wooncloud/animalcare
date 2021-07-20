@@ -4,10 +4,12 @@
 	<typeAliases>
 		<typeAlias type="com.pet.care.dto.CodeDto" alias="CodeDto"/>
 		<typeAlias type="com.pet.care.dto.UserDto" alias="UserDto"/>
+		<typeAlias type="com.pet.care.dto.ReservationDto" alias="ReservationDto"/>
 	</typeAliases>
 
 	<mappers>
 		<mapper resource="/sqls/Code_Statement.xml"/>
+		<mapper resource="/sqls/Reservation_Statement.xml"/>
 	</mappers>
 
 </configuration>
