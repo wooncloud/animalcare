@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pet.care.model.dao.hospital.IHospitalScheduleDao">
+
+<!-- 병원 일정 등록-->
+	<insert id="insertSchedule">
+		INSERT INTO HOSPITALSCHEDULE
+    			(SEQ, HOSPITAL_SEQ, TITLE ,CONTENT,
+    			SCHEDULE, "CHECK", DELFLAG)
+        VALUES(HOSPITALSCHEDULE_SEQ.NEXTVAL, 3, 
+                  '젤리한테 간식 조공하러 가는 날', 젤리간식냠냠, '2021-07-16',
+                  'Y', 'N')
+	</insert>
+	
+<!-- 병원 월별 일정조회-->
+	<select id="monthSchedule">
+		SELECT SEQ , HOSPITAL_SEQ , CONTENT ,
+                SCHEDULE , "CHECK" , DELFLAG 
+     		FROM HOSPITALSCHEDULE h 
+     		WHERE HOSPITAL_SEQ = '3'
+                AND DELFLAG = 'N'
+                AND TO_CHAR(SCHEDULE,'YYYYMM') =
+                        TO_CHAR(SYSDATE, 'YYYYMM')
+	</select>
+	
+<!-- 병원 오늘 일정조회-->
+	<select id="todaySchedule">
+		SELECT SEQ , HOSPITAL_SEQ , CONTENT ,
+                SCHEDULE , "CHECK" , DELFLAG 
+      		FROM HOSPITALSCHEDULE h 
+     		WHERE HOSPITAL_SEQ = '3'
+                AND DELFLAG = 'N'
+                AND TO_CHAR(SCHEDULE,'YYYYMMDD') =
+                         TO_CHAR(SYSDATE, 'YYYYMMDD')
+	</select>
+	
+<!-- 병원 일정 상세정보 조회-->
+	<select id="detailSchedule">
+		SELECT SEQ , HOSPITAL_SEQ , TITLE, CONTENT ,
+                SCHEDULE , "CHECK" , DELFLAG
+   			FROM HOSPITALSCHEDULE h 
+   			WHERE SEQ = '1'
+                AND DELFLAG = 'N'
+	</select>
+	
+<!-- 병원 일정 수정-->
+	<update id="modifySchedule">
+		UPDATE HOSPITALSCHEDULE
+  			SET TITLE='젤리야 거긴행복하니',
+                CONTENT='젤리님 영접하러 가는 날',
+                SCHEDULE='2021-07-15',
+                "CHECK"='Y'
+    		WHERE SEQ = 1
+	</update>
+	
+<!-- 병원 일정 삭제-->
+	<update id="deleteSchedule">
+		UPDATE HOSPITALSCHEDULE SET DELFLAG ='Y'
+  			WHERE SEQ ='1'
+	</update>
+	
+</mapper>
