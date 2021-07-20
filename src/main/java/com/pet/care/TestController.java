@@ -21,6 +21,7 @@ import javax.servlet.http.HttpSession;
 import org.codehaus.jackson.JsonParser;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,6 +34,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pet.care.comm.Util;
+import com.pet.care.model.service.code.CodeServiceImpl;
+import com.pet.care.model.service.code.ICodeService;
 
 import net.nurigo.java_sdk.api.Message;
 import net.nurigo.java_sdk.exceptions.CoolsmsException;
@@ -42,52 +45,13 @@ public class TestController {
 
 	@RequestMapping(value = "/test/sms.do", method = RequestMethod.GET)
 	public String smsPage() {
-
 		return "test/SMS";
 	}
 
 	@RequestMapping(value = "/test/sendSMS.do", method = RequestMethod.POST)
 	@ResponseBody
 	public String sendSMS(String phoneNumber) {
-		Random rand = new Random();
-		String numStr = "";
-		for (int i = 0; i < 6; i++) {
-			String ran = Integer.toString(rand.nextInt(10));
-			numStr += ran;
-		}
-
-		System.out.println("수신자 번호 : " + phoneNumber);
-		System.out.println("인증번호 : " + numStr);
-
-		smsModule(phoneNumber, numStr);
-
-		return numStr;
-	}
-
-	private void smsModule(String phoneNumber, String numStr) {
-		Util util = new Util();
-		Properties prop = util.readProperties("properties/sms.properties");
-
-		String api_key = prop.getProperty("key");
-		String api_secret = prop.getProperty("secret");
-
-		Message coolsms = new Message(api_key, api_secret);
-
-		// 4 params(to, from, type, text) are mandatory. must be filled
-		HashMap<String, String> params = new HashMap<String, String>();
-		params.put("to", phoneNumber);
-		params.put("from", "01030509849");
-		params.put("type", "SMS");
-		params.put("text", "[PET CARE] 회원가입 인증번호는 '" + numStr + "' 입니다.");
-		params.put("app_version", "PET CARE test v0.1"); // application name and version
-
-		try {
-			JSONObject obj = (JSONObject) coolsms.send(params);
-			System.out.println(obj.toString());
-		} catch (CoolsmsException e) {
-			System.out.println(e.getMessage());
-			System.out.println(e.getCode());
-		}
+		return Util.sendSMS(phoneNumber);
 	}
 
 	@RequestMapping(value = "/test/oauth.do", method = RequestMethod.GET)

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pet.care.model.dao.reservation.ReservationDaoImpl">
+
+
+	
+	<select id="userReserveList" parameterType="java.util.Map" resultType="ReservationDto">
+	SELECT r1.SEQ, r1.RESERVETYPE, r1.PET_NAME, h.NAME , r1.RESERVEDATE ,r1.STATUS, r1.HOSPITAL_SEQ 
+        FROM HOSPITALINFO h JOIN
+        (SELECT r.SEQ ,r.RESERVETYPE ,r.PET_NAME ,r.RESERVEDATE ,r.STATUS, r.HOSPITAL_SEQ 
+                        FROM RESERVATION r 
+                        WHERE r.USER_EMAIL = #{user_email}) r1  
+        ON h.SEQ = r1.HOSPITAL_SEQ
+        ORDER BY r1.RESERVEDATE DESC
+	
+	</select>
+	
+	<select id="userRejectDetail" parameterType="java.util.Map" resultType="ReservationDto">
+	SELECT r1.RESERVETYPE , r1.RESERVEDATE ,r1.RESERVETIME , r1.PET_NAME ,r1.PAYNUM ,r1.STATUS, h.NAME ,r1.COMMNET ,h.ADDRESS1 
+        FROM HOSPITALINFO h JOIN
+                        (SELECT r.RESERVETYPE , r.RESERVEDATE ,r.RESERVETIME , r.PET_NAME ,r.PAYNUM ,r.STATUS, r.COMMNET ,r.HOSPITAL_SEQ 
+                                FROM RESERVATION r 
+                                WHERE r.USER_EMAIL =#{user_email}
+                                AND r.STATUS ='R'
+                                AND r.SEQ =#{seq}) r1
+        ON h.SEQ = r1.HOSPITAL_SEQ 
+	</select>
+	
+	<select id="userReserveDetail" parameterType="java.util.Map" resultType="ReservationDto">
+SELECT r1.RESERVETYPE , r1.RESERVEDATE ,r1.RESERVETIME , r1.PET_NAME ,r1.PAYNUM ,r1.STATUS, h.NAME ,h.ADDRESS1 
+	FROM HOSPITALINFO h JOIN
+			(SELECT r.RESERVETYPE , r.RESERVEDATE ,r.RESERVETIME , r.PET_NAME ,r.PAYNUM ,r.STATUS, r.HOSPITAL_SEQ 
+				FROM RESERVATION r 
+				WHERE r.USER_EMAIL = #{user_email}
+				AND r.STATUS IN ('S','A','C')
+				AND r.SEQ =#{seq}) r1
+	ON h.SEQ = r1.HOSPITAL_SEQ 
+	
+	</select>
+	
+	<select id="todayReserveList" parameterType="java.util.Map" resultType="ReservationDto">
+	SELECT  HOSPITAL_SEQ ,SEQ ,RESERVETYPE,u.NAME ,u.EMAIL ,u.PHONE ,PET_NAME ,RESERVEDATE, RESERVETIME
+        FROM  USERINFO u JOIN RESERVATION r 
+        ON RESERVEDATE = TO_CHAR(SYSDATE,'YYYYMMDD')
+        WHERE u.EMAIL = r.USER_EMAIL 
+        AND HOSPITAL_SEQ =${seq}
+	
+	</select>
+	
+	<select id="hospitalReserveList" parameterType="java.util.Map" resultType="ReservationDto">
+	SELECT HOSPITAL_SEQ ,SEQ ,RESERVETYPE,u.NAME ,u.EMAIL ,u.PHONE ,PET_NAME ,RESERVEDATE ,RESERVETIME, STATUS
+        FROM  USERINFO u  JOIN RESERVATION r 
+        ON r.USER_EMAIL = u.EMAIL 
+        AND HOSPITAL_SEQ =#{seq}
+        ORDER BY RESERVEDATE DESC
+		
+	</select>
+	
+</mapper>

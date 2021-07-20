@@ -5,13 +5,18 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.Reader;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
+import java.util.Random;
 
 import javax.servlet.http.HttpServletResponse;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+
+import net.nurigo.java_sdk.api.Message;
+import net.nurigo.java_sdk.exceptions.CoolsmsException;
 
 public class Util {
 
@@ -81,10 +86,28 @@ public class Util {
 		}
 		return randomval;
 	}
+	
+	
+	/**
+	 * 랜덤으로 지정한 자릿수의 숫자를 만들어주는 메서드입니다.
+	 * 
+	 * @return 랜덤 발생한 지정한 자릿수의 숫자
+	 * @author WOO SEONG HO
+	 */
+	public static String randomNum(int len) {
+		Random rand = new Random();
+		String numStr = "";
+		
+		for (int i = 0; i < len; i++) {
+			String ran = Integer.toString(rand.nextInt(10));
+			numStr += ran;
+		}
+		
+		return numStr;
+	}
 
 	/**
-	 * prop.getProperty("key"); 로 값을 가져올 수 있도록 Properties를 읽어 Properties 객체로
-	 * 반환합니다.<br>
+	 * prop.getProperty("key"); 로 값을 가져올 수 있도록 Properties를 읽어 Properties 객체로 반환합니다.<br>
 	 * 기본 경로 : src/main/resources/
 	 * 
 	 * @param propFileName : 파일명 (경로 : properties/파일명)
@@ -108,5 +131,49 @@ public class Util {
 		}
 	}
 	
-	// 
+	// 이메일
+	
+	
+	
+	/**
+	 * SMS를 해당 입력받은 번호로 전송합니다. 
+	 * @param phoneNumber 전화번호
+	 * @author WOO SEONG HO
+	 * @return 랜덤으로 만들어진 인증번호가 반환됩니다.
+	 */
+	public static String sendSMS(String phoneNumber) {
+		phoneNumber = phoneNumber.replace("-", ""); // -이 있으면 제거
+		return smsModule(phoneNumber);
+	}
+	
+	private static String smsModule(String phoneNumber) {
+		Util util = new Util();
+		Properties prop = util.readProperties("properties/sms.properties");
+		String numStr = randomNum(6);
+		
+		String text = "[PET CARE] 회원가입 인증번호는 '" + numStr + "' 입니다.";
+		String api_key = prop.getProperty("key");
+		String api_secret = prop.getProperty("secret");
+
+		// coolsms 객체 생성
+		Message coolsms = new Message(api_key, api_secret);
+
+		// 4 params(to, from, type, text) are mandatory. must be filled
+		HashMap<String, String> params = new HashMap<String, String>();
+		params.put("to", phoneNumber);
+		params.put("from", prop.getProperty("from"));
+		params.put("type", "SMS");
+		params.put("text", text);
+		params.put("app_version", prop.getProperty("app_version")); // application name and version
+
+		try {
+			JSONObject obj = (JSONObject) coolsms.send(params);
+			System.out.println(obj.toString());
+		} catch (CoolsmsException e) {
+			System.out.println(e.getMessage());
+			System.out.println(e.getCode());
+		}
+		
+		return numStr;
+	}
 }
