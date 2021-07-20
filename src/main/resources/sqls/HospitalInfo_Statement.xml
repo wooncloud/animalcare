@@ -2,24 +2,24 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.pet.care.model.dao.hospital.IHospitalInfoDao">
 
-	<resultMap type="com.pet.care.dto.HospitalJoinDto" id="HospitalJoinDto">
-		<result/>
-		<collection property="" resultMap="UserDto"/>
-		<collection property="" resultMap="PetTypeDto"/>
-		<collection property="" resultMap="OperatorDto"/>
-	</resultMap>
+<!-- 	<resultMap type="com.pet.care.dto.HospitalJoinDto" id="HospitalJoinDto"> -->
+<!-- 		<result/> -->
+<!-- 		<collection property="" resultMap="UserDto"/> -->
+<!-- 		<collection property="" resultMap="PetTypeDto"/> -->
+<!-- 		<collection property="" resultMap="OperatorDto"/> -->
+<!-- 	</resultMap> -->
 	
-	<resultMap type="com.pet.care.dto.UserDto" id="UserDto">
-		<result/>
-	</resultMap>
+<!-- 	<resultMap type="com.pet.care.dto.UserDto" id="UserDto"> -->
+<!-- 		<result/> -->
+<!-- 	</resultMap> -->
 	
-	<resultMap type="com.pet.care.dto.PetTypeDto" id="PetTypeDto">
-		<result/>
-	</resultMap>
+<!-- 	<resultMap type="com.pet.care.dto.PetTypeDto" id="PetTypeDto"> -->
+<!-- 		<result/> -->
+<!-- 	</resultMap> -->
 	
-	<resultMap type="com.pet.care.dto.OperatorDto" id="OperatorDto">
-		<result/>
-	</resultMap>
+<!-- 	<resultMap type="com.pet.care.dto.OperatorDto" id="OperatorDto"> -->
+<!-- 		<result/> -->
+<!-- 	</resultMap> -->
 
 <!-- 	회원 병원 리스트 조회  -->
 	<select id="hospitalList" resultMap="">
