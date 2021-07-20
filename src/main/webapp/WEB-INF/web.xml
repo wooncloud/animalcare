@@ -5,7 +5,7 @@
 	version="3.1">
   <display-name>Pet Care</display-name>
 	<welcome-file-list>
-		<welcome-file>index.jsp</welcome-file>
+		<welcome-file>/home.do</welcome-file>
 	</welcome-file-list>
  	<error-page>
 		<error-code>403</error-code>
@@ -46,7 +46,7 @@
 			<param-value>
 				/WEB-INF/spring/appServlet/servlet-context.xml
 				/WEB-INF/spring/appServlet/aop-context.xml
-<!-- 				/WEB-INF/spring/appServlet/email-context.xml -->
+				/WEB-INF/spring/appServlet/email-context.xml
 			</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
