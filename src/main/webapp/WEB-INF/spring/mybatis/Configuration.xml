@@ -18,16 +18,20 @@
 		<typeAlias type="com.pet.care.dto.ReportDto" alias="ReportDto"/>
 		<typeAlias type="com.pet.care.dto.ReservationDto" alias="ReservationDto"/>
 		<typeAlias type="com.pet.care.dto.UserDto" alias="UserDto"/>
+		<typeAlias type="com.pet.care.dto.PaymentDto" alias="PaymentDto"/>
 		
 		<typeAlias type="com.pet.care.dto.HospitalJoinDto" alias="HospitalJoinDto"/>
 		<typeAlias type="com.pet.care.dto.MedicalRecodeJoinDto" alias="MedicalRecodeJoinDto"/>
+
 	</typeAliases>
 
 	<mappers>
 		<mapper resource="/sqls/Code_Statement.xml"/>
+		<mapper resource="/sqls/Payment_Statement.xml"/>
 		<mapper resource="/sqls/Reservation_Statement.xml"/>
 		<mapper resource="/sqls/HospitalInfo_Statement.xml"/>
 		<mapper resource="/sqls/HospitalSchedule_Statement.xml"/>
+    
 		<mapper resource="/sqls/MedicalRecode_Statement.xml"/>
 	</mappers>
 

@@ -1,0 +1,18 @@
+package com.pet.care.model.dao.payment;
+
+import java.util.List;
+import java.util.Map;
+
+import com.pet.care.dto.PaymentDto;
+
+public interface IPaymentDao {
+
+	//결제 정보 저장
+	public boolean insertPay(PaymentDto pdto);
+
+	//결제 내역 조회
+	public List<PaymentDto> payList(String user_email);
+	
+	//결제 내역 상세 조회
+	public PaymentDto payDetailList(String seq);
+}

@@ -187,6 +187,9 @@
 		<hr class="my-3">
 		<br>
 	</div>
+	<a href="./payment/payList.do">결제내역</a>
+	<a href="./payment/payment.do">결제</a>
+
 	<script>
 		var toastTrigger = document.getElementById('liveToastBtn')
 		var toastLiveExample = document.getElementById('liveToast')
@@ -198,3 +201,4 @@
 		}
 	</script>
 <%@ include file="/footer.jsp" %>
+
