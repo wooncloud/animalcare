@@ -39,6 +39,33 @@ public class PaymentDaoImpl implements IPaymentDao {
 		return sqlSession.selectOne(NS+"payDetailList", seq);
 	}
 
+	@Override
+	public boolean cancelPay(Map<String, Object> map) {
+		logger.info("PaymentDaoImpl : cancelPay 결제 취소 (환불 X) - {}", map);
+		int n = sqlSession.update(NS+"cancelPay",map);
+		return (n>0)?true:false;
+	}
+
+	@Override
+	public boolean userCancelPayRefund(Map<String, Object> map) {
+		logger.info("PaymentDaoImpl : userCancelPayRefund 사용자 결제 취소 (환불 O) - {}", map);
+		int n = sqlSession.update(NS+"userCancelPayRefund",map);
+		return (n>0)?true:false;
+	}
+
+	@Override
+	public boolean operCancelPayRefund(Map<String, Object> map) {
+		logger.info("PaymentDaoImpl : operCancelPayRefund 병원관계자 결제 취소 (환불 O) - {}", map);
+		int n = sqlSession.update(NS+"operCancelPayRefund",map);
+		return (n>0)?true:false;
+	}
+
+	@Override
+	public String sendPayNum(Map<String, Object> map) {
+		logger.info("PaymentDaoImpl : sendPayNum 결제 번호 - {}", map);
+		return sqlSession.selectOne(NS+"sendPayNum",map);
+	}
+
 
 
 }

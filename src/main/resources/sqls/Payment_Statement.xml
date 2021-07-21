@@ -29,6 +29,57 @@ FROM PAYMENT
 WHERE SEQ = #{seq}
 </select>
 
+<update id="cancelPay" parameterType="java.util.Map">
+UPDATE PAYMENT SET CANCELDATE=SYSDATE, CANCELFLAG =
+        CASE WHEN (SELECT r.STATUS
+                  FROM RESERVATION r
+                  WHERE SEQ= #{seq} AND (#{status} ='A')) IS NOT NULL 
+        THEN 'Y' ELSE 'N' END
+WHERE PAYNUM = (SELECT r.PAYNUM 
+                FROM RESERVATION r
+                WHERE SEQ= #{seq} AND (#{status} ='A'))
+</update>
+
+<update id="userCancelPayRefund" parameterType="java.util.Map">
+UPDATE PAYMENT SET CANCELDATE=SYSDATE, CANCELFLAG =
+        CASE WHEN (SELECT r.STATUS
+                        FROM RESERVATION r
+                        WHERE SEQ= #{seq} AND #{status} ='S') IS NOT NULL 
+        THEN 'Y' ELSE 'N' END,
+        REFUNDDATE=SYSDATE, REFUNDFLAG=
+        CASE WHEN (SELECT r.STATUS
+                        FROM RESERVATION r
+                        WHERE SEQ= #{seq} AND #{status} ='S') IS NOT NULL 
+        THEN 'Y' ELSE 'N' END 
+        WHERE PAYNUM = (SELECT r.PAYNUM 
+	                       FROM RESERVATION r
+	                       WHERE SEQ= #{seq} AND #{status} ='S')
+</update>
+
+
+<update id="operCancelPayRefund" parameterType="java.util.Map">
+UPDATE PAYMENT SET CANCELDATE=SYSDATE, CANCELFLAG =
+        CASE WHEN (SELECT r.STATUS
+                   FROM RESERVATION r
+                   WHERE SEQ= #{seq} AND (#{status} IN ('S','A','R'))) IS NOT NULL 
+        THEN 'Y' ELSE 'N' END ,
+        REFUNDDATE=SYSDATE, REFUNDFLAG=
+        CASE WHEN (SELECT r.STATUS
+                   FROM RESERVATION r
+                   WHERE SEQ= #{seq} AND (#{status} IN ('S','A','R'))) IS NOT NULL 
+        THEN 'Y' ELSE 'N' END 
+	WHERE PAYNUM = (SELECT r.PAYNUM 
+                   FROM RESERVATION r
+                   WHERE SEQ= #{seq} AND (#{status} IN ('S','A','R')))
+</update>
+
+<!-- 환불 시 필요 -->
+<select id="sendPayNum" parameterType="java.util.Map" resultType="java.lang.String">
+SELECT PAYNUM
+	FROM RESERVATION r
+	WHERE SEQ = #{seq}
+</select>
+
 
 
 </mapper>
