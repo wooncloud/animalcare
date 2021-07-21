@@ -55,6 +55,8 @@ public class TestController {
 	@Autowired
 	private JavaMailSender mailSender;
 	
+	@Autowired
+	
 	@RequestMapping(value = "/test/sms.do", method = RequestMethod.GET)
 	public String smsPage() {
 		return "test/SMS";
@@ -266,8 +268,8 @@ public class TestController {
 		 	return "/";
 	 }
 	    
-	
-	
-	
-	
+	 @RequestMapping(value = "/test/user/login.do", method = RequestMethod.GET)
+	 public String login() {
+		 return "";
+	 }
 }

@@ -2,86 +2,166 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.pet.care.model.dao.user.IUserDao.">
 
-    <!-- 로그인 - 이메일, 비밀번호 입력하여 조회 -->
-	<select id="userLogin" parameterType="java.lang.String" resultType="UserDto">
-    
-    </select>
+	<!-- 로그인 - 이메일, 비밀번호 입력하여 조회 -->
+	<select id="userLogin" parameterType="java.util.Map" resultType="UserDto">
+		SELECT EMAIL, NAME, USERTYPE, DELFLAG
+		FROM (
+			SELECT EMAIL, NAME, PASSWORD, DELFLAG, 'A' AS USERTYPE FROM ADMININFO
+			UNION
+			SELECT EMAIL, NAME, PASSWORD, DELFLAG, 'O' AS USERTYPE FROM OPERATORINFO
+			UNION
+			SELECT EMAIL, NAME, PASSWORD, DELFLAG, 'U' AS USERTYPE FROM USERINFO
+		) 
+		WHERE EMAIL = #{email} AND PASSWORD = #{password}
+	</select>
 
 
-    <!-- 이메일 중복검사 - 중복된 이메일 조회 -->
+	<!-- 이메일 중복검사 - 중복된 이메일 조회 -->
 	<select id="emailDuplCheck" parameterType="java.lang.String">
-    
-    </select>
+		SELECT COUNT(*) 
+		FROM 
+		(
+			SELECT EMAIL FROM ADMININFO
+			UNION
+			SELECT EMAIL FROM OPERATORINFO
+			UNION
+			SELECT EMAIL FROM USERINFO
+		)
+		WHERE EMAIL = #{email}
+	</select>
 
 
-    <!-- 회원 등록 - 이메일, 이름, 비밀번호, 전화번호, 주소, 상세주소 입력 -->
+	<!-- 회원 등록 - 이메일, 이름, 비밀번호, 전화번호, 주소, 상세주소 입력 -->
 	<insert id="insertUser" parameterType="UserDto">
-    
-    </insert>
+		INSERT INTO USERINFO
+		(
+			EMAIL, NAME, PASSWORD, 
+			ADDRESS1, ADDRESS2, PHONE, 
+			REGDATE, DELFLAG
+		)
+		VALUES(
+			#{email}, #{name}, #{password}, 
+			#{address1}, #{address2}, #{phone}, 
+			SYSDATE, 'N'
+		)
+	</insert>
 
 
-    <!-- 병원관계자 가입 신청 - 이메일, 이름, 비밀번호, 전화번호, 사업자 등록번호, 면허번호 입력, 가입신청 기본 비허가 -->
-	<insert id="insertOper" parameterType="UserDto">
-    
-    </insert>
+	<!-- 병원관계자 가입 신청 - 이메일, 이름, 비밀번호, 전화번호, 사업자 등록번호, 면허번호 입력, 가입신청 기본 비허가 -->
+	<insert id="insertOper" parameterType="OperDto">
+		INSERT INTO OPERATORINFO
+		(
+			EMAIL, NAME, PASSWORD, 
+			PHONE, CORPREGNUM, LICENSENUM, 
+			REGDATE, APPROVALFLAG, DELFLAG
+		)
+		VALUES(
+			#{email}, #{name}, #{password}, 
+			#{phone}, #{corpregnum}, #{licensenum}, 
+			SYSDATE, 'S', 'N'
+		)
+	</insert>
 
 
-    <!-- 가입신청 병원관계자 조회 - 가입신청 비허가 처리된 병원관계자 조회 -->
+	<!-- 가입신청 병원관계자 조회 - 가입신청 비허가 처리된 병원관계자 조회 -->
 	<select id="grantWaitList" resultType="UserDto">
-    
-    </select>
+		SELECT EMAIL, NAME, PHONE,
+			CORPREGNUM, LICENSENUM, REGDATE,
+			APPROVALFLAG, DELFLAG
+		FROM OPERATORINFO
+		WHERE APPROVALFLAG = 'S' AND DELFLAG = 'N'
+	</select>
 
 
-    <!-- 가입신청 처리 - 가입신청을 승인 or 거부 로 변경 -->
-	<update id="grantOper" parameterType="java.lang.String">
-    
-    </update>
+	<!-- 가입신청 처리 - 가입신청을 승인 or 거부 로 변경 -->
+	<update id="grantOper" parameterType="java.util.Map">
+		UPDATE OPERATORINFO SET APPROVALFLAG = #{approvalflag}
+		WHERE EMAIL = #{email}
+	</update>
 
 
-    <!-- 병원관계자 정보 조회 - 회원 정보 조회 -->
+	<!-- 병원관계자 정보 조회 - 회원 정보 조회 -->
 	<select id="detailOper" parameterType="java.lang.String" resultType="UserDto">
-    
-    </select>
+		SELECT EMAIL, NAME, PHONE, CORPREGNUM, LICENSENUM
+		FROM OPERATORINFO
+		WHERE EMAIL = #{email}
+	</select>
 
 
-    <!-- 병원관계자 정보 수정 - 회원 정보 수정 -->
+	<!-- 병원관계자 정보 수정 - 회원 정보 수정 -->
 	<update id="modifyOper" parameterType="java.util.Map">
-    
-    </update>
+		UPDATE OPERATORINFO
+		SET PHONE = #{phone}
+		WHERE EMAIL = #{email}
+	</update>
 
 
-    <!-- 병원관계자  탈퇴 - 회원 휴면 처리 -->
+	<!-- 병원관계자  탈퇴 - 회원 휴면 처리 -->
 	<update id="dormancyOper" parameterType="java.lang.String">
-    
-    </update>
+		UPDATE OPERATORINFO
+		SET DELFLAG = 'Y'
+		WHERE EMAIL = #{email}
+	</update>
 
 
-    <!-- 병원관계자  삭제 - 회원 진짜 삭제 -->
+	<!-- 병원관계자  삭제 - 회원 진짜 삭제 -->
 	<delete id="deleteOper" parameterType="java.lang.String">
-    
-    </delete>
+		DELETE FROM OPERATORINFO
+		WHERE EMAIL = #{email}
+	</delete>
 
 
-    <!-- 회원 정보 조회 - 회원 정보 조회 -->
+	<!-- 회원 정보 조회 - 회원 정보 조회 -->
 	<select id="detailUser" parameterType="java.lang.String" resultType="UserDto">
-    
-    </select>
+		SELECT EMAIL, NAME, ADDRESS1, ADDRESS2, PHONE
+		FROM USERINFO
+		WHERE EMAIL = #{email}
+	</select>
 
 
-    <!-- 회원 정보 수정 - 회원 정보 수정 -->
+	<!-- 회원 정보 수정 - 회원 정보 수정 -->
 	<update id="modifyUser" parameterType="java.util.Map">
-    
-    </update>
+		UPDATE USERINFO
+		SET PHONE = #{phone}
+		WHERE EMAIL = #{email}
+	</update>
 
 
-    <!-- 회원 탈퇴 - 회원 휴면 처리 -->
+	<!-- 회원 탈퇴 - 회원 휴면 처리 -->
 	<update id="dormancyUser" parameterType="java.lang.String">
-    
-    </update>
+		UPDATE USERINFO
+		SET DELFLAG = 'Y'
+		WHERE EMAIL = #{email}
+	</update>
 
 
-    <!-- 회원 삭제 - 회원 진짜 삭제 -->
+	<!-- 회원 삭제 - 회원 진짜 삭제 -->
 	<delete id="deleteUser" parameterType="java.lang.String">
-    
-    </delete>
+		DELETE FROM USERINFO
+		WHERE EMAIL = #{email}
+	</delete>
+
+	<select id="emailSecurity" parameterType="java.lang.String" resultType="UserDto">
+		SELECT EMAIL, NAME, USERTYPE, DELFLAG
+		FROM (
+			SELECT EMAIL, NAME, PASSWORD, DELFLAG, 'A' AS USERTYPE FROM ADMININFO
+			UNION
+			SELECT EMAIL, NAME, PASSWORD, DELFLAG, 'O' AS USERTYPE FROM OPERATORINFO
+			UNION
+			SELECT EMAIL, NAME, PASSWORD, DELFLAG, 'U' AS USERTYPE FROM USERINFO
+		) 
+		WHERE EMAIL = #{email} AND DELFLAG = 'N'
+	</select>
+
+	<select id="pwSecurity" parameterType="java.lang.String" resultType="UserDto">
+		SELECT PASSWORD
+		FROM (
+			SELECT EMAIL, NAME, PASSWORD, DELFLAG, 'A' AS USERTYPE FROM ADMININFO
+			UNION
+			SELECT EMAIL, NAME, PASSWORD, DELFLAG, 'O' AS USERTYPE FROM OPERATORINFO
+			UNION
+			SELECT EMAIL, NAME, PASSWORD, DELFLAG, 'U' AS USERTYPE FROM USERINFO
+		) 
+		WHERE EMAIL = #{email}
+	</select>
 </mapper>

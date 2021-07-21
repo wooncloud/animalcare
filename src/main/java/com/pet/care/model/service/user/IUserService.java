@@ -1,13 +1,17 @@
-package com.pet.care.model.dao.user;
+package com.pet.care.model.service.user;
 
 import java.util.List;
 import java.util.Map;
+
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.pet.care.dto.MemberDto;
 import com.pet.care.dto.OperatorDto;
 import com.pet.care.dto.UserDto;
 
-public interface IUserDao {
+public interface IUserService {
 
 	/**
 	 * 로그인
@@ -17,17 +21,17 @@ public interface IUserDao {
 	/**
 	 * 이메일 중복검사
 	 */
-	public int emailDuplCheck(String email);
+	public boolean emailDuplCheck(String email);
 
 	/**
 	 * 회원 등록
 	 */
-	public int insertUser(UserDto dto);
+	public boolean insertUser(UserDto dto);
 
 	/**
 	 * 병원관계자 가입 신청
 	 */
-	public int insertOper(OperatorDto dto);
+	public boolean insertOper(OperatorDto dto);
 
 	/**
 	 * 가입신청 병원관계자 조회
@@ -37,7 +41,7 @@ public interface IUserDao {
 	/**
 	 * 가입신청 처리
 	 */
-	public int grantOper(String email);
+	public boolean grantOper(String email);
 
 	/**
 	 * 병원관계자 정보 조회
@@ -47,17 +51,17 @@ public interface IUserDao {
 	/**
 	 * 병원관계자 정보 수정
 	 */
-	public int modifyOper(Map<String, Object> map);
+	public boolean modifyOper(Map<String, Object> map);
 
 	/**
 	 * 병원관계자 탈퇴
 	 */
-	public int dormancyOper(String email);
+	public boolean dormancyOper(String email);
 
 	/**
 	 * 병원관계자 삭제
 	 */
-	public int deleteOper(String email);
+	public boolean deleteOper(String email);
 
 	/**
 	 * 회원 정보 조회
@@ -67,17 +71,17 @@ public interface IUserDao {
 	/**
 	 * 회원 정보 수정
 	 */
-	public int modifyUser(Map<String, Object> map);
+	public boolean modifyUser(Map<String, Object> map);
 
 	/**
 	 * 회원 탈퇴
 	 */
-	public int dormancyUser(String email);
+	public boolean dormancyUser(String email);
 
 	/**
 	 * 회원 삭제
 	 */
-	public int deleteUser(String email);
+	public boolean deleteUser(String email);
 	
 	// ------------------------ security ------------------------ 
 	
@@ -90,5 +94,4 @@ public interface IUserDao {
 	 * 비밀번호 확인
 	 */
 	public String pwSecurity(String email);
-	
 }

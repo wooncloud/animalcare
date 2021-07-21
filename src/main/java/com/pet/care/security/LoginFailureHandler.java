@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 
+import com.pet.care.model.service.user.IUserService;
+
 public class LoginFailureHandler extends SimpleUrlAuthenticationFailureHandler {
 
 	@Autowired
