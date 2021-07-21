@@ -37,12 +37,8 @@ public class PaymentController {
 	
 	@ResponseBody
 	@RequestMapping(value ="/insertPay.do", method=RequestMethod.POST)
-	public String insertPay(@RequestParam("rsp")String rsp, HttpServletRequest req
-			,PaymentDto pDto
-			) {
-		logger.info("PaymentController : insertPay 결제 저장 - {}",rsp);
-		ObjectMapper mapper = new ObjectMapper();
-//		PaymentDto pDto = (PaymentDto)mapper.readValues(rsp, new TypeReference<PaymentDto>(){});
+	public String insertPay(HttpServletRequest req ,PaymentDto pDto) {
+		logger.info("PaymentController : insertPay 결제 저장 - {}", pDto);
 		boolean isc = iService.insertPay(pDto);
 		if(isc) {
 //			return "redirect:/예약컨트롤러";

@@ -7,8 +7,8 @@ INSERT INTO PAYMENT
 	(SEQ, USER_EMAIL, USER_PHONE, PAYNUM,
 	 HOSPITAL_NAME, PAIDAMOUNT, PAYDATE, APPLYNUM,
 	  CANCELDATE, CANCELFLAG, REFUNDDATE, REFUNDFLAG, RESERVATION_SEQ)
-VALUES(PAYMENT_SEQ.NEXTVAL, 'user01@gmail.com', '010-1111-1111', #{paynum}, 
-	'CDC', #{paidamount}, SYSDATE, #{applynum},
+VALUES(PAYMENT_SEQ.NEXTVAL, #{user_email}, #{user_phone}, #{paynum}, 
+	#{hospital_name}, #{paidamount}, SYSDATE, #{applynum},
 	 '', 'N', '', 'N', '49')
 </insert>
 

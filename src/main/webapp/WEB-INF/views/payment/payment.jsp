@@ -7,9 +7,10 @@
 <a href="./cancelPay.do">결제 취소</a>
 <a href="./userCancelPayRefund.do">사용자결제취소</a>
 <a href="./operCancelPayRefund.do">병원관계자결제취소</a>
+
 <script type="text/javascript">
 function requestPay(){
-		var email = 'dongdong@pet.care'; //ex) ${userInfo.email};
+		var email = 'user01@gmail.com'; //ex) ${userInfo.email};
 		var name = 'GDJ'; //ex) ${userInfo.name};
 		var phone = '010-1234-1111'; //ex) ${userInfo.phone};
 		var address = '서울특별시 금천구'; //ex) ${userInfo.address};
@@ -38,20 +39,21 @@ function requestPay(){
 				var applynum =rsp.apply_num;
 				
 				var sendData = {"user_email":rsp.buyer_email,"user_phone":rsp.buyer_tel,"paynum":rsp.imp_uid,"hospital_name":hospitalName,"paidamount":rsp.paid_amount,"applynum":rsp.apply_num}
+				
 				if(rsp.success){
 					console.log("성공");
-// 					var rspdata = JSON.parse('rsp');
-//// 					location.href="./insertPay.do?imp_uid="+paynum+"&paid_amount="+paidamount+"&apply_num="+applynum;
 					$.ajax({
 						type: "POST",
-						url : "/payment/insertPay.do",
+						url : "./insertPay.do",
 // 						data : "user_email="+email+"&user_phone="+phone+"&paynum="+paynum+"&hospital_name="+hospital_name+"&paidamount="+paidamount+"&applynum="+applynum,
-						data : JSON.stringify(sendData),
+						data : sendData,
 						datatype: "JSON",
 						success : function(data){
+							console.log(data);
 							console.log("성공성공");
 						},
-						error : function(){
+						error : function(msg){
+							console.log(msg);
 							console.log("에러");
 						}
 					})
