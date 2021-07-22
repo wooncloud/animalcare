@@ -260,3 +260,12 @@ function setCookie(cName, cValue, cDay ){
 function DeleteCookie(name) {
     setCookie(name,"",-1);
 }
+
+// 코드 이름 가져오기
+function getCodeName(codeId, codeList){
+	for (const code of codeList) {
+		if(code.id == codeId){
+			return code.name;
+		}
+	}
+}

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.pet.care.model.dao.user.IUserDao.">
+<mapper namespace="com.pet.care.model.dao.user.IUserDao">
 
 	<!-- 로그인 - 이메일, 비밀번호 입력하여 조회 -->
 	<select id="userLogin" parameterType="java.util.Map" resultType="UserDto">
@@ -17,7 +17,7 @@
 
 
 	<!-- 이메일 중복검사 - 중복된 이메일 조회 -->
-	<select id="emailDuplCheck" parameterType="java.lang.String">
+	<select id="emailDuplCheck" parameterType="java.lang.String" resultType="java.lang.Integer">
 		SELECT COUNT(*) 
 		FROM 
 		(
