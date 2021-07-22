@@ -2,6 +2,6 @@
 <%@ include file="/header.jsp" %>
 
 	<h1>동물병원</h1>
-
+	${sessionScope.member }
 <%@ include file="/footer.jsp" %>
 

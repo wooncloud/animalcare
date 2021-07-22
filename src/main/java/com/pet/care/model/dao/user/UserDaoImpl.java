@@ -27,10 +27,10 @@ public class UserDaoImpl implements IUserDao {
 		MemberDto dto = null;
 
 		String pw = pwSecurity((String) map.get("email"));
-		if (passwordEncoder.matches((String) map.get("email"), pw)) {
+		if (passwordEncoder.matches((String) map.get("password"), pw)) {
 			dto = emailSecurity((String) map.get("email"));
 		}
-
+		
 		return dto;
 	}
 

@@ -58,33 +58,34 @@
 							<i class="fas fa-search"></i> 병원찾기
 						</a>
 					</li>
-					<security:authorize access="hasRole('U')">
-						<li>
-							<a href="#" class="nav-link px-4 link-dark">
-								<i class="fas fa-cat"></i> 내 애완동물
-							</a>
-						</li>
-						<li>
-							<a href="#" class="nav-link px-4 link-dark">
-								<i class="fas fa-book"></i> 건강수첩
-							</a>
-						</li>
-						<li>
-							<a href="#" class="nav-link px-4 link-dark">
-								<i class="far fa-calendar-check"></i> 예약내역
-							</a>
-						</li>
-						<li>
-							<a href="#" class="nav-link px-4 link-dark">
-								<i class="fas fa-notes-medical"></i> 진료내역
-							</a>
-						</li>
-					</security:authorize>
-					<security:authorize access="hasRole('O')">
+					<c:choose>
+						<c:when test="${sessionScope.member.usertype eq 'ROLE_USER'}">
+							<li>
+								<a href="${path}/" class="nav-link px-4 link-dark">
+									<i class="fas fa-cat"></i> 내 애완동물
+								</a>
+							</li>
+							<li>
+								<a href="${path}/" class="nav-link px-4 link-dark">
+									<i class="fas fa-book"></i> 건강수첩
+								</a>
+							</li>
+							<li>
+								<a href="${path}/" class="nav-link px-4 link-dark">
+									<i class="far fa-calendar-check"></i> 예약내역
+								</a>
+							</li>
+							<li>
+								<a href="${path}/" class="nav-link px-4 link-dark">
+									<i class="fas fa-notes-medical"></i> 진료내역
+								</a>
+							</li>
+						</c:when>
+						<c:otherwise>
 						
-					</security:authorize>
+						</c:otherwise>
+					</c:choose>
 				</ul>
-
 				<c:choose>
 					<c:when test="${sessionScope.member eq null}">
 						<div class="col-md-3 text-end mx-3">
@@ -102,12 +103,15 @@
 								<img src="${path}/img/logo.jpg" alt="mdo" width="32" height="32" class="rounded-circle">
 							</a>
 							<ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
-								<li class="ms-3">이거성님</li>
+								<li class="ms-3">
+									<div>이거성님</div>
+									<div style="font-size:small">안녕하세요.</div>
+								</li>
 								<li>
 									<hr class="dropdown-divider">
 								</li>
 								<li>
-									<a class="dropdown-item" href="">
+									<a class="dropdown-item" href="${path}/login/userInfo.do">
 										<i class="fas fa-user"></i> 내 정보
 									</a>
 								</li>
@@ -116,18 +120,18 @@
 										<i class="fas fa-headset"></i> 고객의 소리
 									</a>
 								</li>
-								<security:authorize access="hasRole('U')">
+								<c:if test="${sessionScope.member.usertype eq 'ROLE_USER'}">
 									<li>
 										<a class="dropdown-item" href="#">
 											<i class="fas fa-star"></i> 관심병원
 										</a>
 									</li>
-								</security:authorize>
+								</c:if>
 								<li>
 									<hr class="dropdown-divider">
 								</li>
 								<li>
-									<a class="dropdown-item" href="#">
+									<a class="dropdown-item" href="${path}/login/logout.do">
 										<i class="fas fa-sign-out-alt"></i> 로그아웃
 									</a>
 								</li>

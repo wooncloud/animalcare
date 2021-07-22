@@ -22,16 +22,22 @@ public class MemberDto implements UserDetails {
 	public MemberDto() {
 	}
 
-	public MemberDto(String email, String name, String usertype, String delflag) {
+	public MemberDto(String email, String name, String password, String usertype, String delflag,
+			Collection<GrantedAuthority> authorities, Date issueAt) {
+		super();
 		this.email = email;
 		this.name = name;
+		this.password = password;
 		this.usertype = usertype;
 		this.delflag = delflag;
+		this.authorities = authorities;
+		this.issueAt = issueAt;
 	}
-
+	
 	@Override
 	public String toString() {
-		return "MemberDto [email=" + email + ", name=" + name + ", usertype=" + usertype + ", delflag=" + delflag + "]";
+		return "MemberDto [email=" + email + ", name=" + name + ", password=" + password + ", usertype=" + usertype
+				+ ", delflag=" + delflag + ", authorities=" + authorities + ", issueAt=" + issueAt + "]";
 	}
 
 	public String getEmail() {

@@ -1,6 +1,9 @@
 window.onload = function () {
 	let pathname = window.location.pathname;
 
+	if (pathname.indexOf('login') != -1) {
+		login.init();
+	}
 	if (pathname.indexOf('signupUserForm') != -1) {
 		signupUser.init();
 	}
@@ -10,6 +13,11 @@ window.onload = function () {
 }
 
 const login = {
+	init: function(){
+		if(getParam('type') == "empty"){
+			swal.alert_txt("로그인 실패", "로그인에 실패했습니다.\n이메일과 비밀번호를 확인후 다시 시도하세요.", "");
+		}
+	},
 	login: function () {
 		let form = document.forms[0];
 		let email = form.email;
@@ -203,5 +211,21 @@ const signupUser = {
 		
 		// 가입
 		form.submit();
+	}
+}
+
+const leave = {
+	leave: function(){
+		let agree = document.getElementById('agree').checked;
+
+		if(agree){
+			location.href = "./leave.do";
+		} else {
+			swal.alert_txt(
+				"",
+				"탈퇴 동의를 체크해야 탈퇴가 가능합니다.",
+				""
+			);
+		}
 	}
 }

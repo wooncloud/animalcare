@@ -3,14 +3,14 @@
 <mapper namespace="com.pet.care.model.dao.user.IUserDao">
 
 	<!-- 로그인 - 이메일, 비밀번호 입력하여 조회 -->
-	<select id="userLogin" parameterType="java.util.Map" resultType="UserDto">
+	<select id="userLogin" parameterType="java.util.Map" resultType="MemberDto">
 		SELECT EMAIL, NAME, USERTYPE, DELFLAG
 		FROM (
-			SELECT EMAIL, NAME, PASSWORD, DELFLAG, 'A' AS USERTYPE FROM ADMININFO
+			SELECT EMAIL, NAME, PASSWORD, DELFLAG, 'ROLE_ADMIN' AS USERTYPE FROM ADMININFO
 			UNION
-			SELECT EMAIL, NAME, PASSWORD, DELFLAG, 'O' AS USERTYPE FROM OPERATORINFO
+			SELECT EMAIL, NAME, PASSWORD, DELFLAG, 'ROLE_OPER' AS USERTYPE FROM OPERATORINFO
 			UNION
-			SELECT EMAIL, NAME, PASSWORD, DELFLAG, 'U' AS USERTYPE FROM USERINFO
+			SELECT EMAIL, NAME, PASSWORD, DELFLAG, 'ROLE_USER' AS USERTYPE FROM USERINFO
 		) 
 		WHERE EMAIL = #{email} AND PASSWORD = #{password}
 	</select>
@@ -64,7 +64,7 @@
 
 
 	<!-- 가입신청 병원관계자 조회 - 가입신청 비허가 처리된 병원관계자 조회 -->
-	<select id="grantWaitList" resultType="UserDto">
+	<select id="grantWaitList" resultType="OperDto">
 		SELECT EMAIL, NAME, PHONE,
 			CORPREGNUM, LICENSENUM, REGDATE,
 			APPROVALFLAG, DELFLAG
@@ -81,7 +81,7 @@
 
 
 	<!-- 병원관계자 정보 조회 - 회원 정보 조회 -->
-	<select id="detailOper" parameterType="java.lang.String" resultType="UserDto">
+	<select id="detailOper" parameterType="java.lang.String" resultType="OperDto">
 		SELECT EMAIL, NAME, PHONE, CORPREGNUM, LICENSENUM
 		FROM OPERATORINFO
 		WHERE EMAIL = #{email}
@@ -141,26 +141,26 @@
 		WHERE EMAIL = #{email}
 	</delete>
 
-	<select id="emailSecurity" parameterType="java.lang.String" resultType="UserDto">
+	<select id="emailSecurity" parameterType="java.lang.String" resultType="MemberDto">
 		SELECT EMAIL, NAME, USERTYPE, DELFLAG
 		FROM (
-			SELECT EMAIL, NAME, PASSWORD, DELFLAG, 'A' AS USERTYPE FROM ADMININFO
+			SELECT EMAIL, NAME, PASSWORD, DELFLAG, 'ROLE_ADMIN' AS USERTYPE FROM ADMININFO
 			UNION
-			SELECT EMAIL, NAME, PASSWORD, DELFLAG, 'O' AS USERTYPE FROM OPERATORINFO
+			SELECT EMAIL, NAME, PASSWORD, DELFLAG, 'ROLE_OPER' AS USERTYPE FROM OPERATORINFO
 			UNION
-			SELECT EMAIL, NAME, PASSWORD, DELFLAG, 'U' AS USERTYPE FROM USERINFO
+			SELECT EMAIL, NAME, PASSWORD, DELFLAG, 'ROLE_USER' AS USERTYPE FROM USERINFO
 		) 
 		WHERE EMAIL = #{email} AND DELFLAG = 'N'
 	</select>
 
-	<select id="pwSecurity" parameterType="java.lang.String" resultType="UserDto">
+	<select id="pwSecurity" parameterType="java.lang.String" resultType="java.lang.String">
 		SELECT PASSWORD
 		FROM (
-			SELECT EMAIL, NAME, PASSWORD, DELFLAG, 'A' AS USERTYPE FROM ADMININFO
+			SELECT EMAIL, NAME, PASSWORD, DELFLAG, 'ROLE_ADMIN' AS USERTYPE FROM ADMININFO
 			UNION
-			SELECT EMAIL, NAME, PASSWORD, DELFLAG, 'O' AS USERTYPE FROM OPERATORINFO
+			SELECT EMAIL, NAME, PASSWORD, DELFLAG, 'ROLE_OPER' AS USERTYPE FROM OPERATORINFO
 			UNION
-			SELECT EMAIL, NAME, PASSWORD, DELFLAG, 'U' AS USERTYPE FROM USERINFO
+			SELECT EMAIL, NAME, PASSWORD, DELFLAG, 'ROLE_USER' AS USERTYPE FROM USERINFO
 		) 
 		WHERE EMAIL = #{email}
 	</select>
