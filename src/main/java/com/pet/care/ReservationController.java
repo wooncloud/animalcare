@@ -69,56 +69,60 @@ public class ReservationController {
 		return "reservation/calendar";
 	}
 	
-	@SuppressWarnings("unchecked")
-	@RequestMapping(value = "/calendar.do", method = RequestMethod.GET, produces = "application/text; charset=UTF-8")
-	@ResponseBody
-	public String Calendar(String hospital_seq) {
-		logger.info("ReservationController Calendar 달력 {} ",hospital_seq );
-		System.out.println(hospital_seq);
+//	@SuppressWarnings("unchecked")
+//	@RequestMapping(value = "/calendar.do", method = RequestMethod.GET, produces = "application/text; charset=UTF-8")
+//	@ResponseBody
+//	public String Calendar(String hospital_seq) {
+//		logger.info("ReservationController Calendar 달력 {} ",hospital_seq );
+//		System.out.println(hospital_seq);
+//		
+//		Map<String, Object> rMap = new HashMap<String, Object>();
+//		rMap.put("hospital_seq",hospital_seq);
+//		
+//		Map<String, Object>hMap = new HashMap<String, Object>();
+//		hMap.put("hospital_seq", hospital_seq);
 		
-		Map<String, Object> rMap = new HashMap<String, Object>();
-		rMap.put("hospital_seq",hospital_seq);
+//		List<ReservationDto>rLists= rService.hospitalReserveList(rMap);
+//		List<HospitalScheduleDto> hList = hService.monthSchedule(hMap);
 		
-		Map<String, Object>hMap = new HashMap<String, Object>();
-		hMap.put("hospital_seq", hospital_seq);
+//		JSONArray jarr = JsonUtil.CalenderJson(hList, rLists);
 		
-		List<ReservationDto>rLists= rService.hospitalReserveList(rMap);
-		List<HospitalScheduleDto> hList = hService.monthSchedule(hMap);
+//		JSONObject result = new JSONObject();
+//		result.put("result",jarr);
 		
-		JSONArray jarr = JsonUtil.CalenderJson(hList, rLists);
+//		System.out.println("-=-=-=-=-=-=-=-=-=-=-=-="+result.toJSONString());
+//		
+//		return result.toString();
 		
-		JSONObject result = new JSONObject();
-		result.put("result",jarr);
-		
-		System.out.println("-=-=-=-=-=-=-=-=-=-=-=-="+result.toJSONString());
-		
-		return result.toString();
+//	}
+	
+	/*
+	 * 예약 디비 입력 insert  놀고 있는거
+	 */
+	@RequestMapping(value = "/insertReservation.do", method = RequestMethod.POST)
+	public String insertReservation(Model model, ReservationDto rDto, @RequestParam Map<String, Object> map, String paynum) {
+		logger.info("ReservationController insertReservation 양식 입력 {} =========================", rDto );
+		System.out.println("+++++++++++++++++++++++++++++++++="+rDto);
+		System.out.println("------------------------------"+map);
+		rDto.setHospital_seq(3);
+		rDto.setReservedate("20210726");
+		rDto.setReservetime("15001700");
+		 map.get("name");
+		 map.get("pet_name");
+		 map.get("reservetype");
+		 map.get("user_email");
+		 map.get("phone");
+		 System.out.println("+++++++++++++++++두번째++++++++++++++++="+rDto);
+		 System.out.println("================================"+paynum);
+		rService.insertReserve(rDto);
+		return "redirect:/reservation/userReserveList.do";
 		
 	}
 	
 	/*
-	 *  예약 신청 테스트
+	 * 놀고 있는거
 	 */
-	@RequestMapping(value = "/insertReservation.do", method = RequestMethod.GET)
-	public String insertReservation(Model model) {
-		logger.info("ReservationController insertReservation 양식 입력  " );
-		Map<String, Object> map = new HashMap<String, Object>();
-		//세션에서 ? 
-		map.put("user_email", "user01@gmail.com");
-		
-		//이건 반려동물 정보 가져오기 위한 것
-		List<String>lists = rService.getUserPet(map);
-
-		model.addAttribute("userPet",lists);
-		
-		return "reservation/insertReservation";
-		
-	}
-	
-	/*
-	 * 결제 컨트롤러로? 보내야 함
-	 */
-	@RequestMapping(value="sendReservation.do", method=RequestMethod.POST)
+	@RequestMapping(value="/sendReservation.do", method=RequestMethod.POST)
 	public String sendReservation(ReservationDto dto, Model model) {
 		logger.info("ReservationController insertReservation 양식 입력값 {}  ",dto );
 		
@@ -140,7 +144,7 @@ public class ReservationController {
 		logger.info("ReservationController userReserveList 사용자 예약 목록 조회  " );
 		//user_email은 세션에서 가져와야함
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("user_email", "user01@gmail.com");
+		map.put("user_email", "kckt66@naver.com");
 		List<ReservationDto> lists = rService.userReserveList(map);
 		
 		model.addAttribute("lists",lists);
@@ -183,7 +187,7 @@ public class ReservationController {
 		System.out.println(seq);
 		
 		Map<String, Object> uMap = new HashMap<String, Object>();
-		uMap.put("user_email", "user01@gmail.com");
+		uMap.put("user_email", "kckt66@naver.com");
 		uMap.put("seq", seq);
 		ReservationDto rDto = rService.userReserveDetail(uMap);
 		
@@ -294,10 +298,11 @@ public class ReservationController {
 		List<ReservationDto> lists = rService.selectdayReserveList(rMap);
 		
 		model.addAttribute("todayReserve", lists);
-		
+		//가져갈방법????????
 		return "reservation/selectdayReserveList";
 	}
 	
+
 	/*
 	 * 오늘의 예약 목록 조회 (병원 관계자 페이지에서 볼거)
 	 */

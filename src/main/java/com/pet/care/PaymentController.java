@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pet.care.dto.PaymentDto;
 import com.pet.care.model.service.payment.IPaymentService;
 import com.pet.care.payment.PaymentRefund;
@@ -37,14 +36,16 @@ public class PaymentController {
 	
 	@ResponseBody
 	@RequestMapping(value ="/insertPay.do", method=RequestMethod.POST)
-	public String insertPay(HttpServletRequest req ,PaymentDto pDto) {
+	public String insertPay(HttpServletRequest req ,PaymentDto pDto, Model model) {
 		logger.info("PaymentController : insertPay 결제 저장 - {}", pDto);
+		String paynum = pDto.getPaynum();
 		boolean isc = iService.insertPay(pDto);
 		if(isc) {
 //			return "redirect:/예약컨트롤러";
-			return "redirect:/payment/payList.do";
+//			model.addAttribute("paynum", paynum);
+			return paynum;
 		}else {
-			return "결제실패창";
+			return "redirect:/error/error.do";
 		}
 	}
 	

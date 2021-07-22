@@ -6,16 +6,13 @@
 	<!-- 예약 신청 -->
 	
 	<insert id="insertReserve" parameterType="ReservationDto">
-	
-	<selectKey keyProperty="seq" resultType="java.lang.Integer" order="BEFORE">
-		SELECT RESERVATION_SEQ.CURRVAL AS SEQ FROM DUAL
-	</selectKey>
+
 	
 	INSERT INTO RESERVATION
 		(SEQ, HOSPITAL_SEQ, USER_EMAIL,PET_NAME , RESERVETYPE, REGDATE, RESERVEDATE,
 		RESERVETIME ,STATUS, PAYNUM)
-	VALUES (RESERVATION_SEQ.NEXTVAL,#{hospital_seq},#{user_email},#{pet_name},#{reservetype}
-			SYSDATE, TO_DATE(#{reservedate},'YYYYMMDD'),#{reservetime},'S','')
+	VALUES (RESERVATION_SEQ.NEXTVAL,#{hospital_seq},#{user_email},#{pet_name},#{reservetype},
+				SYSDATE, TO_DATE(#{reservedate},'YYYYMMDD'),#{reservetime},'S',#{paynum})
 	
 	</insert>
 	
