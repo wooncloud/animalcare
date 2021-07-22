@@ -6,6 +6,7 @@ import java.util.Map;
 import com.pet.care.dto.ReservationDto;
 
 public interface IReservationService {
+
 	//사용자 예약신청
 	public boolean insertReserve(ReservationDto rDto);
 	
@@ -21,6 +22,9 @@ public interface IReservationService {
 	//병원 예약 신청 목록 전체 조회//
 	public List<ReservationDto> hospitalReserveList(Map<String, Object>map);
 	
+	//병원 예약 상세 조회 
+	public ReservationDto hospitalReserveDetail(Map<String, Object>map);
+	
 	//병원 관계자 예약 신청 완료 처리//
 	public boolean acceptReserve(Map<String, Object>map);
 	
@@ -34,8 +38,14 @@ public interface IReservationService {
 	public boolean modifyReserve(Map<String, Object>map);
 	
 	//미처리 예약 목록 보기
-	public ReservationDto standReserveList(Map<String, Object>map);
+	public List<ReservationDto> hospitalstandReserveList(Map<String, Object>map);
 	
-	//병원 오늘의 예약 보기
+	//오늘의 예약 목록 보기
 	public List<ReservationDto> todayReserveList(Map<String, Object>map);
+	
+	//사용자 반려 동물 목록
+	public List<String> getUserPet(Map<String, Object>map);
+	
+	//병원 해당일 목록 예약 보기
+	public List<ReservationDto> selectdayReserveList(Map<String, Object>map);
 }

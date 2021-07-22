@@ -21,8 +21,8 @@ public class ReservationServiceImpl implements IReservationService {
 
 	@Override
 	public boolean insertReserve(ReservationDto rDto) {
-		// TODO Auto-generated method stub
-		return false;
+		logger.info(" ReservationServiceImpl insertReserve {}", rDto);
+		return rDao.insertReserve(rDto);
 	}
 
 	@Override
@@ -51,32 +51,32 @@ public class ReservationServiceImpl implements IReservationService {
 
 	@Override
 	public boolean acceptReserve(Map<String, Object> map) {
-		// TODO Auto-generated method stub
-		return false;
+		logger.info(" ReservationServiceImpl acceptReserve {}", map);
+		return rDao.acceptReserve(map);
 	}
 
 	@Override
 	public boolean rejectReserve(Map<String, Object> map) {
-		// TODO Auto-generated method stub
-		return false;
+		logger.info(" ReservationServiceImpl rejectReserve {}", map);
+		return rDao.rejectReserve(map);
 	}
 
 	@Override
 	public boolean cancelReserve(Map<String, Object> map) {
-		// TODO Auto-generated method stub
-		return false;
+		logger.info(" ReservationServiceImpl cancelReserve {}", map);
+		return rDao.cancelReserve(map);
 	}
 
 	@Override
 	public boolean modifyReserve(Map<String, Object> map) {
-		// TODO Auto-generated method stub
-		return false;
+		logger.info(" ReservationServiceImpl modifyReserve {}", map);
+		return rDao.modifyReserve(map);
 	}
 
 	@Override
-	public ReservationDto standReserveList(Map<String, Object> map) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<ReservationDto> hospitalstandReserveList(Map<String, Object> map) {
+		logger.info(" ReservationServiceImpl hospitalstandReserveList {}", map);
+		return rDao.hospitalstandReserveList(map);
 	}
 
 	@Override
@@ -84,4 +84,20 @@ public class ReservationServiceImpl implements IReservationService {
 		return rDao.todayReserveList(map);
 	}
 
+	@Override
+	public ReservationDto hospitalReserveDetail(Map<String, Object> map) {
+		return rDao.hospitalReserveDetail(map);
+	}
+
+	@Override
+	public List<String> getUserPet(Map<String, Object> map) {
+		return rDao.getUserPet(map);
+	}
+
+	@Override
+	public List<ReservationDto> selectdayReserveList(Map<String, Object> map) {
+		return rDao.selectdayReserveList(map);
+	}
+
+	
 }

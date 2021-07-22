@@ -21,7 +21,6 @@ public class JsonUtil {
 	@SuppressWarnings("unchecked")
 	public static JSONArray CommonCodeJson(List<CodeDto> codeList) {
 		JSONArray ja = new JSONArray();
-		
 		for (CodeDto code : codeList) {
 			JSONObject j = new JSONObject();
 			j.put("id", code.getCodeid());
@@ -45,13 +44,13 @@ public class JsonUtil {
 	@SuppressWarnings("unchecked")
 	public static JSONArray CalenderJson(List<HospitalScheduleDto> HospitalScheduleList, List<ReservationDto> reservationList) {
 		JSONArray ja = new JSONArray();
-		
+		//병원 스케줄 하고 예약 리스트하고 집어넣으면 JSON으로 뽑아
 		for (ReservationDto r : reservationList) {
 			JSONObject j = new JSONObject();
 			j.put("id", r.getSeq());
 			j.put("calendarId", "예약");
 			j.put("title", r.getReservetype()); // 제목 어떻게 할지 정해야 함.
-			j.put("start", r.getReservedate());
+			j.put("start", r.getReservetime());
 			
 			// 예약 상태에 따른 다른 색깔
 			j.put("category", "task");
