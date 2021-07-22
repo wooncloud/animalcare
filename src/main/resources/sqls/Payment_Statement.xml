@@ -12,19 +12,20 @@ VALUES(PAYMENT_SEQ.NEXTVAL, #{user_email}, #{user_phone}, #{paynum},
 	 '', 'N', '', 'N', '49')
 </insert>
 
-<!-- <select id="payList" parameterType="java.lang.String" resultType="PaymentDto"> -->
+
+
 <select id="payList" parameterType="java.lang.String" resultType="PaymentDto">
 SELECT SEQ, USER_EMAIL, PAYNUM, HOSPITAL_NAME,  APPLYNUM,
-                PAYDATE, CANCELFLAG, REFUNDFLAG
+               TO_CHAR(PAYDATE,'yyyy-mm-dd') AS PAYDATE, CANCELFLAG, REFUNDFLAG
         FROM PAYMENT
         WHERE USER_EMAIL = #{user_email}
         ORDER BY SEQ DESC
 </select>
-
+<!-- TO_CHAR(PAYDATE,'YYYY-MM-DD') AS -->
 <select id="payDetailList" parameterType="java.lang.String" resultType="PaymentDto">
 SELECT SEQ, USER_EMAIL, PAYNUM, HOSPITAL_NAME, 
-		PAIDAMOUNT, PAYDATE, APPLYNUM, CANCELDATE,
-		CANCELFLAG, REFUNDDATE, REFUNDFLAG
+		PAIDAMOUNT, TO_CHAR(PAYDATE,'YYYY-MM-DD hh24:mi:ss') AS PAYDATE, APPLYNUM, TO_CHAR(CANCELDATE,'YYYY-MM-DD hh24:mi:ss') AS CANCELDATE,
+		CANCELFLAG, TO_CHAR(REFUNDDATE,'YYYY-MM-DD hh24:mi:ss') AS REFUNDDATE, REFUNDFLAG
 FROM PAYMENT
 WHERE SEQ = #{seq}
 </select>
