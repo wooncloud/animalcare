@@ -1,17 +1,21 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@include file="/header.jsp" %>
 
-<br><br>
+<link href="${path}/css/hospital.css" rel="stylesheet">
+<script type="text/javascript" src="${path}/js/hospital.js" ></script>
 
 <div class="container">
-	<div>
-		<div class="row fs-3">
-			<div class="col">병원 찾기</div>
-			<div class="col d-grid gap-2 d-md-flex justify-content-md-end">
-				<input type="button" class="btn btn-outline-success" value="초기화">
-			</div>
+
+<br><br>
+
+	
+	<div class="row fs-3 my-2">
+		<div class="col">병원 찾기</div>
+		<div class="col d-grid gap-2 d-md-flex justify-content-md-end">
+			<input type="button" class="btn btn-outline-success" value="초기화" onclick="window.location.reload();">
 		</div>
 	</div>
+	
 	<div>
 		<div class="card">
 			<div class="card-body">
@@ -20,24 +24,41 @@
      					 지역 선택
   					</div>
   					<div class="col">
-  						<input id="Gangnam" type="checkbox">
-  						<label for="Gangnam">강남구</label>
-  					</div>
-  					<div class="col">
-  						<input id="Gangnam" type="checkbox">
-  						<label for="Gangnam">거성은 선택해야한다 하드코딩이냐 코드테이블 데이터 입력이냐</label>
+  						<c:set var="i" value="0"/>
+  						<c:set var="j" value="5"/>
+  						<c:forEach var="loc" items="${loc}" varStatus="vs" >
+  							<c:if test="${i%j==0}">
+  								<div class="row">
+  							</c:if>
+									<div class="col">
+  										<input id="${loc.codeid}" type="checkbox" value="${loc.codename}" name="chkBox" onchange="chkBox(this)">
+  										<label for="${loc.codeid}">${loc.codename}</label>
+									</div>
+							<c:if test="${i%j==j-1}">
+  								</div>
+  							</c:if>
+  						<c:set var="i" value="${i+1}"/>
+  						</c:forEach>
   					</div>
   				</div>				
 			</div>
 		</div>
-		<div class="card">
+		<div class="card" id="petType">
 			<div class="card-body">
-				<div class="row">
+				<div class="row" >
    					<div class="col-2 text-center">
      					 진료 항목
   					</div>
-  					<div class="col">
-  						항목 넣을 곳
+  					<div class="col-2" >
+  						<select id="selectPetType" onchange="selectPetType()">
+  							<option value="">&nbsp;선택&nbsp;</option>
+  							<c:forEach var="dto" items="${petlist}" varStatus="vs">
+								<option  value="${dto.codeid}" value2="${dto.codename}" >${dto.codename}</option>
+							</c:forEach>
+  						</select>
+  					</div>
+  					<div class="col-8" id="choice">
+  					
   					</div>
   				</div>				
 			</div>
@@ -67,15 +88,15 @@
 	
 	<br><br>
 	
-	<div class="fs-3">병원 목록</div>
+	<div class="fs-3 my-2">병원 목록</div>
 	<div>
 		<div class="card">
 			<div class="card-body">
 				<div class="row">
-					<div class="col-3 text-center">
+					<div class="col-4 text-center">
 		     			병원명
 		    		</div>
-					<div class="col-4 text-center">
+					<div class="col-3 text-center">
 		     			위치
 		    		</div>
 					<div class="col text-center">
@@ -84,9 +105,11 @@
 					<div class="col text-center">
 		     			전화번호
 		    		</div>
-					<div class="col-2 text-center">
-		     			진료항목
-		    		</div>
+		    		<c:if test="${sessionScope.auth eq 'user'}">
+						<div class="col text-center">
+		     			 	관심등록
+		    			</div>
+		    		</c:if>
 				</div>
 			</div>
 		</div>
@@ -94,11 +117,11 @@
 			<div class="card">
 				<div class="card-body">
 					<div class="row">
-						<div class="col-3 text-center">
+						<div class="col-4 text-center" onclick="location.href='./detailHospital.do?seq=${dto.seq}'; " style="cursor:pointer;">
 		     				${dto.name}
 						</div>
-						<div class="col-4">
-					     	${dto.address1}&nbsp;${dto.address2}
+						<div class="col-3">
+					     	${dto.address1}
 					    </div>
 						<div class="col text-center">
 					     	${dto.opentime}
@@ -106,9 +129,11 @@
 						<div class="col text-center">
 					     	${dto.tel}
 					    </div>
-						<div class="col-2">
-					     	${dto.pettypedto.pettype}
-					    </div>
+					    <c:if test="${sessionScope.auth eq 'user'}">
+							<div class="col text-center">
+					     		추천☆즐찾
+						    </div>
+					    </c:if>
 					</div>
 				</div>
 			</div>
@@ -140,12 +165,10 @@
 	
 	
 	<br><br>
-	<hr>
-		${lists}
-	<hr>
-	<br><br>
 	
 </div>
+
+<!-- 테스트 -->
 
 
 <%@include file="/footer.jsp" %>

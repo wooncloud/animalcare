@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.pet.care.dto.CodeDto;
 import com.pet.care.dto.HospitalInfoDto;
 import com.pet.care.dto.HospitalJoinDto;
 import com.pet.care.model.dao.hospital.IHospitalInfoDao;
@@ -31,6 +32,13 @@ public class HospitalInfoServiceImpl implements IHospitalInfoService {
 	public int hospitalCount(Map<String, Object> map) {
 		logger.info("[hospitalCount - {}] : 조회된 병원 전체 갯수", map);
 		return dao.hospitalCount(map);
+	}
+	
+	//진료항목 전체조회(페이징x 검색 기능 위한 쿼리)
+	@Override
+	public List<CodeDto> petTypeList() {
+		logger.info("[hospitalList - {}] : 진료항목 전체조회", dao.petTypeList());
+		return dao.petTypeList();
 	}
 	
 	//병원 검색  

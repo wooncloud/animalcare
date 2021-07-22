@@ -7,6 +7,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.pet.care.dto.CodeDto;
 import com.pet.care.dto.HospitalInfoDto;
 import com.pet.care.dto.HospitalJoinDto;
 
@@ -28,6 +29,12 @@ public class HospitalInfoDaoImpl implements IHospitalInfoDao {
 	@Override
 	public int hospitalCount(Map<String, Object> map) {
 		return sqlSession.selectOne(NS+"hospitalCount", map);
+	}
+	
+	//진료항목 전체조회(페이징x 검색 기능 위한 쿼리)
+	@Override
+	public List<CodeDto> petTypeList() {
+		return sqlSession.selectList(NS+"petTypeList");
 	}
 
 	//병원 검색  
@@ -52,7 +59,7 @@ public class HospitalInfoDaoImpl implements IHospitalInfoDao {
 	//병원 상세정보 조회 
 	@Override
 	public HospitalJoinDto detailHospital(int seq) {
-		return sqlSession.selectOne(NS+"HospitalInfoDto", seq);
+		return sqlSession.selectOne(NS+"detailHospital", seq);
 	}
 	
 	//병원 정보 수정
@@ -69,6 +76,5 @@ public class HospitalInfoDaoImpl implements IHospitalInfoDao {
 		return (n > 0) ? true : false;
 	}
 
-	
-	
+
 }
