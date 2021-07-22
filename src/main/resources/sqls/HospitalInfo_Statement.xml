@@ -22,28 +22,28 @@
 <!-- 	</resultMap> -->
 
 <!-- 	회원 병원 리스트 조회  -->
-	<select id="hospitalList" resultMap="">
-		SELECT HOSPITAL_SEQ , NAME , CONTENT ,
-                ADDRESS1 , ADDRESS2 , OPENTIME , PETTYPE
-        	FROM (                
-					SELECT p.HOSPITAL_SEQ , h.NAME , h.CONTENT ,
-      	    		     h.ADDRESS1 , h.ADDRESS2 , h.OPENTIME ,
-      	     		     LISTAGG(p.PETTYPE,',') PETTYPE ,
-        	    		 ROW_NUMBER() OVER(ORDER BY p.HOSPITAL_SEQ DESC) AS RN
-        			FROM HOSPITALINFO h 
-        	       		JOIN USERINFO u 
-        	     		 	ON SUBSTR(h.ADDRESS1 , 0, INSTR(h.ADDRESS1, ' ', 1, 2)) =
-        	       			    SUBSTR(u.ADDRESS1 , 0, INSTR(u.ADDRESS1, ' ', 1, 2))
-        	      		JOIN PETTYPE p 
-        	      			ON h.SEQ = p.HOSPITAL_SEQ 
-       				WHERE u.EMAIL = #{email}
-        	     	   AND h.DELFLAG = 'N'
-      				GROUP BY p.HOSPITAL_SEQ , h.NAME , h.CONTENT ,
-                         h.ADDRESS1 , h.ADDRESS2 , h.OPENTIME
-                        )
-			WHERE RN BETWEEN #{first} AND #{last}
-			ORDER BY HOSPITAL_SEQ DESC     
-	</select>
+<!-- 	<select id="hospitalList" resultMap=""> -->
+<!-- 		SELECT HOSPITAL_SEQ , NAME , CONTENT , -->
+<!--                 ADDRESS1 , ADDRESS2 , OPENTIME , PETTYPE -->
+<!--         	FROM (                 -->
+<!-- 					SELECT p.HOSPITAL_SEQ , h.NAME , h.CONTENT , -->
+<!--       	    		     h.ADDRESS1 , h.ADDRESS2 , h.OPENTIME , -->
+<!--       	     		     LISTAGG(p.PETTYPE,',') PETTYPE , -->
+<!--         	    		 ROW_NUMBER() OVER(ORDER BY p.HOSPITAL_SEQ DESC) AS RN -->
+<!--         			FROM HOSPITALINFO h  -->
+<!--         	       		JOIN USERINFO u  -->
+<!--         	     		 	ON SUBSTR(h.ADDRESS1 , 0, INSTR(h.ADDRESS1, ' ', 1, 2)) = -->
+<!--         	       			    SUBSTR(u.ADDRESS1 , 0, INSTR(u.ADDRESS1, ' ', 1, 2)) -->
+<!--         	      		JOIN PETTYPE p  -->
+<!--         	      			ON h.SEQ = p.HOSPITAL_SEQ  -->
+<!--        				WHERE u.EMAIL = #{email} -->
+<!--         	     	   AND h.DELFLAG = 'N' -->
+<!--       				GROUP BY p.HOSPITAL_SEQ , h.NAME , h.CONTENT , -->
+<!--                          h.ADDRESS1 , h.ADDRESS2 , h.OPENTIME -->
+<!--                         ) -->
+<!-- 			WHERE RN BETWEEN #{first} AND #{last} -->
+<!-- 			ORDER BY HOSPITAL_SEQ DESC      -->
+<!-- 	</select> -->
 	
 <!-- 	조회된 병원 전체 갯수 (페이징 쿼리)  -->	
 	<select id="hospitalCount" parameterType="java.util.Map" resultType="java.lang.Integer">
