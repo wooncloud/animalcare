@@ -3,9 +3,29 @@
 <mapper namespace="com.pet.care.model.dao.reservation.ReservationDaoImpl">
 
 
+	<!-- 예약 신청 -->
 	
+	<insert id="insertReserve" parameterType="ReservationDto">
+
+	
+	INSERT INTO RESERVATION
+		(SEQ, HOSPITAL_SEQ, USER_EMAIL,PET_NAME , RESERVETYPE, REGDATE, RESERVEDATE,
+		RESERVETIME ,STATUS, PAYNUM)
+	VALUES (RESERVATION_SEQ.NEXTVAL,#{hospital_seq},#{user_email},#{pet_name},#{reservetype},
+				SYSDATE, TO_DATE(#{reservedate},'YYYYMMDD'),#{reservetime},'S',#{paynum})
+	
+	</insert>
+	
+	<!-- 사용자 반려동물 목록 -->
+	<select id="getUserPet" parameterType="java.util.Map" resultType="java.lang.String">
+	SELECT NAME
+		FROM PETINFO p 
+		WHERE USER_EMAIL =#{user_email}
+	
+	</select>
+	<!-- 사용자 예약 목록 조회 -->
 	<select id="userReserveList" parameterType="java.util.Map" resultType="ReservationDto">
-	SELECT r1.SEQ, r1.RESERVETYPE, r1.PET_NAME, h.NAME , r1.RESERVEDATE ,r1.STATUS, r1.HOSPITAL_SEQ 
+	SELECT r1.SEQ, r1.RESERVETYPE, r1.PET_NAME, h.NAME ,TO_CHAR(r1.RESERVEDATE,'YYYY-MM-DD') AS RESERVEDATE,r1.STATUS, r1.HOSPITAL_SEQ 
         FROM HOSPITALINFO h JOIN
         (SELECT r.SEQ ,r.RESERVETYPE ,r.PET_NAME ,r.RESERVEDATE ,r.STATUS, r.HOSPITAL_SEQ 
                         FROM RESERVATION r 
@@ -15,8 +35,9 @@
 	
 	</select>
 	
+	<!-- 사용자 반려 상세 조회 -->
 	<select id="userRejectDetail" parameterType="java.util.Map" resultType="ReservationDto">
-	SELECT r1.RESERVETYPE , r1.RESERVEDATE ,r1.RESERVETIME , r1.PET_NAME ,r1.PAYNUM ,r1.STATUS, h.NAME ,r1.COMMNET ,h.ADDRESS1 
+	SELECT r1.RESERVETYPE ,TO_CHAR(r1.RESERVEDATE,'YYYY-MM-DD')  AS RESERVEDATE ,r1.RESERVETIME , r1.PET_NAME ,r1.PAYNUM ,r1.STATUS, h.NAME ,r1.COMMNET ,h.ADDRESS1 
         FROM HOSPITALINFO h JOIN
                         (SELECT r.RESERVETYPE , r.RESERVEDATE ,r.RESERVETIME , r.PET_NAME ,r.PAYNUM ,r.STATUS, r.COMMNET ,r.HOSPITAL_SEQ 
                                 FROM RESERVATION r 
@@ -26,8 +47,9 @@
         ON h.SEQ = r1.HOSPITAL_SEQ 
 	</select>
 	
+	<!-- 사용자 예약(반려제외) 상세 조회 -->
 	<select id="userReserveDetail" parameterType="java.util.Map" resultType="ReservationDto">
-SELECT r1.RESERVETYPE , r1.RESERVEDATE ,r1.RESERVETIME , r1.PET_NAME ,r1.PAYNUM ,r1.STATUS, h.NAME ,h.ADDRESS1 
+SELECT r1.RESERVETYPE , TO_CHAR(r1.RESERVEDATE,'YYYY-MM-DD') AS RESERVEDATE ,r1.RESERVETIME , r1.PET_NAME ,r1.PAYNUM ,r1.STATUS, h.NAME ,h.ADDRESS1 
 	FROM HOSPITALINFO h JOIN
 			(SELECT r.RESERVETYPE , r.RESERVEDATE ,r.RESERVETIME , r.PET_NAME ,r.PAYNUM ,r.STATUS, r.HOSPITAL_SEQ 
 				FROM RESERVATION r 
@@ -38,8 +60,9 @@ SELECT r1.RESERVETYPE , r1.RESERVEDATE ,r1.RESERVETIME , r1.PET_NAME ,r1.PAYNUM 
 	
 	</select>
 	
+	<!-- 오늘의 예약 목록 조회 -->
 	<select id="todayReserveList" parameterType="java.util.Map" resultType="ReservationDto">
-	SELECT  HOSPITAL_SEQ ,SEQ ,RESERVETYPE,u.NAME ,u.EMAIL ,u.PHONE ,PET_NAME ,RESERVEDATE, RESERVETIME
+	SELECT  HOSPITAL_SEQ ,SEQ ,RESERVETYPE,u.NAME ,u.EMAIL ,u.PHONE ,PET_NAME ,TO_CHAR(RESERVEDATE,'YYYY-MM-DD')  AS RESERVEDATE , RESERVETIME
         FROM  USERINFO u JOIN RESERVATION r 
         ON RESERVEDATE = TO_CHAR(SYSDATE,'YYYYMMDD')
         WHERE u.EMAIL = r.USER_EMAIL 
@@ -47,13 +70,66 @@ SELECT r1.RESERVETYPE , r1.RESERVEDATE ,r1.RESERVETIME , r1.PET_NAME ,r1.PAYNUM 
 	
 	</select>
 	
+	<!-- 병원 예약 목록 조회 -->
 	<select id="hospitalReserveList" parameterType="java.util.Map" resultType="ReservationDto">
-	SELECT HOSPITAL_SEQ ,SEQ ,RESERVETYPE,u.NAME ,u.EMAIL ,u.PHONE ,PET_NAME ,RESERVEDATE ,RESERVETIME, STATUS
+	SELECT HOSPITAL_SEQ ,SEQ ,(SELECT CODENAME FROM TYPECODE t  WHERE CODEID =RESERVETYPE) AS RESERVETYPE,u.NAME ,u.EMAIL ,u.PHONE ,PET_NAME ,TO_CHAR(RESERVEDATE,'YYYY-MM-DD')  AS RESERVEDATE ,RESERVETIME, STATUS
         FROM  USERINFO u  JOIN RESERVATION r 
         ON r.USER_EMAIL = u.EMAIL 
-        AND HOSPITAL_SEQ =#{seq}
+        AND HOSPITAL_SEQ =#{hospital_seq}
         ORDER BY RESERVEDATE DESC
 		
 	</select>
 	
+	<!-- 병원 미처리 목록 조회 -->
+	<select id="hospitalStandReserveList" parameterType="java.util.Map" resultType="ReservationDto">
+	SELECT HOSPITAL_SEQ ,SEQ ,RESERVETYPE,u.NAME ,u.EMAIL ,u.PHONE ,PET_NAME ,TO_CHAR(RESERVEDATE,'YYYY-MM-DD')  AS RESERVEDATE ,RESERVETIME, STATUS
+        FROM  USERINFO u JOIN RESERVATION r 
+        ON r.USER_EMAIL = u.EMAIL 
+        AND HOSPITAL_SEQ =#{seq}
+        AND r.STATUS ='S'
+               ORDER BY RESERVEDATE DESC
+	</select>
+	
+	<!-- 병원 예약 상세 조회 완료-->
+	<select id="hospitalReserveDetail" parameterType="java.util.Map" resultType="ReservationDto">
+	 SELECT (SELECT CODENAME FROM TYPECODE t  WHERE CODEID =RESERVETYPE) AS RESERVETYPE, TO_CHAR(r.RESERVEDATE,'YYYY-MM-DD')  AS RESERVEDATE, r.RESERVETIME, r.PET_NAME, r.USER_EMAIL,r.STATUS,u.PHONE 
+         FROM RESERVATION r JOIN USERINFO u
+         ON r.USER_EMAIL = u.EMAIL 
+         AND r.HOSPITAL_SEQ = #{hospital_seq}
+         AND r.SEQ =#{seq}
+	</select>
+
+
+	<!-- 예약 수정 -->
+	<update id="modifyReserve" parameterType="java.util.Map">
+	UPDATE RESERVATION 
+        SET RESERVEDATE = #{reservedate}, RESERVETIME =#{reservetime}
+        WHERE SEQ=${seq} AND STATUS='S' AND HOSPITAL_SEQ=#{hospital_seq} AND PAYNUM IS NOT NULL
+	</update>
+	
+	<!-- 예약 반려 -->
+	<update id="rejectReserve" parameterType="java.util.Map">
+		UPDATE RESERVATION
+        SET STATUS='R', COMMNET =#{commnet}
+        WHERE SEQ = #{seq} AND PAYNUM IS NOT NULL AND STATUS='S'
+	</update>
+	
+	<!-- 예약 완료 -->
+	<update id="acceptReserve" parameterType="java.util.Map">
+	UPDATE RESERVATION 
+        SET STATUS = 'A'
+        WHERE SEQ=${seq} AND PAYNUM IS NOT NULL AND STATUS='S'
+	
+	</update>
+	
+	<!-- 선택일 조회 -->
+	<select id="selectdayReserveList" parameterType="java.util.Map" resultType="ReservationDto">
+	SELECT ROWNUM, HOSPITAL_SEQ ,SEQ ,(SELECT CODENAME FROM TYPECODE t  WHERE CODEID =RESERVETYPE) AS RESERVETYPE,u.NAME ,r.USER_EMAIL ,u.PHONE ,PET_NAME ,RESERVETIME ,RESERVEDATE
+        FROM  USERINFO u JOIN RESERVATION r 
+        ON r.USER_EMAIL = u.EMAIL 
+        WHERE TO_CHAR(RESERVEDATE,'YYYYMMDD')= #{reservedate}
+        AND HOSPITAL_SEQ =#{hospital_seq}
+        ORDER BY RESERVETIME
+	</select>
+
 </mapper>
