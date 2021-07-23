@@ -24,37 +24,16 @@ const swalNotice = Swal.mixin({
 
 // swal2 공통모듈
 const swal = {
-	checkIcon: (icon) => {
-		switch (icon) {
-			case "success":
-				return "success";
-			case "error":
-				return "error";
-			case "warning":
-				return "warning";
-			case "info":
-				return "info";
-			case "question":
-				return "question";
-			default:
-				return "";
-		}
-	},
 	// 일반 alert
 	alert: (msg) => {
 		Swal.fire(msg);
 	},
 	// 아이콘 있는 alert
 	alert_icon: (msg, icon) => {
-		icon = checkIcon(icon);
-		if (icon == "") {
-			Swal.fire(msg);
-		} else {
-			Swal.fire({
-				icon: icon,
-				title: msg,
-			});
-		}
+		Swal.fire({ icon: icon, title: msg, });
+	},
+	alert_txt: (title, msg, icon) => {
+		Swal.fire(title, msg, icon);
 	},
 	// confirm
 	// msg : 질의 메시지
@@ -99,6 +78,37 @@ const swal = {
 	notice: (msg) => {
 		swalNotice.fire({ icon: 'info', title: msg })
 	},
+}
+
+const regEx = {
+	space: /\s/,
+	numbers: /^[0-9]*$/,
+	eng: /^[a-zA-Z]*$/,
+	engAndNum: /^[a-zA-Z0-9]*$/,
+	kor: /^[가-힣]*$/,
+	email: /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/,
+	phone: /^01(?:0|1|[6-9])-(?:\d{3}|\d{4})-\d{4}$/,
+	// 최소 8 자 최대 128 지 및 대문자 하나 이상, 소문자 하나, 숫자 하나 및 특수 문자 하나 이상
+	pw: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,128}$/
+}
+
+const checkboxUtil = {
+	// 체크박스 배열을 받아 체크 된 갯수 반환
+	chkCnt: function (chks) {
+		let cnt = 0;
+
+		for (let c of chks) {
+			if (c.checked) {
+				cnt++
+			}
+		}
+
+		return cnt;
+	},
+	// 모두 체크가 되어 있다면 true, 아니면 false
+	isAllChk: function (chks) {
+		return chks.length == this.chkCnt(chks);
+	}
 }
 
 // JCF Set과 같은 역할
@@ -249,4 +259,13 @@ function setCookie(cName, cValue, cDay ){
 
 function DeleteCookie(name) {
     setCookie(name,"",-1);
+}
+
+// 코드 이름 가져오기
+function getCodeName(codeId, codeList){
+	for (const code of codeList) {
+		if(code.id == codeId){
+			return code.name;
+		}
+	}
 }

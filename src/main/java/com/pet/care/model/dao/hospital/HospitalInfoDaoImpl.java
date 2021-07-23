@@ -71,9 +71,8 @@ public class HospitalInfoDaoImpl implements IHospitalInfoDao {
 
 	//병원 정보 삭제
 	@Override
-	public boolean deleteHospital(HospitalInfoDto dto) {
-		int n = sqlSession.update(NS + "deleteHospital", dto);
-		return (n > 0) ? true : false;
+	public int deleteHospital(int seq) {
+		return sqlSession.update(NS + "deleteHospital", seq);
 	}
 
 

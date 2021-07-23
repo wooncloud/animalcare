@@ -2,6 +2,8 @@
 <%@include file="/header.jsp" %>
 
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=1dad9dd4a53e26ad95b8bc11412cc8cb&libraries=services"></script>
+<link href="${path}/css/hospital.css" rel="stylesheet">
+<script type="text/javascript" src="${path}/js/hospital.js" ></script>
 
 <div class="container">
 
@@ -10,6 +12,7 @@
 	<div class="row fs-3 my-2">
 		<div class="col">병원 상세 정보</div>
 		<div class="col d-grid gap-2 d-md-flex justify-content-md-end">
+			<input type="button" class="btn btn-outline-primary" value="일정등록 임시" onclick="insertSchedule()">
 			<input type="button" class="btn btn-outline-primary" value="이전페이지" onclick="history.back()">
 		</div>
 	</div>
@@ -32,7 +35,7 @@
    					<div class="col-2 text-center border-end">
      					 진료항목
   					</div>
-  					<div id="pettype" class="col">
+  					<div id="pettypes" class="col">
 						 ${dto.pettypedto[0].pettype}
   					</div>
   				</div>				
@@ -102,26 +105,33 @@
 	
 	<br>
 	
-<%-- 	<c:if test="${sessionScope.auth eq 'user'}"> --%>
-	<div class="d-grid gap-2 d-md-flex justify-content-md-center">
-			<button type="button" class="btn btn-outline-primary btn-lg">문의하기</button>				 	
-     		<button type="button" class="btn btn-outline-primary btn-lg">예약하기</button>		 
-     		<button type="button" class="btn btn-outline-primary btn-lg">관심병원 등록</button>		 
-     		<button type="button" class="btn btn-outline-secondary btn-lg">신고하기</button>		  		
-	</div>
-<%-- 	</c:if> --%>
-<%-- 	<c:if test="${sessionScope.auth eq 'user'}"> --%>
-	<div class="d-grid gap-2 d-md-flex justify-content-md-center">
-			<button type="button" class="btn btn-outline-primary btn-lg">수정하기</button>				 	
-     		<button type="button" class="btn btn-outline-secondary btn-lg">삭제하기</button>		 	  		
-	</div>
-<%-- 	</c:if> --%>
+
+	<%-- 	<c:if test="${sessionScope.auth eq 'user'}"> --%>
+		<div class="d-grid gap-2 d-md-flex justify-content-md-center">
+				<button type="button" class="btn btn-outline-primary btn-lg">문의하기</button>				 	
+     			<button type="button" class="btn btn-outline-primary btn-lg">예약하기</button>		 
+     			<button type="button" class="btn btn-outline-primary btn-lg">관심병원 등록</button>		 
+     			<button type="button" class="btn btn-outline-secondary btn-lg">신고하기</button>		  		
+		</div>
+	<%-- 	</c:if> --%>
+	<%-- 	<c:if test="${sessionScope.auth eq 'user'}"> --%>
+		<div class="d-grid gap-2 d-md-flex justify-content-md-center">
+				<input type="button" class="btn btn-outline-primary btn-lg" value="수정하기" onclick="modifyHospital('${dto.seq}')"/>				 	
+    	 		<input type="button" class="btn btn-outline-secondary btn-lg" value="삭제하기" onclick="deleteHospital('${dto.seq}')"/>		
+		</div>
+	<%-- 	</c:if> --%>
 <p>버튼친구들 같은페이지에 권한으로 구분할 예정</p>
+
 <br><br>
 
 </div>
 
 <script type="text/javascript">
+
+// 펫타입 코드
+	window.onload = detailHospital.init;     
+	let petCode = ${petJson}
+	
 // 지도 API 스크립트 부분
 var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
 mapOption = {
@@ -169,8 +179,4 @@ geocoder.addressSearch(targetAddress, function(result, status) {
 });
 
 </script>
-<script type="text/javascript">
-        window.onload = detailHospital.init;
-        let petCode = ${petJson}
-    </script>
 <%@include file="/footer.jsp" %>

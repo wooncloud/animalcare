@@ -3,6 +3,7 @@
 <mapper namespace="com.pet.care.model.dao.hospital.IHospitalInfoDao">
 
 	<resultMap type="com.pet.care.dto.HospitalJoinDto" id="HospitalJoinDto">
+		<result property="seq" column="SEQ"/>
 		<result property="name" column="NAME"/>
 		<result property="content" column="CONTENT"/>
 		<result property="address1" column="ADDRESS1"/>
@@ -83,9 +84,9 @@
             			JOIN PETTYPE p 
           				ON h.SEQ = p.HOSPITAL_SEQ 
     			WHERE h.DELFLAG = 'N'
-     					AND h.EMERGENCY = 'N' 
     					AND SUBSTR(h.ADDRESS1 , 0, INSTR(h.ADDRESS1, ' ', 1, 2)) = '서울 강남구 ' 
     					AND p.PETTYPE = 'PET002'
+     					AND h.EMERGENCY = 'N' 	
         GROUP BY p.HOSPITAL_SEQ , h.NAME , h.CONTENT ,
                          h.ADDRESS1 , h.ADDRESS2 , h.OPENTIME , h.TEL
                         )
@@ -125,7 +126,7 @@
 
 <!-- 	병원 상세정보 조회  -->
 	<select id="detailHospital" resultMap="HospitalJoinDto">
-		SELECT h.OPERATOR_EMAIL , h.NAME , h.ADDRESS1 ,
+		SELECT h.SEQ, h.OPERATOR_EMAIL , h.NAME , h.ADDRESS1 ,
                 h.ADDRESS2 , o.PHONE , LISTAGG(p.PETTYPE,',') PETTYPE ,
                 h.CONTENT , h.EMERGENCY , h.OPENTIME , h.TEL
         FROM HOSPITALINFO h 
@@ -135,7 +136,7 @@
                 ON o.EMAIL = h.OPERATOR_EMAIL 
         WHERE h.SEQ = #{seq}
                 AND h.DELFLAG = 'N'
-        GROUP BY h.OPERATOR_EMAIL , h.NAME , h.ADDRESS1 , o.PHONE , 
+        GROUP BY h.SEQ, h.OPERATOR_EMAIL , h.NAME , h.ADDRESS1 , o.PHONE , 
                         h.ADDRESS2 , h.CONTENT , h.EMERGENCY , h.OPENTIME , h.TEL
 	</select>
 
@@ -154,7 +155,7 @@
 <!-- 	병원 정보 삭제  -->
 	<update id="deleteHospital" parameterType="java.lang.Integer">
 		UPDATE HOSPITALINFO SET DELFLAG ='Y'
-			WHERE SEQ ='3'
+			WHERE SEQ =#{seq}
 	</update>
 	
 	

@@ -34,6 +34,6 @@ public interface IHospitalInfoDao {
 	public boolean modifyHospital(HospitalInfoDto dto);
 	
 	//병원 정보 삭제  
-	public boolean deleteHospital(HospitalInfoDto dto);
+	public int deleteHospital(int seq);
 	
 }

@@ -30,8 +30,8 @@
   							<c:if test="${i%j==0}">
   								<div class="row">
   							</c:if>
-									<div class="col">
-  										<input id="${loc.codeid}" type="checkbox" value="${loc.codename}" name="chkBox" onchange="chkBox(this)">
+									<div class="col my-1">
+  										<input class="form-check-input" id="${loc.codeid}" type="checkbox" value="${loc.codename}" name="chkBox" onchange="chkBox(this)">
   										<label for="${loc.codeid}">${loc.codename}</label>
 									</div>
 							<c:if test="${i%j==j-1}">
@@ -45,22 +45,22 @@
 		</div>
 		<div class="card" id="petType">
 			<div class="card-body">
-				<div class="row" >
+				<div class="row my-2" >
    					<div class="col-2 text-center">
      					 진료 항목
   					</div>
   					<div class="col-2" >
-  						<select id="selectPetType" onchange="selectPetType()">
-  							<option value="">&nbsp;선택&nbsp;</option>
-  							<c:forEach var="dto" items="${petlist}" varStatus="vs">
-								<option  value="${dto.codeid}" value2="${dto.codename}" >${dto.codename}</option>
-							</c:forEach>
-  						</select>
-  					</div>
-  					<div class="col-8" id="choice">
-  					
-  					</div>
+							<select class="form-select" id="selectPetType" onchange="selectType()">
+								<option value="" selected>&nbsp;선택&nbsp;</option>
+								<c:forEach var="dto" items="${petlist}" varStatus="vs">
+									<option  value="${dto.codeid}" >${dto.codename}</option>
+								</c:forEach>
+							</select>
+						</div>
   				</div>				
+ 				<div class="choice-div" id="choice">
+ 					
+ 				</div>
 			</div>
 		</div>
 		<div class="card">

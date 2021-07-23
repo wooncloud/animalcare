@@ -1,24 +1,28 @@
 package com.pet.care.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.security.core.SpringSecurityMessageSource;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 
-import com.pet.care.model.service.IUserService;
+import com.pet.care.model.service.user.IUserService;
 
+@Service
 public class UserAuthService implements UserDetailsService {
 
 	@Autowired
-	private IUserService iUserService;
-	
-	@Override
-	public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
-		return null;
-		// return iUserService.findBy(id);
-		// 아이디로 유저 찾기 -> dao에 user id로 유저 찾는 기능 있어야 함
-	}
-	
-	
+	private IUserService userService;
 
+	private MessageSourceAccessor msg = SpringSecurityMessageSource.getAccessor();
+
+	public UserAuthService() {
+	}
+
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		return userService.emailSecurity(username);
+	}
 }

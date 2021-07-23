@@ -18,6 +18,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Random;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpSession;
 
 import org.codehaus.jackson.JsonParser;
@@ -25,6 +27,9 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,8 +52,20 @@ import net.nurigo.java_sdk.exceptions.CoolsmsException;
 @Controller
 public class TestController {
 
+	@Autowired
+	private JavaMailSender mailSender;
+	
+	@Autowired
+	
 	@RequestMapping(value = "/test/sms.do", method = RequestMethod.GET)
 	public String smsPage() {
+		return "test/SMS";
+	}
+	
+	@RequestMapping(value = "/test/email.do", method = RequestMethod.GET)
+	public String emailPage() {
+		Util.EmailSend(mailSender, "dntjdgh02@naver.com", "테스트입니다.", "대단하네요!");
+		
 		return "test/SMS";
 	}
 
@@ -251,8 +268,8 @@ public class TestController {
 		 	return "/";
 	 }
 	    
-	
-	
-	
-	
+	 @RequestMapping(value = "/test/user/login.do", method = RequestMethod.GET)
+	 public String login() {
+		 return "";
+	 }
 }

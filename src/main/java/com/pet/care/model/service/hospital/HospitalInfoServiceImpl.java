@@ -78,9 +78,9 @@ public class HospitalInfoServiceImpl implements IHospitalInfoService {
 	
 	//병원 정보 삭제
 	@Override
-	public boolean deleteHospital(HospitalInfoDto dto) {
-		logger.info("[deleteHospital - {}] : 병원 정보 삭제", dto);
-		return dao.deleteHospital(dto);
+	public boolean deleteHospital(int seq) {
+		logger.info("[deleteHospital - {}] : 병원 정보 삭제", seq);
+		return dao.deleteHospital(seq) > 0 ? true : false;
 	}
 	
 }
