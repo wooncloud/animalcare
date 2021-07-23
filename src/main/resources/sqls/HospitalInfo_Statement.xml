@@ -2,90 +2,96 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.pet.care.model.dao.hospital.IHospitalInfoDao">
 
-<!-- 	<resultMap type="com.pet.care.dto.HospitalJoinDto" id="HospitalJoinDto"> -->
-<!-- 		<result/> -->
+	<resultMap type="com.pet.care.dto.HospitalJoinDto" id="HospitalJoinDto">
+		<result property="seq" column="SEQ"/>
+		<result property="name" column="NAME"/>
+		<result property="content" column="CONTENT"/>
+		<result property="address1" column="ADDRESS1"/>
+		<result property="address2" column="ADDRESS2"/>
+		<result property="opentime" column="OPENTIME"/>
+		<result property="operator_email " column="OPERATOR_EMAIL "/>
+		<result property="tel" column="TEL"/>
+		<result property="emergency" column="EMERGENCY"/>
 <!-- 		<collection property="" resultMap="UserDto"/> -->
-<!-- 		<collection property="" resultMap="PetTypeDto"/> -->
-<!-- 		<collection property="" resultMap="OperatorDto"/> -->
-<!-- 	</resultMap> -->
+		<collection property="pettypedto" resultMap="PetTypeDto"/>
+		<collection property="operatordto" resultMap="OperatorDto"/>
+	</resultMap>
 	
 <!-- 	<resultMap type="com.pet.care.dto.UserDto" id="UserDto"> -->
 <!-- 		<result/> -->
 <!-- 	</resultMap> -->
 	
-<!-- 	<resultMap type="com.pet.care.dto.PetTypeDto" id="PetTypeDto"> -->
-<!-- 		<result/> -->
-<!-- 	</resultMap> -->
+	<resultMap type="com.pet.care.dto.PetTypeDto" id="PetTypeDto">
+		<result property="hospital_seq" column="HOSPITAL_SEQ"/>
+		<result property="pettype" column="PETTYPE"/>
+	</resultMap>
 	
-<!-- 	<resultMap type="com.pet.care.dto.OperatorDto" id="OperatorDto"> -->
-<!-- 		<result/> -->
-<!-- 	</resultMap> -->
+	<resultMap type="com.pet.care.dto.OperatorDto" id="OperatorDto">
+		<result property="phone" column="PHONE"/>
+		<result property="email" column="EMAIL"/>
+	</resultMap>
 
 <!-- 	회원 병원 리스트 조회  -->
-<!-- 	<select id="hospitalList" resultMap=""> -->
-<!-- 		SELECT HOSPITAL_SEQ , NAME , CONTENT , -->
-<!--                 ADDRESS1 , ADDRESS2 , OPENTIME , PETTYPE -->
-<!--         	FROM (                 -->
-<!-- 					SELECT p.HOSPITAL_SEQ , h.NAME , h.CONTENT , -->
-<!--       	    		     h.ADDRESS1 , h.ADDRESS2 , h.OPENTIME , -->
-<!--       	     		     LISTAGG(p.PETTYPE,',') PETTYPE , -->
-<!--         	    		 ROW_NUMBER() OVER(ORDER BY p.HOSPITAL_SEQ DESC) AS RN -->
-<!--         			FROM HOSPITALINFO h  -->
-<!--         	       		JOIN USERINFO u  -->
-<!--         	     		 	ON SUBSTR(h.ADDRESS1 , 0, INSTR(h.ADDRESS1, ' ', 1, 2)) = -->
-<!--         	       			    SUBSTR(u.ADDRESS1 , 0, INSTR(u.ADDRESS1, ' ', 1, 2)) -->
-<!--         	      		JOIN PETTYPE p  -->
-<!--         	      			ON h.SEQ = p.HOSPITAL_SEQ  -->
-<!--        				WHERE u.EMAIL = #{email} -->
-<!--         	     	   AND h.DELFLAG = 'N' -->
-<!--       				GROUP BY p.HOSPITAL_SEQ , h.NAME , h.CONTENT , -->
-<!--                          h.ADDRESS1 , h.ADDRESS2 , h.OPENTIME -->
-<!--                         ) -->
-<!-- 			WHERE RN BETWEEN #{first} AND #{last} -->
-<!-- 			ORDER BY HOSPITAL_SEQ DESC      -->
-<!-- 	</select> -->
+	<select id="hospitalList" parameterType="java.util.Map" resultType="HospitalJoinDto">
+		SELECT SEQ , HOSPITAL_SEQ , NAME , CONTENT ,
+                ADDRESS1 , ADDRESS2 , OPENTIME , TEL
+        	FROM (                
+					SELECT h.SEQ , p.HOSPITAL_SEQ , h.NAME , h.CONTENT ,
+      	    		     h.ADDRESS1 , h.ADDRESS2 , h.OPENTIME , h.TEL,
+        	    		 ROW_NUMBER() OVER(ORDER BY p.HOSPITAL_SEQ DESC) AS RN
+        			FROM HOSPITALINFO h 
+        	      		JOIN PETTYPE p 
+        	      			ON h.SEQ = p.HOSPITAL_SEQ 
+       				WHERE h.DELFLAG = 'N'
+       			 GROUP BY h.SEQ , p.HOSPITAL_SEQ , h.NAME , h.CONTENT ,
+                         h.ADDRESS1 , h.ADDRESS2 , h.OPENTIME , h.TEL
+                        )
+			WHERE RN BETWEEN #{first} AND #{last}
+			ORDER BY HOSPITAL_SEQ DESC     
+	</select>
 	
 <!-- 	조회된 병원 전체 갯수 (페이징 쿼리)  -->	
 	<select id="hospitalCount" parameterType="java.util.Map" resultType="java.lang.Integer">
 		 SELECT COUNT(*)
 			FROM (                
 					SELECT p.HOSPITAL_SEQ , h.NAME , h.CONTENT ,
-            					h.ADDRESS1 , h.ADDRESS2 , h.OPENTIME ,
-            					LISTAGG(p.PETTYPE,',') PETTYPE
+            					h.ADDRESS1 , h.ADDRESS2 , h.OPENTIME 
   					FROM HOSPITALINFO h 
-    					JOIN USERINFO u 
-    					ON SUBSTR(h.ADDRESS1 , 0, INSTR(h.ADDRESS1, ' ', 1, 2)) =
-       						 SUBSTR(u.ADDRESS1 , 0, INSTR(u.ADDRESS1, ' ', 1, 2))
      					JOIN PETTYPE p 
       					ON h.SEQ = p.HOSPITAL_SEQ 
-  					WHERE u.EMAIL = #{email}
-        				AND h.DELFLAG = 'N'
+  					WHERE h.DELFLAG = 'N'
         GROUP BY p.HOSPITAL_SEQ , h.NAME , h.CONTENT ,
                          h.ADDRESS1 , h.ADDRESS2 , h.OPENTIME
                         )
 	</select>
 	
+<!-- 	진료항목 리스트  -->
+	<select id="petTypeList" resultType="CodeDto">
+		SELECT CODEID , CODENAME 
+        	FROM TYPECODE t
+        	WHERE CODETYPE = 'PET'
+	</select>
+
 <!-- 	병원 검색  (다이나믹쿼리 해야함 하면 괄호 삭제)-->
-	<select id="searchHospital">
-		SELECT HOSPITAL_SEQ , NAME , CONTENT ,
-  				ADDRESS1 , ADDRESS2 , OPENTIME , PETTYPE
+	<select id="searchHospital" parameterType="java.util.Map" resultType="HospitalJoinDto">
+		 SELECT HOSPITAL_SEQ , NAME , CONTENT ,
+  				ADDRESS1 , ADDRESS2 , OPENTIME , TEL
 		FROM (                
 				SELECT p.HOSPITAL_SEQ , h.NAME , h.CONTENT ,
-            			h.ADDRESS1 , h.ADDRESS2 , h.OPENTIME ,
- 						LISTAGG(p.PETTYPE,',') PETTYPE ,
+            			h.ADDRESS1 , h.ADDRESS2 , h.OPENTIME , h.TEL,
          				ROW_NUMBER() OVER(ORDER BY p.HOSPITAL_SEQ DESC) AS RN
    				FROM HOSPITALINFO h 
             			JOIN PETTYPE p 
           				ON h.SEQ = p.HOSPITAL_SEQ 
     			WHERE h.DELFLAG = 'N'
-     					AND h.EMERGENCY = 'N' 
     					AND SUBSTR(h.ADDRESS1 , 0, INSTR(h.ADDRESS1, ' ', 1, 2)) = '서울 강남구 ' 
-    					AND p.PETTYPE = '멍멍'
+    					AND p.PETTYPE = 'PET002'
+     					AND h.EMERGENCY = 'N' 	
         GROUP BY p.HOSPITAL_SEQ , h.NAME , h.CONTENT ,
-                         h.ADDRESS1 , h.ADDRESS2 , h.OPENTIME
+                         h.ADDRESS1 , h.ADDRESS2 , h.OPENTIME , h.TEL
                         )
      	WHERE RN BETWEEN #{first} AND #{last}
-     	ORDER BY HOSPITAL_SEQ DESC
+     	ORDER BY HOSPITAL_SEQ DESC 
 	</select>
 
 <!-- 	검색된 병원 전채 갯수 (페이징 쿼리)(다이나믹쿼리 해야함 하면 괄호삭제)  -->
@@ -107,8 +113,8 @@
                         )
 	</select>
 	
-<!-- 	병원 정보 입력  -->
-	<insert id="insertHospital">
+<!-- 	병원 정보 입력  dto확인-->
+	<insert id="insertHospital" parameterType="HospitalInfoDto">
 		INSERT INTO HOSPITALINFO
   				(SEQ, OPERATOR_EMAIL, NAME,
 				ADDRESS1, ADDRESS2, CONTENT,
@@ -119,23 +125,23 @@
 	</insert>
 
 <!-- 	병원 상세정보 조회  -->
-	<select id="detailHospital">
-		SELECT h.OPERATOR_EMAIL , h.NAME , h.ADDRESS1 ,
+	<select id="detailHospital" resultMap="HospitalJoinDto">
+		SELECT h.SEQ, h.OPERATOR_EMAIL , h.NAME , h.ADDRESS1 ,
                 h.ADDRESS2 , o.PHONE , LISTAGG(p.PETTYPE,',') PETTYPE ,
-                h.CONTENT , h.EMERGENCY , h.OPENTIME 
+                h.CONTENT , h.EMERGENCY , h.OPENTIME , h.TEL
         FROM HOSPITALINFO h 
                 JOIN PETTYPE p 
                 ON h.SEQ = p.HOSPITAL_SEQ
                 JOIN  OPERATORINFO o 
                 ON o.EMAIL = h.OPERATOR_EMAIL 
-        WHERE h.SEQ = '3'
+        WHERE h.SEQ = #{seq}
                 AND h.DELFLAG = 'N'
-        GROUP BY h.OPERATOR_EMAIL , h.NAME , h.ADDRESS1 , o.PHONE , 
-                        h.ADDRESS2 , h.CONTENT , h.EMERGENCY , h.OPENTIME
+        GROUP BY h.SEQ, h.OPERATOR_EMAIL , h.NAME , h.ADDRESS1 , o.PHONE , 
+                        h.ADDRESS2 , h.CONTENT , h.EMERGENCY , h.OPENTIME , h.TEL
 	</select>
 
 <!-- 	병원 정보 수정  -->
-	<update id="modifyHospital">
+	<update id="modifyHospital" parameterType="HospitalInfoDto">
 		UPDATE  HOSPITALINFO 
                 SET NAME = '난병원01',
                         ADDRESS1 = '서울 금천구 시흥대로 276',
@@ -147,9 +153,9 @@
 	</update>
 	
 <!-- 	병원 정보 삭제  -->
-	<update id="deleteHospital">
+	<update id="deleteHospital" parameterType="java.lang.Integer">
 		UPDATE HOSPITALINFO SET DELFLAG ='Y'
-			WHERE SEQ ='3'
+			WHERE SEQ =#{seq}
 	</update>
 	
 	
