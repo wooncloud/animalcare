@@ -20,8 +20,8 @@ public class ReservationDaoImpl implements IReservationDao {
 
 	@Override
 	public boolean insertReserve(ReservationDto rDto) {
-		// TODO Auto-generated method stub
-		return false;
+		 int cnt = session.insert(NS+"insertReserve", rDto);
+		return (cnt>0)?true:false;
 	}
 
 	@Override
@@ -46,32 +46,32 @@ public class ReservationDaoImpl implements IReservationDao {
 
 	@Override
 	public boolean acceptReserve(Map<String, Object> map) {
-		// TODO Auto-generated method stub
-		return false;
+		 int cnt = session.update(NS+"acceptReserve", map);
+		return (cnt>0)?true:false;
 	}
 
 	@Override
 	public boolean rejectReserve(Map<String, Object> map) {
-		// TODO Auto-generated method stub
-		return false;
+		int cnt = session.update(NS+"rejectReserve", map);
+		return (cnt>0)?true:false;
 	}
 
 	@Override
 	public boolean cancelReserve(Map<String, Object> map) {
-		// TODO Auto-generated method stub
-		return false;
+		int cnt = session.update(NS+"cancelReserve", map);
+		return (cnt>0)?true:false;
 	}
+	
 
 	@Override
 	public boolean modifyReserve(Map<String, Object> map) {
-		// TODO Auto-generated method stub
-		return false;
+		int cnt = session.update(NS+"modifyReserve", map);
+		return (cnt>0)?true:false;
 	}
 
 	@Override
-	public ReservationDto standReserveList(Map<String, Object> map) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<ReservationDto> hospitalStandReserveList(Map<String, Object> map) {
+		return session.selectList(NS+"hospitalStandReserveList", map);
 	}
 
 	@Override
@@ -79,6 +79,19 @@ public class ReservationDaoImpl implements IReservationDao {
 		return session.selectList(NS+"todayReserveList",map);
 	}
 
+	@Override
+	public ReservationDto hospitalReserveDetail(Map<String, Object> map) {
+		return session.selectOne(NS+"hospitalReserveDetail",map);
+	}
 
+	@Override
+	public List<String> getUserPet(Map<String, Object> map) {
+		return session.selectList(NS+"getUserPet", map);
+	}
 
+	@Override
+	public List<ReservationDto> selectdayReserveList(Map<String, Object> map) {
+		return session.selectList(NS+"selectdayReserveList", map);
+	}
+	
 }

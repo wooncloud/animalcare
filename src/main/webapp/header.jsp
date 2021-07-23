@@ -38,7 +38,9 @@
 <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
 <!-- SWAL2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.all.min.js"></script>
-
+<!-- jstree -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
 <!-- common -->
 <link rel="stylesheet" href="${path}/css/common.css" />
 <script src="${path}/js/common.js" type="text/javascript"></script>
@@ -54,11 +56,17 @@
 				</a>
 				<ul class="nav col-12 col-lg-auto me-lg-auto mb-2 ms-5 justify-content-center mb-md-0">
 					<c:if test="${(sessionScope.member eq null) or (sessionScope.member.usertype eq 'ROLE_USER')}">
-					<li>
-						<a href="./searchHospital.do" class="nav-link px-4 link-dark">
-							<i class="fas fa-search"></i> 병원찾기
-						</a>
-					</li>
+						<li>
+							<a href="${path}/hospital/searchHospital.do" class="nav-link px-4 link-dark">
+								<i class="fas fa-search"></i> 병원찾기
+							</a>
+						</li>
+	
+						<li>
+							<a href="${path}/hospital/insertHospital.do" class="nav-link px-4 link-dark">
+								<i class="fas fa-search"></i> 병원등록(임시생성)
+							</a>
+						</li>
 					</c:if>
 					<c:if test="${sessionScope.member.usertype eq 'ROLE_USER'}">
 						<li>
@@ -72,7 +80,7 @@
 							</a>
 						</li>
 						<li>
-							<a href="${path}/" class="nav-link px-4 link-dark">
+							<a href="${path}/reservation/userReserveList.do" class="nav-link px-4 link-dark">
 								<i class="far fa-calendar-check"></i> 예약내역
 							</a>
 						</li>
@@ -84,7 +92,7 @@
 					</c:if>
 					<c:if test="${sessionScope.member.usertype eq 'ROLE_OPER'}">
 						<li>
-							<a href="${path}/" class="nav-link px-4 link-dark">
+							<a href="${path}/reservation/hospitalReserveList.do" class="nav-link px-4 link-dark">
 								<i class="far fa-calendar-check"></i> 예약
 							</a>
 						</li>

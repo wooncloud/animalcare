@@ -22,6 +22,8 @@
 		
 		<typeAlias type="com.pet.care.dto.HospitalJoinDto" alias="HospitalJoinDto"/>
 		<typeAlias type="com.pet.care.dto.MedicalRecodeJoinDto" alias="MedicalRecodeJoinDto"/>
+		<typeAlias type="com.pet.care.dto.SurveyDto" alias="SurveyDto"/>
+		<typeAlias type="com.pet.care.dto.SurveyResultDto" alias="SurveyResultDto"/>
 		<typeAlias type="com.pet.care.dto.MemberDto" alias="MemberDto"/>
 
 	</typeAliases>
@@ -36,7 +38,9 @@
 		<mapper resource="/sqls/HospitalInfo_Statement.xml"/>
 		<mapper resource="/sqls/HospitalSchedule_Statement.xml"/>    
 		<mapper resource="/sqls/MedicalRecode_Statement.xml"/>
+		<mapper resource="/sqls/Survey_Statement.xml"/>
 		<mapper resource="/sqls/User_Statement.xml"/>
+
 	</mappers>
 
 </configuration>

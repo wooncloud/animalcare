@@ -10,11 +10,11 @@ public class PaymentDto {
 	private String paynum;
 	private String hospital_name;
 	private String paidamount;
-	private Date paydate;
+	private String paydate;
 	private String applynum;
-	private Date canceldate;
+	private String canceldate;
 	private String cancelflag;
-	private Date refunddate;
+	private String refunddate;
 	private String refundflag;
 	private int reservation_seq;
 	
@@ -23,7 +23,7 @@ public class PaymentDto {
 	}
 
 	public PaymentDto(int seq, String user_email, String user_phone, String paynum, String hospital_name,
-			String paidamount, Date paydate, String applynum, Date canceldate, String cancelflag, Date refunddate,
+			String paidamount, String paydate, String applynum, String canceldate, String cancelflag, String refunddate,
 			String refundflag, int reservation_seq) {
 		super();
 		this.seq = seq;
@@ -98,11 +98,11 @@ public class PaymentDto {
 		this.paidamount = paidamount;
 	}
 
-	public Date getPaydate() {
+	public String getPaydate() {
 		return paydate;
 	}
 
-	public void setPaydate(Date paydate) {
+	public void setPaydate(String paydate) {
 		this.paydate = paydate;
 	}
 
@@ -114,11 +114,11 @@ public class PaymentDto {
 		this.applynum = applynum;
 	}
 
-	public Date getCanceldate() {
+	public String getCanceldate() {
 		return canceldate;
 	}
 
-	public void setCanceldate(Date canceldate) {
+	public void setCanceldate(String canceldate) {
 		this.canceldate = canceldate;
 	}
 
@@ -130,11 +130,11 @@ public class PaymentDto {
 		this.cancelflag = cancelflag;
 	}
 
-	public Date getRefunddate() {
+	public String getRefunddate() {
 		return refunddate;
 	}
 
-	public void setRefunddate(Date refunddate) {
+	public void setRefunddate(String refunddate) {
 		this.refunddate = refunddate;
 	}
 
@@ -153,7 +153,6 @@ public class PaymentDto {
 	public void setReservation_seq(int reservation_seq) {
 		this.reservation_seq = reservation_seq;
 	}
-	
 	
 	
 }

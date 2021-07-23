@@ -7,26 +7,78 @@ INSERT INTO PAYMENT
 	(SEQ, USER_EMAIL, USER_PHONE, PAYNUM,
 	 HOSPITAL_NAME, PAIDAMOUNT, PAYDATE, APPLYNUM,
 	  CANCELDATE, CANCELFLAG, REFUNDDATE, REFUNDFLAG, RESERVATION_SEQ)
-VALUES(PAYMENT_SEQ.NEXTVAL, 'user01@gmail.com', '010-1111-1111', #{paynum}, 
-	'CDC', #{paidamount}, SYSDATE, #{applynum},
+VALUES(PAYMENT_SEQ.NEXTVAL, #{user_email}, #{user_phone}, #{paynum}, 
+	#{hospital_name}, #{paidamount}, SYSDATE, #{applynum},
 	 '', 'N', '', 'N', '49')
 </insert>
 
-<!-- <select id="payList" parameterType="java.lang.String" resultType="PaymentDto"> -->
+
+
 <select id="payList" parameterType="java.lang.String" resultType="PaymentDto">
 SELECT SEQ, USER_EMAIL, PAYNUM, HOSPITAL_NAME,  APPLYNUM,
-                PAYDATE, CANCELFLAG, REFUNDFLAG
+               TO_CHAR(PAYDATE,'yyyy-mm-dd') AS PAYDATE, CANCELFLAG, REFUNDFLAG
         FROM PAYMENT
         WHERE USER_EMAIL = #{user_email}
         ORDER BY SEQ DESC
 </select>
-
+<!-- TO_CHAR(PAYDATE,'YYYY-MM-DD') AS -->
 <select id="payDetailList" parameterType="java.lang.String" resultType="PaymentDto">
 SELECT SEQ, USER_EMAIL, PAYNUM, HOSPITAL_NAME, 
-		PAIDAMOUNT, PAYDATE, APPLYNUM, CANCELDATE,
-		CANCELFLAG, REFUNDDATE, REFUNDFLAG
+		PAIDAMOUNT, TO_CHAR(PAYDATE,'YYYY-MM-DD hh24:mi:ss') AS PAYDATE, APPLYNUM, TO_CHAR(CANCELDATE,'YYYY-MM-DD hh24:mi:ss') AS CANCELDATE,
+		CANCELFLAG, TO_CHAR(REFUNDDATE,'YYYY-MM-DD hh24:mi:ss') AS REFUNDDATE, REFUNDFLAG
 FROM PAYMENT
 WHERE SEQ = #{seq}
+</select>
+
+<update id="cancelPay" parameterType="java.util.Map">
+UPDATE PAYMENT SET CANCELDATE=SYSDATE, CANCELFLAG =
+        CASE WHEN (SELECT r.STATUS
+                  FROM RESERVATION r
+                  WHERE SEQ= #{seq} AND (#{status} ='A')) IS NOT NULL 
+        THEN 'Y' ELSE 'N' END
+WHERE PAYNUM = (SELECT r.PAYNUM 
+                FROM RESERVATION r
+                WHERE SEQ= #{seq} AND (#{status} ='A'))
+</update>
+
+<update id="userCancelPayRefund" parameterType="java.util.Map">
+UPDATE PAYMENT SET CANCELDATE=SYSDATE, CANCELFLAG =
+        CASE WHEN (SELECT r.STATUS
+                        FROM RESERVATION r
+                        WHERE SEQ= #{seq} AND #{status} ='S') IS NOT NULL 
+        THEN 'Y' ELSE 'N' END,
+        REFUNDDATE=SYSDATE, REFUNDFLAG=
+        CASE WHEN (SELECT r.STATUS
+                        FROM RESERVATION r
+                        WHERE SEQ= #{seq} AND #{status} ='S') IS NOT NULL 
+        THEN 'Y' ELSE 'N' END 
+        WHERE PAYNUM = (SELECT r.PAYNUM 
+	                       FROM RESERVATION r
+	                       WHERE SEQ= #{seq} AND #{status} ='S')
+</update>
+
+
+<update id="operCancelPayRefund" parameterType="java.util.Map">
+UPDATE PAYMENT SET CANCELDATE=SYSDATE, CANCELFLAG =
+        CASE WHEN (SELECT r.STATUS
+                   FROM RESERVATION r
+                   WHERE SEQ= #{seq} AND (#{status} IN ('S','A','R'))) IS NOT NULL 
+        THEN 'Y' ELSE 'N' END ,
+        REFUNDDATE=SYSDATE, REFUNDFLAG=
+        CASE WHEN (SELECT r.STATUS
+                   FROM RESERVATION r
+                   WHERE SEQ= #{seq} AND (#{status} IN ('S','A','R'))) IS NOT NULL 
+        THEN 'Y' ELSE 'N' END 
+	WHERE PAYNUM = (SELECT r.PAYNUM 
+                   FROM RESERVATION r
+                   WHERE SEQ= #{seq} AND (#{status} IN ('S','A','R')))
+</update>
+
+<!-- 환불 시 필요 -->
+<select id="sendPayNum" parameterType="java.util.Map" resultType="java.lang.String">
+SELECT PAYNUM
+	FROM RESERVATION r
+	WHERE SEQ = #{seq}
 </select>
 
 

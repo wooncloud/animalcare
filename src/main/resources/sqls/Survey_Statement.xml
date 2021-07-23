@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pet.care.model.dao.survey.ISurveyDao">
+<select id="adminSurveyList" resultType="SurveyDto">
+SELECT SEQ, TITLE, REGDATE, DELFLAG
+	FROM SURVEY
+	ORDER BY REGDATE DESC
+</select>
+
+<insert id="insertSurveyForm" parameterType="SurveyDto">
+INSERT INTO SURVEY
+	(SEQ, QUESTION, REGDATE, DELFLAG, TITLE, HOSPITAL_SEQ)
+	VALUES(SURVEY_SEQ.NEXTVAL, #{question}, SYSDATE, 'N', #{title}, '3');
+</insert>
+
+
+</mapper>
