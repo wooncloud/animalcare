@@ -1,14 +1,11 @@
 package com.pet.care.model.service.user;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.collections.map.HashedMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -131,8 +128,9 @@ public class UserServiceImpl implements IUserService {
 
 	@Override
 	@Transactional
-	public boolean checkVerificationCode(Map<String, Object> param) {
-		logger.info("checkVerificationCode : {}", param);
+	public boolean checkPhoneVerificationCode(Map<String, Object> param) {
+		logger.info("checkPhoneVerificationCode : {}", param);
+		String type = (String)param.get("type");
 
 		Map<String, Object> map = dao.getVerificationCode((String) param.get("email"));
 		
@@ -140,7 +138,8 @@ public class UserServiceImpl implements IUserService {
 		String realCode = (String) map.get("PHONE_CONFIRM");
 		
 		if (realCode.equals(userCode)) {
-			int n = dao.modifyUser(param);
+			int n = type.equals("modify") ? dao.modifyUser(param) : 1;
+			
 			if(n > 0) {
 				n = dao.deleteVerification((String)param.get("email"));
 			}else {
@@ -148,6 +147,21 @@ public class UserServiceImpl implements IUserService {
 			}
 			
 			return n > 0 ? true : false;
+		} else {
+			return false;
+		}
+	}
+	
+	@Override
+	public boolean checkEmailVerificationCode(Map<String, Object> param) {
+		logger.info("checkEmailVerificationCode : {}", param);
+		Map<String, Object> map = dao.getVerificationCode((String) param.get("email"));
+		
+		String userCode = (String) param.get("code");
+		String realCode = (String) map.get("EMAIL_CONFIRM");
+		
+		if (realCode.equals(userCode)) {
+			return dao.deleteVerification((String)param.get("email")) > 0 ? true : false;
 		} else {
 			return false;
 		}

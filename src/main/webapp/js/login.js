@@ -1,6 +1,6 @@
 window.onload = function () {
 	let pathname = window.location.pathname;
-
+	
 	if (pathname.indexOf('login') != -1) {
 		login.init();
 	}
@@ -66,7 +66,9 @@ const select = {
 
 const signupUser = {
 	status: {
-		edc: false
+		edc: false,
+		evc: false,
+		pvc: false
 	},
 	init: function () {
 		document.getElementById('btnEmailDupl').addEventListener('click', signupUser.emailDupl);
@@ -79,7 +81,7 @@ const signupUser = {
 		document.getElementById('btnSignup').addEventListener('click', signupUser.signup);
 
 		document.getElementById('email').addEventListener('change', function () {
-			edc = false;
+			signupUser.status.edc = false;
 		});
 	},
 	emailDupl: function () {
@@ -91,31 +93,167 @@ const signupUser = {
 			data: "email=" + email,
 			success: function (msg) {
 				if (msg == false) {
-					edc = true;
+					signupUser.status.edc = true;
 					swal.alert_txt("이메일 중복 검사", "사용 가능한 이메일입니다.", "success");
 				}
 				else {
-					edc = false
+					signupUser.status.edc = false
 					swal.alert_txt("이메일 중복 검사", "이미 있는 계정입니다.", "error");
 				}
 			},
 			error: function () {
-				edc = false
+				signupUser.status.edc = false
 				swal.alert_txt("오류", "이메일 검사중 문제가 발생했습니다.\n관리자에게 문의하세요.", "error");
 			}
 		});
 	},
 	emailSendConfirm: function () {
+		// 중복검사 먼저 진행
+		if(!signupUser.status.edc){
+			swal.alert_txt("", "먼저 이메일 중복검사를 해야 합니다.", "error");
+			return false;
+		}
 
+		let email = document.getElementById('email').value;
+		if(isEmpty(email)){
+			swal.alert_txt("유효값 오류", "이메일을 먼저 입력해야 합니다.", "error");
+			return false;
+		}
+
+		let data = { "email": email }
+
+		$.ajax({
+			url: './sendEmailCode.do',
+			type: 'post',
+			data: data,
+			success: function (msg) {
+				if (msg == 'success') {
+					swal.toast_s("인증번호가 전송 되었습니다.\n메일을 확인해 주세요.");
+					document.getElementById("emailVerificationDiv").style.display = "block";
+					document.getElementById("btnEmailSendConfirm").disabled = true;
+				} else if (msg == 'error') {
+					errorAlert();
+				}
+			},
+			error: function () {
+				errorAlert();
+			}
+		});
 	},
 	emailConfirm: function () {
+		// 인증번호 유효성
+		let code = document.getElementById('emailChk').value;
+		if(isEmpty(code)){
+			swal.alert_txt("유효값 오류", "인증번호가 없습니다.", "error");
+			return false;
+		}
 
+		let data = { 
+			"email": document.getElementById('email').value,
+			"code": code 
+		}
+
+		$.ajax({
+			url: './checkEmailCode.do',
+			type: 'post',
+			data: data,
+			success: function (msg) {
+				if (msg == 'success') {
+					swal.alert_txt(
+						"인증 완료",
+						"이메일 인증이 완료 되었습니다.",
+						"success"
+					);
+
+					document.getElementById('email').readOnly = true;
+					document.getElementById('emailChk').value = "";
+					document.getElementById('btnEmailDupl').disabled = true;
+					document.getElementById('emailVerificationDiv').style.display = "none";
+					signupUser.status.evc = true;
+				} else if (msg == 'error') {
+					errorAlert();
+				}
+			},
+			error: function () {
+				errorAlert();
+			}
+		});
 	},
 	phoneSendConfirm: function () {
+		// 전화번호 유효성, 형식
+		let email = document.getElementById('email').value;
+		let phone = document.getElementById('phone').value;
+		if(isEmpty(email)){
+			swal.alert_txt("유효값 오류", "이메일을 먼저 입력해야 합니다.", "error");
+			return false;
+		}
+		if(isEmpty(phone)){
+			swal.alert_txt("유효값 오류", "전화번호를 입력하세요.", "error");
+			return false;
+		}
 
+		let data = { "email": email, "phone": phone }
+
+		// 인증번호 요청 ajax
+		$.ajax({
+			url: './sendVerifyCode.do',
+			type: 'post',
+			data: data,
+			success: function (msg) {
+				if (msg == 'success') {
+					swal.toast_s("인증번호가 전송 되었습니다.");
+					document.getElementById('phone').readOnly = true;
+					document.getElementById('btnPhoneSendConfirm').disabled = true;
+					document.getElementById('phoneVerificationDiv').style.display = "block";
+				} else if (msg == 'error') {
+					swal.alert_txt(
+						"에러",
+						"문자는 발송되었으나 문제가 발생했습니다.\n관리자에게 문의하세요.",
+						"error"
+					);
+				}
+			},
+			error: function () {
+				errorAlert();
+			},
+		});
 	},
 	phoneConfirm: function () {
+		// 인증번호 유효성
+		let code = document.getElementById('phoneConfirm').value;
+		if(isEmpty(code)){
+			swal.alert_txt("유효값 오류", "인증번호가 없습니다.", "error");
+			return false;
+		}
 
+		let data = {
+			"email": document.getElementById('email').value,
+			"code": code 
+		}
+
+		$.ajax({
+			url: './checkVerifyCode.do',
+			type: 'post',
+			data: data,
+			success: function (msg) {
+				if (msg == 'success') {
+					swal.alert_txt(
+						"인증 완료",
+						"전화번호가 인증 되었습니다.",
+						"success"
+					);
+
+					document.getElementById('phoneConfirm').value = "";
+					document.getElementById('phoneVerificationDiv').style.display = "none";
+					signupUser.status.pvc = true;
+				} else if (msg == 'error') {
+					errorAlert();
+				}
+			},
+			error: function () {
+				errorAlert();
+			}
+		});
 	},
 	addrSearch: function () {
 		let addr1 = document.getElementById("address1");
@@ -123,7 +261,9 @@ const signupUser = {
 		searchAddr(addr1, addr2);
 	},
 	cancel: function () {
-
+		swal.confirm("정말로 나가시겠습니까?", function(){
+			location.href = "./loginForm.do";
+		})
 	},
 	signup: function () {
 		let form = document.forms[0];
@@ -179,17 +319,22 @@ const signupUser = {
 			}
 		}
 
-		// 인증 유무 체크
-		if (!edc) {
-			swal.alert_txt(
-				"이메일 검사",
-				"이메일 중복검사를 먼저 해야합니다.",
-				"error"
-			);
+		if(form.password.value != document.getElementById("pwc").value){
+			swal.alert_txt("비밀번호 오류", "비밀번호 확인이 다릅니다.", "error");
 			return false;
 		}
-		// 이메일 인증
-		// 전화번호 인증
+		if (!signupUser.status.edc) {
+			swal.alert_txt("이메일 검사 오류", "이메일 중복검사를 먼저 해야합니다.", "error");
+			return false;
+		}
+		if (!signupUser.status.evc) {
+			swal.alert_txt("이메일 인증 오류", "이메일 인증을 해야 합니다", "error");
+			return false;
+		}
+		if (!signupUser.status.pvc) {
+			swal.alert_txt("전화번호 인증 오류", "전화번호 인증을 해야 합니다", "error");
+			return false;
+		}
 
 		// 가입
 		form.submit();

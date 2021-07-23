@@ -1,6 +1,7 @@
 /**
  * 
  */
+
 // swal2 toast setting ---------------------------------------------->
 const swalMini = Swal.mixin({
 	toast: true,

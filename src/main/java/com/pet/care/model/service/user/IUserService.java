@@ -3,10 +3,6 @@ package com.pet.care.model.service.user;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-
 import com.pet.care.dto.MemberDto;
 import com.pet.care.dto.OperatorDto;
 import com.pet.care.dto.UserDto;
@@ -103,7 +99,12 @@ public interface IUserService {
 	public boolean insertVerificationCode(Map<String, Object> map);
 	
 	/**
-	 * 인증번호 확인
+	 * 전화번호 인증번호 확인
 	 */
-	public boolean checkVerificationCode(Map<String, Object> map);
+	public boolean checkPhoneVerificationCode(Map<String, Object> param);
+	
+	/**
+	 * 이메일 인증번호 확인
+	 */
+	public boolean checkEmailVerificationCode(Map<String, Object> param);
 }
