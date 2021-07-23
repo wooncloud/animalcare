@@ -22,6 +22,8 @@
 		
 		<typeAlias type="com.pet.care.dto.HospitalJoinDto" alias="HospitalJoinDto"/>
 		<typeAlias type="com.pet.care.dto.MedicalRecodeJoinDto" alias="MedicalRecodeJoinDto"/>
+		<typeAlias type="com.pet.care.dto.SurveyDto" alias="SurveyDto"/>
+		<typeAlias type="com.pet.care.dto.SurveyResultDto" alias="SurveyResultDto"/>
 
 	</typeAliases>
 

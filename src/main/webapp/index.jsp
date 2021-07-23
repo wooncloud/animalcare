@@ -197,6 +197,7 @@
 	</div>
 	<a href="./payment/payList.do">결제내역</a>
 	<a href="./payment/payment.do">결제</a>
+	<a href="./survey/adminSurveyList.do">설문리스트</a>
 
 	<script>
 		var toastTrigger = document.getElementById('liveToastBtn')
