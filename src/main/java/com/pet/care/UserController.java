@@ -165,7 +165,7 @@ public class UserController {
 		boolean isc = userService.insertUser(param);
 
 		if (isc) {
-			return "redirect:./login.do";
+			return "redirect:./loginForm.do";
 		} else {
 			return "redirect:error/error500.do";
 		}
@@ -184,7 +184,7 @@ public class UserController {
 		boolean isc = userService.insertOper(param);
 
 		if (isc) {
-			return "redirect:./login.do";
+			return "redirect:./loginForm.do";
 		} else {
 			return "redirect:error/error500.do";
 		}
