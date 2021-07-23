@@ -173,10 +173,13 @@ var cal = new tui.Calendar('#calendar', {
 	      var nDay =nYear+""+nMonth+""+nDay;
 	      
 	      console.log(nDay);
+	      
+	      if(fullday < nDay || fullday - nDay > 20 ){
+	    	  alert("해당일은 예약이 가능한 날짜가 아닙니다.")
+	      }else{
+	    	  location.href="./selectdayReserveList.do?reservedate="+fullday;
+	      }
 
-
-	      alert("이동");	
-		   location.href="./selectdayReserveList.do?reservedate="+fullday;
 	        
 	        
 	        

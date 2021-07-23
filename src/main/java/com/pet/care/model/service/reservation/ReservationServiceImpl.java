@@ -74,9 +74,9 @@ public class ReservationServiceImpl implements IReservationService {
 	}
 
 	@Override
-	public List<ReservationDto> hospitalstandReserveList(Map<String, Object> map) {
+	public List<ReservationDto> hospitalStandReserveList(Map<String, Object> map) {
 		logger.info(" ReservationServiceImpl hospitalstandReserveList {}", map);
-		return rDao.hospitalstandReserveList(map);
+		return rDao.hospitalStandReserveList(map);
 	}
 
 	@Override
@@ -99,5 +99,4 @@ public class ReservationServiceImpl implements IReservationService {
 		return rDao.selectdayReserveList(map);
 	}
 
-	
 }

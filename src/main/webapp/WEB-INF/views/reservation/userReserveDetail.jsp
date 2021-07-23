@@ -1,8 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@include file="/header.jsp" %>
+${reserveDto}
 <div class="card">
    <div class="card-body">
-      <h5 class="card-title my-3">사용자 예약 상세 내역</h5>
+      <h5 class="card-title my-3">예약 상세 내역</h5>
       <div class="row my-2">
           <div class="col-3">
             <h6 class="card-subtitle mb-2 text-muted">예약종류</h6>
@@ -72,12 +73,83 @@
             <p class="card-text">${reserveDto.address1}</p>
          </div>
       </div>
+      <c:if test="${reserveDto.status eq 'R'}">
+           <div class="col-3">
+            <h6 class="card-subtitle mb-2 text-muted">반려내용</h6>
+         </div>
+         <div class="col-3">
+           	<p class="card-text">${reserveDto.commnet}</p>
+          </div>
+         </c:if>
    </div>
 </div>
 
-<c:if test="${reserveDto.paynum != null}">
-   <button class="btn btn-primary" onclick="cancelReservation()">취소</button>
+<c:if test="${reserveDto.status == 'S' or reserveDto.status =='A' }">
+   <button name="cancelBtn" class="btn btn-primary" onclick="cancelReservation('${reserveDto.seq}','${reserveDto.status}','${reserveDto.reservedate}');">취소</button>
 </c:if>
+
 <button class="btn btn-primary" onclick="javascript:history.back(-1);">목록</button>
 
+<script type="text/javascript">
+
+// window.onload= function('${reserveDto.reservedate}'){
+
+// 	console.log(reservedate);
+	
+// 	var date = new Date();
+// 	var day = date.getDate();
+// 	var year = date.getFullYear();
+// 	var month = (1+date.getMonth());
+// 	month = (month >= 10) ? month : '0' + month;
+// 	day = (day >= 10) ? day : '0' + day; 
+		
+// 	var today = year+"-"+month+"-"+day;//날짜
+// 	console.log(today);
+// 	console.log(date);
+
+// 	var cBtn = document.getElementsByName("cancelBtn")[0];
+	
+	
+// 	if(today > reservedate){
+// 		alert("취소 기간이 아닙니다");
+// // 		cBtn.style.display="none";
+// 	}
+// }
+function cancelReservation(seq,status,reservedate){
+	
+	
+	
+	
+	console.log(reservedate);
+	
+	var date = new Date();
+	var day = date.getDate();
+	var year = date.getFullYear();
+	var month = (1+date.getMonth());
+	month = (month >= 10) ? month : '0' + month;
+	day = (day >= 10) ? day : '0' + day; 
+		
+	var today = year+"-"+month+"-"+day;//날짜
+	console.log(today);
+	console.log(date);
+
+	var cBtn = document.getElementsByName("cancelBtn")[0];
+	
+	
+	if(today > reservedate){
+		alert("취소 기간이 아닙니다");
+// 		cBtn.style.display="none";
+	} else{
+		var frm = confirm("취소 하시겠습니까?");
+		console.log(seq,status);
+	if(frm){
+		
+		location.href="./cancelStandReservation.do?seq="+seq+"&status="+status;
+		
+	}
+}
+
+	
+}
+</script>
 <%@include file="/footer.jsp" %>

@@ -31,14 +31,14 @@ public interface IReservationService {
 	//병원 관계자 예약 신청 반려 처리//
 	public boolean rejectReserve(Map<String, Object>map);
 	
-	//예약 취소
+	//사용자 대기 예약 취소
 	public boolean cancelReserve(Map<String, Object>map);
-	
+
 	//병원 관계자 예약 수정
 	public boolean modifyReserve(Map<String, Object>map);
 	
 	//미처리 예약 목록 보기
-	public List<ReservationDto> hospitalstandReserveList(Map<String, Object>map);
+	public List<ReservationDto> hospitalStandReserveList(Map<String, Object>map);
 	
 	//오늘의 예약 목록 보기
 	public List<ReservationDto> todayReserveList(Map<String, Object>map);
