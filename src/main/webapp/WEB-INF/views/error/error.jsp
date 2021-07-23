@@ -67,7 +67,7 @@
 		<div class="fof">
 			<h1>Error ${code}</h1>
 			<h2>${text}</h2>
-			<a id="return" href="${pageContext.request.contextPath}/">메인화면으로 돌아가기</a>
+			<a id="return" href="${pageContext.request.contextPath}/home.do">메인화면으로 돌아가기</a>
 		</div>
 	</div>
 </body>

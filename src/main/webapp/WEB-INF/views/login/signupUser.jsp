@@ -25,10 +25,10 @@
 					<input type="button" class="btn btn-outline-secondary" id="btnEmailSendConfirm" value="인증번호 발송">
 				</div>
 			</div>
-			<div class="signup-row my-3">
+			<div id="emailVerificationDiv" class="signup-row my-3" style="display: none;">
 				<label for="emailChk" class="form-label">이메일 인증번호</label>
 				<div class="input-group">
-					<input type="text" class="form-control" id="emailChk" placeholder="인증번호 입력" readonly>
+					<input type="text" class="form-control" id="emailChk" placeholder="인증번호 입력">
 					<input type="button" class="btn btn-outline-secondary" id="btnEmailConfirm" value="인증">
 				</div>
 			</div>
@@ -58,10 +58,10 @@
 							<input type="button" class="btn btn-outline-secondary" id="btnPhoneSendConfirm" value="인증번호 발송">
 						</div>
 					</div>
-					<div class="col-md-6">
+					<div id="phoneVerificationDiv" class="col-md-6" style="display: none;">
 						<label for="phoneConfirm" class="form-label">전화번호 인증</label>
 						<div class="input-group">
-							<input type="text" class="form-control" id="phoneConfirm" placeholder="인증번호" readonly>
+							<input type="text" class="form-control" id="phoneConfirm" placeholder="인증번호">
 							<input type="button" class="btn btn-outline-secondary" id="btnPhoneConfirm" value="인증">
 						</div>
 					</div>

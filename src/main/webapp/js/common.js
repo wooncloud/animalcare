@@ -1,6 +1,7 @@
 /**
  * 
  */
+
 // swal2 toast setting ---------------------------------------------->
 const swalMini = Swal.mixin({
 	toast: true,
@@ -269,3 +270,7 @@ function getCodeName(codeId, codeList){
 		}
 	}
 }
+
+function getParam(key) {
+	return new URLSearchParams(location.search).get(key);
+};

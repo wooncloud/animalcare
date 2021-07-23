@@ -91,4 +91,20 @@ public interface IUserDao {
 	 */
 	public String pwSecurity(String email);
 	
+	// ------------------------------------------
+	
+	/**
+	 * 인증번호 삽입
+	 */
+	public int insertVerificationCode(Map<String, Object> map);
+
+	/**
+	 * 인증번호 확인
+	 */
+	public Map<String, Object> getVerificationCode(String email);
+	
+	/**
+	 * 인증번호 삭제
+	 */
+	public int deleteVerification(String email);
 }

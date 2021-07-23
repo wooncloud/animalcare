@@ -55,8 +55,6 @@ public class TestController {
 	@Autowired
 	private JavaMailSender mailSender;
 	
-	@Autowired
-	
 	@RequestMapping(value = "/test/sms.do", method = RequestMethod.GET)
 	public String smsPage() {
 		return "test/SMS";

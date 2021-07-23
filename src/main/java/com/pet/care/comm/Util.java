@@ -4,10 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
-import java.io.Reader;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 import java.util.Random;
 
@@ -15,15 +12,9 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletResponse;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.MailException;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.mail.javamail.MimeMessagePreparator;
 
 import net.nurigo.java_sdk.api.Message;
 import net.nurigo.java_sdk.exceptions.CoolsmsException;
@@ -187,7 +178,7 @@ public class Util {
 		Properties prop = util.readProperties("properties/sms.properties");
 		String numStr = randomNum(6);
 		
-		String text = "[PET CARE] 회원가입 인증번호는 '" + numStr + "' 입니다.";
+		String text = "[PET CARE] 전화번호 인증번호는 '" + numStr + "' 입니다.";
 		String api_key = prop.getProperty("key");
 		String api_secret = prop.getProperty("secret");
 
