@@ -94,4 +94,16 @@ public interface IUserService {
 	 * 비밀번호 확인
 	 */
 	public String pwSecurity(String email);
+	
+	// ------------------------------------------
+	
+	/**
+	 * 인증번호 삽입
+	 */
+	public boolean insertVerificationCode(Map<String, Object> map);
+	
+	/**
+	 * 인증번호 확인
+	 */
+	public boolean checkVerificationCode(Map<String, Object> map);
 }

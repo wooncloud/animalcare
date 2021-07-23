@@ -1,13 +1,16 @@
 package com.pet.care.model.service.user;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections.map.HashedMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.pet.care.dto.MemberDto;
 import com.pet.care.dto.OperatorDto;
@@ -21,7 +24,7 @@ public class UserServiceImpl implements IUserService {
 
 	@Autowired
 	private IUserDao dao;
-	
+
 	@Override
 	public MemberDto userLogin(Map<String, Object> map) {
 		logger.info("userLogin : {}", map);
@@ -116,5 +119,37 @@ public class UserServiceImpl implements IUserService {
 	public String pwSecurity(String email) {
 		logger.info("pwSecurity : {}", email);
 		return dao.pwSecurity(email);
+	}
+
+	@Override
+	@Transactional
+	public boolean insertVerificationCode(Map<String, Object> map) {
+		logger.info("insertVerificationCode : {}", map);
+		dao.deleteVerification((String)map.get("email"));
+		return dao.insertVerificationCode(map) > 0 ? true : false;
+	}
+
+	@Override
+	@Transactional
+	public boolean checkVerificationCode(Map<String, Object> param) {
+		logger.info("checkVerificationCode : {}", param);
+
+		Map<String, Object> map = dao.getVerificationCode((String) param.get("email"));
+		
+		String userCode = (String) param.get("code");
+		String realCode = (String) map.get("PHONE_CONFIRM");
+		
+		if (realCode.equals(userCode)) {
+			int n = dao.modifyUser(param);
+			if(n > 0) {
+				n = dao.deleteVerification((String)param.get("email"));
+			}else {
+				return false;
+			}
+			
+			return n > 0 ? true : false;
+		} else {
+			return false;
+		}
 	}
 }

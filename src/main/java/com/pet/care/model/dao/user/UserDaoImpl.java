@@ -126,4 +126,20 @@ public class UserDaoImpl implements IUserDao {
 	public String pwSecurity(String email) {
 		return sqlSession.selectOne(NS + "pwSecurity", email);
 	}
+	
+	@Override
+	public int insertVerificationCode(Map<String, Object> map) {
+		return sqlSession.insert(NS + "insertVerificationCode", map);
+	}
+	
+	@Override
+	public Map<String, Object> getVerificationCode(String email) {
+		return sqlSession.selectOne(NS + "getVerificationCode", email);
+	}
+	
+	@Override
+	public int deleteVerification(String email) {
+		return sqlSession.delete(NS + "deleteVerification", email);
+	}
+	
 }

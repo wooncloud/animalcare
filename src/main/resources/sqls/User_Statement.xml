@@ -122,7 +122,18 @@
 	<!-- 회원 정보 수정 - 회원 정보 수정 -->
 	<update id="modifyUser" parameterType="java.util.Map">
 		UPDATE USERINFO
-		SET PHONE = #{phone}
+		SET
+		<choose>
+			<when test="phone != null">
+				PHONE = #{phone}
+			</when>
+			<when test="password != null">
+				PASSWORD = #{password}
+			</when>
+			<when test="address1 != null">
+				address1 = #{address1}, address2 = #{address2}
+			</when>
+		</choose>
 		WHERE EMAIL = #{email}
 	</update>
 
@@ -164,4 +175,19 @@
 		) 
 		WHERE EMAIL = #{email}
 	</select>
+	
+	<insert id="insertVerificationCode" parameterType="java.util.Map">
+		INSERT INTO VERIFICATION (EMAIL, PHONE_CONFIRM, REGDATE)
+		VALUES(#{email}, #{phone_confirm}, SYSDATE)
+	</insert>
+	
+	<select id="getVerificationCode" parameterType="java.lang.String" resultType="java.util.Map">
+		SELECT EMAIL_CONFIRM, PHONE_CONFIRM
+		FROM VERIFICATION
+		WHERE EMAIL = #{email}
+	</select>
+	
+	<delete id="deleteVerification" parameterType="java.lang.String">
+		DELETE FROM VERIFICATION WHERE EMAIL = #{email}
+	</delete>
 </mapper>

@@ -187,7 +187,7 @@ public class Util {
 		Properties prop = util.readProperties("properties/sms.properties");
 		String numStr = randomNum(6);
 		
-		String text = "[PET CARE] 회원가입 인증번호는 '" + numStr + "' 입니다.";
+		String text = "[PET CARE] 전화번호 인증번호는 '" + numStr + "' 입니다.";
 		String api_key = prop.getProperty("key");
 		String api_secret = prop.getProperty("secret");
 

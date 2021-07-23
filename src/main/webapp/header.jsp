@@ -58,33 +58,55 @@
 							<i class="fas fa-search"></i> 병원찾기
 						</a>
 					</li>
-					<c:choose>
-						<c:when test="${sessionScope.member.usertype eq 'ROLE_USER'}">
-							<li>
-								<a href="${path}/" class="nav-link px-4 link-dark">
-									<i class="fas fa-cat"></i> 내 애완동물
-								</a>
-							</li>
-							<li>
-								<a href="${path}/" class="nav-link px-4 link-dark">
-									<i class="fas fa-book"></i> 건강수첩
-								</a>
-							</li>
-							<li>
-								<a href="${path}/" class="nav-link px-4 link-dark">
-									<i class="far fa-calendar-check"></i> 예약내역
-								</a>
-							</li>
-							<li>
-								<a href="${path}/" class="nav-link px-4 link-dark">
-									<i class="fas fa-notes-medical"></i> 진료내역
-								</a>
-							</li>
-						</c:when>
-						<c:otherwise>
-						
-						</c:otherwise>
-					</c:choose>
+					<c:if test="${sessionScope.member.usertype eq 'ROLE_USER'}">
+						<li>
+							<a href="${path}/" class="nav-link px-4 link-dark">
+								<i class="fas fa-cat"></i> 내 애완동물
+							</a>
+						</li>
+						<li>
+							<a href="${path}/" class="nav-link px-4 link-dark">
+								<i class="fas fa-book"></i> 건강수첩
+							</a>
+						</li>
+						<li>
+							<a href="${path}/" class="nav-link px-4 link-dark">
+								<i class="far fa-calendar-check"></i> 예약내역
+							</a>
+						</li>
+						<li>
+							<a href="${path}/" class="nav-link px-4 link-dark">
+								<i class="fas fa-notes-medical"></i> 진료내역
+							</a>
+						</li>
+					</c:if>
+					<c:if test="${sessionScope.member.usertype eq 'ROLE_OPER'}">
+						<li>
+							<a href="${path}/" class="nav-link px-4 link-dark">
+								<i class="far fa-calendar-check"></i> 예약
+							</a>
+						</li>
+						<li>
+							<a href="${path}/" class="nav-link px-4 link-dark">
+								<i class="far fa-calendar-alt"></i> 일정
+							</a>
+						</li>
+						<li>
+							<a href="${path}/" class="nav-link px-4 link-dark">
+								<i class="fas fa-hospital"></i> 병원정보
+							</a>
+						</li>
+						<li>
+							<a href="${path}/" class="nav-link px-4 link-dark">
+								<i class="far fa-clipboard"></i> 문의조회
+							</a>
+						</li>
+						<li>
+							<a href="${path}/" class="nav-link px-4 link-dark">
+								<i class="fas fa-poll"></i> 설문
+							</a>
+						</li>
+					</c:if>
 				</ul>
 				<c:choose>
 					<c:when test="${sessionScope.member eq null}">
@@ -104,7 +126,7 @@
 							</a>
 							<ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
 								<li class="ms-3">
-									<div>이거성님</div>
+									<div>${sessionScope.member.name}님</div>
 									<div style="font-size:small">안녕하세요.</div>
 								</li>
 								<li>
