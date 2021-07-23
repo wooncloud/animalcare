@@ -81,7 +81,7 @@
 						</div>
 						<div class="col-2" >
 							<select class="form-select" id="selectPetType" onchange="selectType()">
-								<option value="" selected>&nbsp;선택&nbsp;</option>
+								<option value="choice" selected>&nbsp;선택&nbsp;</option>
 								<c:forEach var="dto" items="${petlist}" varStatus="vs">
 									<option  value="${dto.codeid}" >${dto.codename}</option>
 								</c:forEach>

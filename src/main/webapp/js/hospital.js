@@ -31,7 +31,7 @@ function selectType() {
 	var text2 = document.createTextNode("X");
 
 	// 항목 추가될때 아작스 넣어야 함
-	if (selectedPetType != undefined) {
+	if (selectedPetType != "choice") {
 		petType.appendChild(petTypeBox);
 		petTypeBox.appendChild(petTypeText);
 		petTypeText.appendChild(text);
