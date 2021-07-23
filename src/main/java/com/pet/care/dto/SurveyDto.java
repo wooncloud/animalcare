@@ -12,7 +12,6 @@ public class SurveyDto {
 	private int hospital_seq;
 	public SurveyDto() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	
 	public SurveyDto(int seq, String question, Date regdate, String delflag, String title, int hospital_seq) {

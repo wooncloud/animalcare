@@ -17,7 +17,6 @@ public class CodeDaoImpl implements ICodeDao {
 
 	@Override
 	public List<CodeDto> allCodeSelect() {
-		System.out.println("asdf");
 		return sqlSession.selectList(NS + "allCodeSelect");
 	}
 

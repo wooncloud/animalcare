@@ -197,6 +197,12 @@
 	</div>
 	<a href="./payment/payList.do">결제내역</a>
 	<a href="./payment/payment.do">결제</a>
+	<a href="./survey/adminSurveyList.do">설문리스트</a>
+
+	<a href="./reservation/moveCalendar.do">달력</a>
+	<a href="./reservation/userReserveList.do">사용자 예약목록</a>
+	<a href="./reservation/hospitalReserveList.do">병원 예약목록</a>
+	<a href="./reservation/insertReservation.do">신청</a>
 
 	<script>
 		var toastTrigger = document.getElementById('liveToastBtn')
