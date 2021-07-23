@@ -10,7 +10,7 @@
 		
 		<typeAlias type="com.pet.care.dto.MedicalRecodeDto" alias="MedicalRecodeDto"/>
 		<typeAlias type="com.pet.care.dto.NoteDto" alias="NoteDto"/>
-		<typeAlias type="com.pet.care.dto.OperatorDto" alias="OperatorDto"/>
+		<typeAlias type="com.pet.care.dto.OperatorDto" alias="OperDto"/>
 		<typeAlias type="com.pet.care.dto.PageDto" alias="PageDto"/>
 		<typeAlias type="com.pet.care.dto.PetDto" alias="PetDto"/>
 		
@@ -22,6 +22,7 @@
 		
 		<typeAlias type="com.pet.care.dto.HospitalJoinDto" alias="HospitalJoinDto"/>
 		<typeAlias type="com.pet.care.dto.MedicalRecodeJoinDto" alias="MedicalRecodeJoinDto"/>
+		<typeAlias type="com.pet.care.dto.MemberDto" alias="MemberDto"/>
 
 	</typeAliases>
 
@@ -35,6 +36,7 @@
 		<mapper resource="/sqls/HospitalInfo_Statement.xml"/>
 		<mapper resource="/sqls/HospitalSchedule_Statement.xml"/>    
 		<mapper resource="/sqls/MedicalRecode_Statement.xml"/>
+		<mapper resource="/sqls/User_Statement.xml"/>
 	</mappers>
 
 </configuration>

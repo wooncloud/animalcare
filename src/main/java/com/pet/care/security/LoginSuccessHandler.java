@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 
-import com.pet.care.model.service.IUserService;
+import com.pet.care.model.service.user.IUserService;
 
 public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
