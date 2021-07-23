@@ -136,7 +136,14 @@
 							</a>
 							<ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
 								<li class="ms-3">
-									<div>${sessionScope.member.name}님</div>
+									<div>
+										${sessionScope.member.name}
+										<c:choose>
+											<c:when test="${sessionScope.member.usertype eq 'ROLE_ADMIN'}">관리자님</c:when>
+											<c:when test="${sessionScope.member.usertype eq 'ROLE_OPER'}">원장님</c:when>
+											<c:otherwise>회원님</c:otherwise>
+										</c:choose>
+									</div>
 									<div style="font-size:small">안녕하세요.</div>
 								</li>
 								<li>
