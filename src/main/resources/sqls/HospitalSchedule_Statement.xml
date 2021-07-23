@@ -3,13 +3,13 @@
 <mapper namespace="com.pet.care.model.dao.hospital.IHospitalScheduleDao">
 
 <!-- 병원 일정 등록-->
-	<insert id="insertSchedule">
+	<insert id="insertSchedule" parameterType="HospitalScheduleDto">
 		INSERT INTO HOSPITALSCHEDULE
     			(SEQ, HOSPITAL_SEQ, TITLE ,CONTENT,
     			SCHEDULE, "CHECK", DELFLAG)
-        VALUES(HOSPITALSCHEDULE_SEQ.NEXTVAL, 3, 
-                  '젤리한테 간식 조공하러 가는 날', 젤리간식냠냠, '2021-07-16',
-                  'Y', 'N')
+        VALUES(HOSPITALSCHEDULE_SEQ.NEXTVAL, #{hospital_seq}, 
+                  #{title}, #{content}, #{schedule},
+                  #{check}, 'N')
 	</insert>
 	
 <!-- 병원 월별 일정조회-->
@@ -24,11 +24,11 @@
 	</select>
 	
 <!-- 병원 오늘 일정조회-->
-	<select id="todaySchedule">
+	<select id="todaySchedule" parameterType="java.lang.Integer" resultType="HospitalScheduleDto">
 		SELECT SEQ , HOSPITAL_SEQ , CONTENT ,
                 SCHEDULE , "CHECK" , DELFLAG 
       		FROM HOSPITALSCHEDULE h 
-     		WHERE HOSPITAL_SEQ = '3'
+     		WHERE HOSPITAL_SEQ = #{hospital_seq}
                 AND DELFLAG = 'N'
                 AND TO_CHAR(SCHEDULE,'YYYYMMDD') =
                          TO_CHAR(SYSDATE, 'YYYYMMDD')

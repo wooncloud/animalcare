@@ -1,0 +1,30 @@
+@charset "UTF-8";
+
+.petTypeCancle{
+	cursor: pointer;
+}
+
+.choice-div{
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.petTypeBox{
+	width: 200px;
+	background-color: #7d9ffb;
+}
+
+.address-input{
+	width: 244px;
+}
+.address-input2{
+	width: 500px;
+}
+
+.timepicker{
+	width: 120px;
+}
+
+.scheduleName{
+	width: 100%;
+}
