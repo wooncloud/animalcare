@@ -13,7 +13,7 @@
 	</insert>
 	
 <!-- 병원 월별 일정조회-->
-	<select id="monthSchedule">
+	<select id="monthSchedule" parameterType="java.util.Map" resultType="HospitalScheduleDto">
 		SELECT SEQ , HOSPITAL_SEQ , CONTENT ,
                 SCHEDULE , "CHECK" , DELFLAG 
      		FROM HOSPITALSCHEDULE h 

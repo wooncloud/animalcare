@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -122,14 +123,38 @@ public class ReservationController {
 	/*
 	 * 놀고 있는거
 	 */
-	@RequestMapping(value="/sendReservation.do", method=RequestMethod.POST)
+	@RequestMapping(value = "/insertReservation.do", method = RequestMethod.GET)
+	public String insertReservation(Model model) {
+		logger.info("ReservationController insertReservation 양식 입력  " );
+		Map<String, Object> map = new HashMap<String, Object>();
+		//세션에서 ? 
+		map.put("user_email", "user01@gmail.com");
+		
+		//이건 반려동물 정보 가져오기 위한 것
+		List<String>lists = rService.getUserPet(map);
+
+		model.addAttribute("userPet",lists);
+		
+		return "reservation/insertReservation";
+		
+	}
+	
+	/*
+	 * 결제 컨트롤러로
+	 */
+	@RequestMapping(value="sendReservation.do", method=RequestMethod.POST)
 	public String sendReservation(ReservationDto dto, Model model) {
 		logger.info("ReservationController insertReservation 양식 입력값 {}  ",dto );
 		
 		dto.setReservetime("09001100");
-		
+		dto.setHospital_seq(3);
 		System.out.println(dto);
 		
+		boolean isc = rService.insertReserve(dto);
+		
+		if(isc) {
+			
+		}
 		model.addAttribute("rDto",dto);
 		
 		return "reservation/index";
@@ -202,6 +227,7 @@ public class ReservationController {
 	 */
 	@RequestMapping(value = "/todayReserveList.do", method = RequestMethod.GET)
 	public String todayReserveList(Model model) {
+		logger.info("ReservationController todayReserveList 오늘의 예약 조회 " );
 		//seq는 병원번호 session
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("seq",4);
@@ -219,6 +245,7 @@ public class ReservationController {
 	 */
 	@RequestMapping(value = "/hospitalReserveList.do", method = RequestMethod.GET)
 	public String hospitalReserveList(Model model) {
+		logger.info("ReservationController hospitalReserveList 병원 예약 목록 조회 " );
 		//seq 병원번호 session
 		Map<String, Object>map = new HashMap<String, Object>();
 		map.put("hospital_seq", 3);
@@ -233,22 +260,48 @@ public class ReservationController {
 	/*
 	 * 병원 예약 미처리 목록 조회
 	 */
-	@RequestMapping(value = "/hospitalStandReserveList.do", method=RequestMethod.GET)
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/hospitalStandReserveList.do", method=RequestMethod.GET ,produces = "application/text; charset=UTF-8")
+	@ResponseBody
 	public String hospitalStandReserveList(Model model) {
+		logger.info("ReservationController hospitalStandReserveList 병원 예약 미처리 목록 조회 {}");
 		Map<String, Object>map = new HashMap<String, Object>();
-		map.put("seq", 3);
+		//병원 seq 임의 입력 session?에서 가져오던가 해야함
+		map.put("hospital_seq",3);
+		List<ReservationDto>lists = rService.hospitalStandReserveList(map);
 		
-		List<ReservationDto>lists = rService.hospitalReserveList(map);
+		JSONObject jObj = new JSONObject();
+		jObj.put("lists", lists);
 		
-		model.addAttribute("lists",lists);
-		return "reservation/hospitalReserveList";
+		System.out.println(jObj.toJSONString());
+		
+		return jObj.toString();
 	}
+	
+	//1번 문자
+//	@SuppressWarnings("unchecked")
+//	@RequestMapping(value = "/hospitalStandReserveList.do", method=RequestMethod.GET, produces = "application/text; charset=UTF-8")
+//	@ResponseBody
+//	public String hospitalStandReserveList(Model model) {
+//		logger.info("ReservationController hospitalStandReserveList 병원 예약 미처리 목록 조회 {}");
+//		Map<String, Object>map = new HashMap<String, Object>();
+//		map.put("hospital_seq",3);
+//		List<ReservationDto>lists = rService.hospitalStandReserveList(map);
+//		
+//		JSONObject jObj = new JSONObject();
+//		jObj.put("lists", lists);
+//		
+//		System.out.println(jObj.toJSONString());
+//		
+//		return jObj.toJSONString();
+//	}
 	
 	/*
 	 * 병원 예약 상세 조회 완료
 	 */
 	@RequestMapping(value = "/hospitalReserveDetail.do", method = RequestMethod.GET)
 	public String hospitalReserveDetail(@RequestParam Map<String,Object>map, Model model) {
+		logger.info("ReservationController hospitalReserveDetail 병원 예약 상세 조회 완료 " );
 		String seq = (String)map.get("seq");
 		System.out.println("seq======================"+seq);
 		Map<String, Object> hMap = new HashMap<String, Object>();
@@ -258,7 +311,7 @@ public class ReservationController {
 		ReservationDto rDto = rService.hospitalReserveDetail(hMap);
 	
 		System.out.println(rDto);
-		model.addAttribute("detail", rDto);
+		model.addAttribute("hospitalReserveDetail", rDto);
 		
 		return "reservation/hospitalReserveDetail";
 	}
@@ -283,23 +336,88 @@ public class ReservationController {
 	 */
 	@RequestMapping(value = "/selectdayReserveList.do", method = RequestMethod.GET)
 	public String selectdayReserveList(@RequestParam Map<String, Object>map, Model model) {
+		logger.info("ReservationController selectdayReserveList 선택일 예약 목록 조회 {}", map );
 		
-		String reservedate = (String)map.get("reservedate");
-		
-		Map<String, Object>rMap = new HashMap<String, Object>();
-		rMap.put("hospital_seq",3);
-		rMap.put("reservedate",reservedate);
-		map.put("user_email","user01@gmail.com");
-		List<String>petLists = rService.getUserPet(map);
+	      String reservedate = (String)map.get("reservedate");
+	      
+	      Map<String, Object>rMap = new HashMap<String, Object>();
+	      rMap.put("hospital_seq",3);
+	      rMap.put("reservedate",reservedate);
+	      map.put("user_email","user01@gmail.com");
+	      List<String>petLists = rService.getUserPet(map);
 
-		//반려 동물 목록
-		model.addAttribute("userPet",petLists);
+	      //반려 동물 목록
+	      model.addAttribute("userPet",petLists);
+	      
+	      List<ReservationDto> lists = rService.selectdayReserveList(rMap);
+	      model.addAttribute("reservedate", reservedate);
+	      model.addAttribute("todayReserve", lists);
+	      //가져갈방법????????
+	      return "reservation/selectdayReserveList";
+
+	}
+	
+
+	
+	
+	
+	
+	/*
+	 * 결제 컨트롤러 -> 예약 취소(쿼리실행)
+	 * 사용자 취소
+	 */
+	@RequestMapping(value = "/cancelReserve.do", method = RequestMethod.GET)
+	public String cancelReservation(@RequestParam Map<String, Object> map, Model model) {
+		logger.info("ReservationController selectdayReserveList 예약 취소 결제 보내기{}", map );
+		//세션에 병원 seq 있으면 병원 관계자 결제 컨트롤러
+		// 아니면 사용자 결제 컨트롤러
 		
-		List<ReservationDto> lists = rService.selectdayReserveList(rMap);
+		String seq = (String)map.get("seq");
+		String status =(String) map.get("status");
+	
+		model.addAttribute("seq", seq);
+		model.addAttribute("status", status);
 		
-		model.addAttribute("todayReserve", lists);
-		//가져갈방법????????
-		return "reservation/selectdayReserveList";
+		//status도 보내주세요~~
+		if(status == "S") {
+			//status 받아서 대기이면 환불 결제 컨트롤러
+//			rService.cancelReserve(map);
+			return "대기 상태 취소 결제 컨트롤러";
+		} else {
+			//status 받아서 확정이면 환불X 결제 컨트롤러
+//			rService.cancelReserve(map);
+			return "확정 상태 취소 결제 컨트롤러";
+		}	
+	}
+	
+	/*
+	 * 병원 관계자 예약 확정
+	 */
+	@RequestMapping(value = "/acceptReserve.do", method = RequestMethod.GET)
+	public String acceptReserve(@RequestParam Map<String, Object>map) {
+		logger.info("ReservationController acceptReserve 병원 관계자 예약 확정 {}", map );
+		String seq = (String)map.get("seq");
+		
+		rService.acceptReserve(map);
+		
+		return "redirect:/reservation/hospitalReserveDetail.do?seq="+seq;
+	}
+	
+	/*
+	 * 병원 관계자 예약 반려
+	 */
+	@RequestMapping(value = "/rejectReserve.do", method = RequestMethod.POST)
+	public String rejectReserve(@RequestParam Map<String,Object>map) {
+		logger.info("ReservationController acceptReserve 예약 확정  {}", map );
+		String seq = (String)map.get("seq");
+		boolean isc = rService.rejectReserve(map);
+		
+		if(isc) {
+			return "reservation/hospitalStandReserveList.do";
+		}else {
+			return "reservation/index";
+		}
+		
 	}
 	
 

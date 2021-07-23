@@ -179,7 +179,6 @@ function setSchedules() {
 		dataType:"text",
 		async:true,
 		success:function(msg){
-			alert("성공");
 			console.log(msg);
 			
 		},
@@ -188,57 +187,57 @@ function setSchedules() {
 		}
 	});
 	
-	
-	cal.createSchedules([
-			{
-				id: '3',
-				calendarId: 'CDC', // 
-				title: '예약가능',
-				name:'백지현',
-				category: 'time', // 
-				start: '2021-07-14 07:00:00',
-				end: '2021-07-14 09:00:00',
-				color: '#black', // 일정 색상을 직접 지정할 수 있음
-				bgColor: '#ccc',
-				dragBgColor: '#ccc',
-				borderColor: '#ccc'
-			},
-				{
-				id: '4',
-				calendarId: 'CDC', // 
-				title: '예약가능',
-				category: 'time', // 
-				start: '2021-07-14 09:00:00',
-				end: '2021-07-14 11:00:00',
-				color: '#black', // 일정 색상을 직접 지정할 수 있음
-				bgColor: '#ccc',
-				dragBgColor: '#ccc',
-				borderColor: '#ccc'
-			},	{
-				id: '5',
-				calendarId: 'CDC', // 
-				title: '예약가능',
-				category: 'time', // 
-				start: '2021-07-14 11:00:00',
-				end: '2021-07-14 13:00:00',
-				color: '#black', // 일정 색상을 직접 지정할 수 있음
-				bgColor: '#ccc',
-				dragBgColor: '#ccc',
-				borderColor: '#ccc'
-			},	
-			{
-				id: '6',
-				calendarId: 'CDC', // 
-				title: '예약불가',
-				category: 'time', // 
-				start: '2021-07-14 15:00:00',
-				end: '2021-07-14 17:00:00',
-				color: '#black', // 일정 색상을 직접 지정할 수 있음
-				bgColor: '#ccc',
-				dragBgColor: '#03bd9e',
-				borderColor: '#03bd9e'
-			}
-		]);
+//	
+//	cal.createSchedules([
+//			{
+//				id: '3',
+//				calendarId: 'CDC', // 
+//				title: '예약가능',
+//				name:'백지현',
+//				category: 'time', // 
+//				start: '2021-07-14 07:00:00',
+//				end: '2021-07-14 09:00:00',
+//				color: '#black', // 일정 색상을 직접 지정할 수 있음
+//				bgColor: '#ccc',
+//				dragBgColor: '#ccc',
+//				borderColor: '#ccc'
+//			},
+//				{
+//				id: '4',
+//				calendarId: 'CDC', // 
+//				title: '예약가능',
+//				category: 'time', // 
+//				start: '2021-07-14 09:00:00',
+//				end: '2021-07-14 11:00:00',
+//				color: '#black', // 일정 색상을 직접 지정할 수 있음
+//				bgColor: '#ccc',
+//				dragBgColor: '#ccc',
+//				borderColor: '#ccc'
+//			},	{
+//				id: '5',
+//				calendarId: 'CDC', // 
+//				title: '예약가능',
+//				category: 'time', // 
+//				start: '2021-07-14 11:00:00',
+//				end: '2021-07-14 13:00:00',
+//				color: '#black', // 일정 색상을 직접 지정할 수 있음
+//				bgColor: '#ccc',
+//				dragBgColor: '#ccc',
+//				borderColor: '#ccc'
+//			},	
+//			{
+//				id: '6',
+//				calendarId: 'CDC', // 
+//				title: '예약불가',
+//				category: 'time', // 
+//				start: '2021-07-14 15:00:00',
+//				end: '2021-07-14 17:00:00',
+//				color: '#black', // 일정 색상을 직접 지정할 수 있음
+//				bgColor: '#ccc',
+//				dragBgColor: '#03bd9e',
+//				borderColor: '#03bd9e'
+//			}
+//		]);
 
 }
 

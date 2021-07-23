@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="/header.jsp" %>
+전체 <input type="radio" name="rdoBtn" checked="checked" />
+미처리 <input type="radio" name="rdoBtn" onclick=" hospitalStandReserveList()"/>
 <div class="card my-1">
    <div class="card-body">
       <div class="row">
@@ -41,7 +43,7 @@
 				</div>
 				<div class="col-1">
 					<p class="card-text">
-					<a href="./userReserveDetail.do?seq=${list.seq}">${list.name}</a></p>
+					<a href="./hospitalReserveDetail.do?seq=${list.seq}">${list.name}</a></p>
 				</div>
 				<div class="col-2">
 					<p class="card-text">${list.phone}</p>
@@ -70,4 +72,45 @@
 		</div>
 	</div>
 </c:forEach>
+<script type="text/javascript">
+	
+function hospitalStandReserveList(){
+			
+	
+	var rdo = document.getElementsByName("rdoBtn");
+	
+	console.log(rdo[0]);
+	console.log(rdo[1]);
+	
+	if(rdo[1].checked){
+		alert("미처리 선택")
+		
+			$.ajax({
+				type:"get",
+				url:"./hospitalStandReserveList.do",
+				dataTyep:"json",
+				success:function(result){
+					console.log(result)
+					var json = JSON.parse(result);
+// 					$.each(result,function(key,value){
+// 						console.log(key,value)
+						
+// 					})
+					console.log(json);
+				},
+				error:function(){
+					alert("잘못된 요청입니다.")
+				
+				}
+			
+			});
+}
+		}
+		
+		
+	
+
+	
+	
+</script>
 <%@ include file="/footer.jsp" %>
