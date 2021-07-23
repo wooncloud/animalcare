@@ -4,16 +4,17 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
-import java.io.Reader;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Properties;
 import java.util.Random;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletResponse;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 
 import net.nurigo.java_sdk.api.Message;
 import net.nurigo.java_sdk.exceptions.CoolsmsException;
@@ -131,8 +132,34 @@ public class Util {
 		}
 	}
 	
-	// 이메일
-	
+	/**
+	 * 이메일을 입력받은 내용으로 보내줍니다.<br>
+	 * 발송자 이메일 주소 : wooncloud9849@gmail.com
+	 *  
+	 * @param mailSender :컨트롤러에서 [@Autowired private JavaMailSender mailSender;] 만든 객체
+	 * @param to : 받는 사람 이메일 주소
+	 * @param subject : 제목
+	 * @param content : 내용
+	 * 
+	 * @author WOO SEONG HO
+	 */
+	public static void EmailSend(JavaMailSender mailSender, String to ,String subject, String content) {
+		MimeMessage message = mailSender.createMimeMessage();
+
+		try {
+			MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+			helper.setFrom("wooncloud9849@gmail.com"); // 보내는 사람의 이메일
+			helper.setTo(to); // 받을 사람 이메일
+			helper.setSubject(subject);
+			helper.setText(content, true);
+
+			mailSender.send(message);
+
+		} catch (MessagingException e) {
+
+			e.printStackTrace();
+		}
+	}
 	
 	
 	/**
@@ -151,7 +178,7 @@ public class Util {
 		Properties prop = util.readProperties("properties/sms.properties");
 		String numStr = randomNum(6);
 		
-		String text = "[PET CARE] 회원가입 인증번호는 '" + numStr + "' 입니다.";
+		String text = "[PET CARE] 전화번호 인증번호는 '" + numStr + "' 입니다.";
 		String api_key = prop.getProperty("key");
 		String api_secret = prop.getProperty("secret");
 

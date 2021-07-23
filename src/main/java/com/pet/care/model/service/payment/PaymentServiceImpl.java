@@ -38,5 +38,32 @@ public class PaymentServiceImpl implements IPaymentService {
 		return iDao.payDetailList(seq);
 	}
 
+	@Override
+	public boolean cancelPay(Map<String, Object> map) {
+		logger.info("PaymentServiceImpl : cancelPay 결제 취소 (환불 X) - {}", map);
+		boolean isc = iDao.cancelPay(map);
+		return isc;
+	}
+
+	@Override
+	public boolean userCancelPayRefund(Map<String, Object> map) {
+		logger.info("PaymentServiceImpl : userCancelPayRefund 사용자 결제 취소 (환불 O) - {}", map);
+		boolean isc = iDao.userCancelPayRefund(map);
+		return isc;
+	}
+
+	@Override
+	public boolean operCancelPayRefund(Map<String, Object> map) {
+		logger.info("PaymentServiceImpl : operCancelPayRefund 병원관계자 결제 취소 (환불 O) - {}", map);
+		boolean isc = iDao.operCancelPayRefund(map);
+		return isc;
+	}
+
+	@Override
+	public String sendPayNum(Map<String, Object> map) {
+		logger.info("PaymentServiceImpl : sendPayNum 결제 번호 - {}", map);
+		return iDao.sendPayNum(map);
+	}
+
 
 }
