@@ -56,21 +56,19 @@
 				</a>
 				<ul class="nav col-12 col-lg-auto me-lg-auto mb-2 ms-5 justify-content-center mb-md-0">
 					<c:if test="${(sessionScope.member eq null) or (sessionScope.member.usertype eq 'ROLE_USER')}">
-					<li>
-						<a href="${path}/hospital/searchHospital.do" class="nav-link px-4 link-dark">
-							<i class="fas fa-search"></i> 병원찾기
-						</a>
-					</li>
-
-					<li>
-						<a href="${path}/hospital/insertHospital.do" class="nav-link px-4 link-dark">
-							<i class="fas fa-search"></i> 병원등록(임시생성)
-						</a>
-					</li>
-
+						<li>
+							<a href="${path}/hospital/searchHospital.do" class="nav-link px-4 link-dark">
+								<i class="fas fa-search"></i> 병원찾기
+							</a>
+						</li>
+	
+						<li>
+							<a href="${path}/hospital/insertHospital.do" class="nav-link px-4 link-dark">
+								<i class="fas fa-search"></i> 병원등록(임시생성)
+							</a>
+						</li>
 					</c:if>
 					<c:if test="${sessionScope.member.usertype eq 'ROLE_USER'}">
-
 						<li>
 							<a href="${path}/" class="nav-link px-4 link-dark">
 								<i class="fas fa-cat"></i> 내 애완동물
@@ -82,7 +80,7 @@
 							</a>
 						</li>
 						<li>
-							<a href="${path}/" class="nav-link px-4 link-dark">
+							<a href="${path}/reservation/userReserveList.do" class="nav-link px-4 link-dark">
 								<i class="far fa-calendar-check"></i> 예약내역
 							</a>
 						</li>
@@ -94,7 +92,7 @@
 					</c:if>
 					<c:if test="${sessionScope.member.usertype eq 'ROLE_OPER'}">
 						<li>
-							<a href="${path}/" class="nav-link px-4 link-dark">
+							<a href="${path}/reservation/hospitalReserveList.do" class="nav-link px-4 link-dark">
 								<i class="far fa-calendar-check"></i> 예약
 							</a>
 						</li>
