@@ -22,7 +22,7 @@
 <!-- 	</resultMap> -->
 
 <!-- 	회원 병원 리스트 조회  -->
-	<select id="hospitalList" resultMap="">
+	<select id="hospitalList" >
 		SELECT HOSPITAL_SEQ , NAME , CONTENT ,
                 ADDRESS1 , ADDRESS2 , OPENTIME , PETTYPE
         	FROM (                
