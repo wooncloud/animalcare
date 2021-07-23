@@ -53,11 +53,13 @@
 					<span class="mx-2 fs-3 fw-bold">PET CARE</span>
 				</a>
 				<ul class="nav col-12 col-lg-auto me-lg-auto mb-2 ms-5 justify-content-center mb-md-0">
+					<c:if test="${(sessionScope.member eq null) or (sessionScope.member.usertype eq 'ROLE_USER')}">
 					<li>
 						<a href="./searchHospital.do" class="nav-link px-4 link-dark">
 							<i class="fas fa-search"></i> 병원찾기
 						</a>
 					</li>
+					</c:if>
 					<c:if test="${sessionScope.member.usertype eq 'ROLE_USER'}">
 						<li>
 							<a href="${path}/" class="nav-link px-4 link-dark">
@@ -133,9 +135,18 @@
 									<hr class="dropdown-divider">
 								</li>
 								<li>
-									<a class="dropdown-item" href="${path}/login/userInfo.do">
-										<i class="fas fa-user"></i> 내 정보
-									</a>
+									<c:choose>
+										<c:when test="${sessionScope.member.usertype eq 'ROLE_USER'}">										
+											<a class="dropdown-item" href="${path}/login/userInfo.do">
+												<i class="fas fa-user"></i> 내 정보
+											</a>
+										</c:when>
+										<c:when test="${sessionScope.member.usertype eq 'ROLE_OPER'}">
+											<a class="dropdown-item" href="${path}/login/operInfo.do">
+												<i class="fas fa-user"></i> 계정 정보
+											</a>
+										</c:when>
+									</c:choose>
 								</li>
 								<li>
 									<a class="dropdown-item" href="#">

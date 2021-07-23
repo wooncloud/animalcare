@@ -1,11 +1,14 @@
 window.onload = function () {
 	let pathname = window.location.pathname;
-	
+
 	if (pathname.indexOf('login') != -1) {
 		login.init();
 	}
 	if (pathname.indexOf('signupUserForm') != -1) {
 		signupUser.init();
+	}
+	if (pathname.indexOf('signupOperForm') != -1) {
+		signupOper.init();
 	}
 	if (pathname.indexOf('signupSelect') != -1) {
 		select.init();
@@ -16,6 +19,9 @@ const login = {
 	init: function () {
 		if (getParam('type') == "empty") {
 			swal.alert_txt("로그인 실패", "로그인에 실패했습니다.\n이메일과 비밀번호를 확인후 다시 시도하세요.", "");
+		}
+		if (getParam('type') == "approval") {
+			swal.alert_txt("로그인 실패", "승인되지 않은 계정입니다.\n관리자에게 문의하세요.", "");
 		}
 	},
 	login: function () {
@@ -83,6 +89,10 @@ const signupUser = {
 		document.getElementById('email').addEventListener('change', function () {
 			signupUser.status.edc = false;
 		});
+
+		signupUser.status.edc = false;
+		signupUser.status.evc = false;
+		signupUser.status.pvc = false;
 	},
 	emailDupl: function () {
 		let email = document.getElementById("email").value;
@@ -282,6 +292,100 @@ const signupUser = {
 			"phone": form.phone.value,
 			"address1": form.address1.value,
 			"address2": form.address2.value
+		}
+
+		// 유효성 검사(빈값, 정규표현식)
+		for (const [key, value] of Object.entries(data)) {
+			if (isEmpty(value)) {
+				let labelTxt = eval(`element.${key}`).closest('.signup-row').querySelector('.form-label').innerText;
+				swal.alert_txt("누락된 내용이 있습니다.", `${labelTxt}(이)가 없습니다.\n다시 확인해 주세요.`, "error");
+				return false;
+			}
+			else {
+				if (key == 'email' && regEx.email.test(value) == false) {
+					swal.alert_txt(
+						"이메일 형식 오류",
+						"이메일 형식이 잘못되었습니다.\n다시 확인해 주세요.",
+						"error"
+					);
+					return false;
+				}
+				if (key == 'password' && regEx.pw.test(value) == false) {
+					swal.alert_txt(
+						"비밀번호 형식 오류",
+						"비밀번호는 영문 최소 8자, 대문자, 소문자, 숫자 및 특수 문자 하나 이상 포함되어야 합니다.",
+						"error"
+					);
+					return false;
+				}
+				if (key == 'phone' && regEx.phone.test(value) == false) {
+					swal.alert_txt(
+						"전화번호 형식 오류",
+						"전화번호 형식이 잘못 되었습니다.\n다시 확인해 주세요.",
+						"error"
+					);
+					return false;
+				}
+			}
+		}
+
+		if(form.password.value != document.getElementById("pwc").value){
+			swal.alert_txt("비밀번호 오류", "비밀번호 확인이 다릅니다.", "error");
+			return false;
+		}
+		if (!signupUser.status.edc) {
+			swal.alert_txt("이메일 검사 오류", "이메일 중복검사를 먼저 해야합니다.", "error");
+			return false;
+		}
+		if (!signupUser.status.evc) {
+			swal.alert_txt("이메일 인증 오류", "이메일 인증을 해야 합니다", "error");
+			return false;
+		}
+		if (!signupUser.status.pvc) {
+			swal.alert_txt("전화번호 인증 오류", "전화번호 인증을 해야 합니다", "error");
+			return false;
+		}
+
+		// 가입
+		form.submit();
+	}
+}
+
+const signupOper = {
+	init: function () {
+		document.getElementById('btnEmailDupl').addEventListener('click', signupUser.emailDupl);
+		document.getElementById('btnEmailSendConfirm').addEventListener('click', signupUser.emailSendConfirm);
+		document.getElementById('btnEmailConfirm').addEventListener('click', signupUser.emailConfirm);
+		document.getElementById('btnPhoneSendConfirm').addEventListener('click', signupUser.phoneSendConfirm);
+		document.getElementById('btnPhoneConfirm').addEventListener('click', signupUser.phoneConfirm);
+		document.getElementById('btnCancel').addEventListener('click', signupUser.cancel);
+		document.getElementById('btnSignup').addEventListener('click', signupOper.signup);
+
+		document.getElementById('email').addEventListener('change', function () {
+			signupUser.status.edc = false;
+		});
+
+		signupUser.status.edc = false;
+		signupUser.status.evc = false;
+		signupUser.status.pvc = false;
+	},
+	signup: function () {
+		let form = document.forms[0];
+		let element = {
+			"email": form.email,
+			"password": form.password,
+			"name": form.name,
+			"phone": form.phone,
+			"corpregnum": form.corpregNum,
+			"licensenum": form.licenseNum
+		}
+		let data = {
+			"email": form.email.value,
+			"password": form.password.value,
+			"name": form.name.value,
+			"phone": form.phone.value,
+			"corpregnum": form.corpregNum.value,
+			"licensenum": form.licenseNum.value
 		}
 
 		// 유효성 검사(빈값, 정규표현식)

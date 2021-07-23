@@ -82,7 +82,7 @@
 
 	<!-- 병원관계자 정보 조회 - 회원 정보 조회 -->
 	<select id="detailOper" parameterType="java.lang.String" resultType="OperDto">
-		SELECT EMAIL, NAME, PHONE, CORPREGNUM, LICENSENUM
+		SELECT EMAIL, NAME, PHONE, CORPREGNUM, LICENSENUM, APPROVALFLAG
 		FROM OPERATORINFO
 		WHERE EMAIL = #{email}
 	</select>

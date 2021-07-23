@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.pet.care.comm.Util;
 import com.pet.care.dto.MemberDto;
+import com.pet.care.dto.OperatorDto;
 import com.pet.care.dto.UserDto;
 import com.pet.care.model.service.user.IUserService;
 
@@ -34,22 +35,44 @@ public class UserController {
 	@Autowired
 	private IUserService userService;
 
+	// 로그인 화면
 	@RequestMapping(value = "/loginForm.do", method = RequestMethod.GET)
 	public String loginForm() {
 		return "login/login";
 	}
 
+	// 로그인
 	@RequestMapping(value = "/login.do", method = RequestMethod.POST)
 	public String login(@RequestParam Map<String, Object> param, HttpSession session) {
 		logger.info("[login] : 로그인 - {}", param);
 
 		MemberDto member = userService.userLogin(param);
-		System.out.println(member);
+
+		// 로그인 실패
 		if (member == null) {
 			return "redirect:./loginForm.do?type=empty";
 		} else {
 			session.setAttribute("member", member);
-			return "redirect:/home.do";
+
+			// 관리자
+			if (member.getUsertype().equals("ROLE_ADMIN")) {
+				return "admin/adminConsole";
+			}
+			// 병원관계자
+			else if (member.getUsertype().equals("ROLE_OPER")) {
+				OperatorDto operDto = userService.detailOper(member.getEmail());
+				System.out.println(operDto);
+				// 계정 승인 여부
+				if(operDto.getApprovalflag().equals("Y")) {
+					return "redirect:/home.do";					
+				} else {
+					return "redirect:./loginForm.do?type=approval";
+				}
+			}
+			// 사용자
+			else {
+				return "redirect:/home.do";
+			}
 		}
 	}
 
@@ -99,7 +122,7 @@ public class UserController {
 	@RequestMapping(value = "/sendEmailCode.do", method = RequestMethod.POST)
 	@ResponseBody
 	public String sendEmailCode(String email) {
-		logger.info("[userInfo] : 이메일 인증 코드 발송 - {}", email);
+		logger.info("[sendEmailCode] : 이메일 인증 코드 발송 - {}", email);
 		String result = "";
 		String code = Util.randomVal(8);
 		String title = "PET CARE 인증번호 입니다.";
@@ -124,7 +147,7 @@ public class UserController {
 	@RequestMapping(value = "/checkEmailCode.do", method = RequestMethod.POST)
 	@ResponseBody
 	public String checkEmailCode(@RequestParam Map<String, Object> param) {
-		logger.info("[userInfo] : 이메일 인증 - {}", param);
+		logger.info("[checkEmailCode] : 이메일 인증 - {}", param);
 
 		boolean isc = userService.checkEmailVerificationCode(param);
 
@@ -153,6 +176,19 @@ public class UserController {
 	public String signupOperForm() {
 		return "login/signupOper";
 	}
+	
+	// 병원관계자 회원가입
+	@RequestMapping(value = "/signupOper.do", method = RequestMethod.POST)
+	public String signupOper(OperatorDto param) {
+		logger.info("[signupUser] : 회원가입 - {}", param);
+		boolean isc = userService.insertOper(param);
+
+		if (isc) {
+			return "redirect:./login.do";
+		} else {
+			return "redirect:error/error500.do";
+		}
+	}
 
 	// 내 정보 화면
 	@RequestMapping(value = "/userInfo.do", method = RequestMethod.GET)
@@ -165,12 +201,24 @@ public class UserController {
 
 		return "login/userInfo";
 	}
+	
+	// 내 정보 화면
+	@RequestMapping(value = "/operInfo.do", method = RequestMethod.GET)
+	public String operInfo(Model model, HttpSession session) {
+		logger.info("[operInfo] : 병원관계자 정보");
+		
+		MemberDto member = (MemberDto) session.getAttribute("member");
+		OperatorDto dto = userService.detailOper(member.getEmail());
+		model.addAttribute("oper", dto);
+		
+		return "login/operInfo";
+	}
 
 	// 비번 변경
 	@RequestMapping(value = "/changePW.do", method = RequestMethod.POST)
 	@ResponseBody
 	public String changePW(@RequestParam Map<String, String> param, HttpSession session) {
-		logger.info("[userInfo] : 내 정보 변경 - {}", param);
+		logger.info("[changePW] : 내 정보 변경 - {}", param);
 		MemberDto member = (MemberDto) session.getAttribute("member");
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("email", member.getEmail());
@@ -195,7 +243,7 @@ public class UserController {
 	@RequestMapping(value = "/changeAddr.do", method = RequestMethod.POST)
 	@ResponseBody
 	public String changeAddr(@RequestParam Map<String, String> param, HttpSession session) {
-		logger.info("[userInfo] : 내 정보 변경 - {}", param);
+		logger.info("[changeAddr] : 내 정보 변경 - {}", param);
 		MemberDto member = (MemberDto) session.getAttribute("member");
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("email", member.getEmail());
@@ -215,7 +263,7 @@ public class UserController {
 	@RequestMapping(value = "/sendVerifyCode.do", method = RequestMethod.POST)
 	@ResponseBody
 	public String sendVerifyCode(@RequestParam Map<String, String> param, HttpSession session) {
-		logger.info("[userInfo] : 인증번호 전송 - {}", param);
+		logger.info("[sendVerifyCode] : 인증번호 전송 - {}", param);
 		MemberDto member = (MemberDto) session.getAttribute("member");
 
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -243,7 +291,7 @@ public class UserController {
 	@RequestMapping(value = "/checkVerifyCode.do", method = RequestMethod.POST)
 	@ResponseBody
 	public String checkVerifyCode(@RequestParam Map<String, String> param, HttpSession session) {
-		logger.info("[userInfo] : 전화번호 인증 - {}", param);
+		logger.info("[checkVerifyCode] : 전화번호 인증 - {}", param);
 		MemberDto member = (MemberDto) session.getAttribute("member");
 
 		Map<String, Object> map = new HashMap<String, Object>();
