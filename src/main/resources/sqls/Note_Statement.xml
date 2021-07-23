@@ -10,13 +10,45 @@
 	<result property="photo" column="PHOTO"/>
 	<result property="delflag" column="DELFLAG"/>
 	<result property="regdate" column="REGDATE"/>
-	<collection property="pdto" resultMap="petDto"></collection>
+	<collection property="pdto" resultMap="petDto"/>
 </resultMap>
 
 <resultMap type="com.pet.care.dto.PetDto" id="petDto">
 	<result property="name" column="NAME"/>
+	<result property="email" column="USER_EMAIL"/>
 </resultMap>
 
 
+<!-- 건강수첩 리스트 조회 -->
+<select id="noteList" parameterType="java.util.Map" resultType="NoteDto">
+	SELECT SEQ , TITLE ,REGDATE, PHOTO 
+        FROM HEALTHNOTE h 
+        LEFT OUTER JOIN PETINFO p ON h.PET_ID = p.ID 
+        WHERE p.USER_EMAIL =#{email}
+        AND h.PET_ID = (SELECT p.ID FROM PETINFO p WHERE p.NAME=#{name})
+        ORDER BY h.REGDATE
+</select>
+
+<!-- 건강수첩 리스트 일별 조회 -->
+<select id="selDateList" parameterType="java.util.Map" resultType="NoteDto">
+<![CDATA[
+	SELECT SEQ , TITLE ,REGDATE, PHOTO 
+        FROM HEALTHNOTE h 
+        LEFT OUTER JOIN PETINFO p ON h.PET_ID = p.ID 
+    WHERE p.USER_EMAIL =#{email}
+    AND h.PET_ID = (SELECT p.ID FROM PETINFO p WHERE p.NAME=#{name})
+        AND h.REGDATE >TO_DATE(#{seldate},'MM-DD')
+    AND h.REGDATE <TO_DATE({seldate},'MM-DD')+1
+]]>
+</select>
+
+
+<!-- 건강수첩 상세조회 -->
+<select id="noteDetail" parameterType="java.lang.Integer" resultMap="PetNoteDto">
+	SELECT p.NAME , h.TITLE , h.CONTENT , h.REGDATE, h.PHOTO
+        FROM HEALTHNOTE h 
+        LEFT OUTER JOIN PETINFO p  ON h.PET_ID = p.ID 
+        WHERE h.SEQ =#{seq}
+</select>
 
 </mapper>
