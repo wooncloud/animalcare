@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.pet.care.dto.PaymentDto;
 import com.pet.care.model.service.payment.IPaymentService;
+import com.pet.care.model.service.reservation.IReservationService;
 import com.pet.care.payment.PaymentRefund;
 
 @Controller
@@ -70,30 +71,26 @@ public class PaymentController {
 	}
 	
 	@RequestMapping(value="/cancelPay.do", method=RequestMethod.GET)
-	public String cancelPay(@RequestParam Map<String, Object> map) {
+	public String cancelPay(@RequestParam Map<String, Object> map, Model model) {
 		logger.info("PaymentController : cancelPay 결제 취소 - {}", map);
-		//예약취소 -> 쿼리돌고 -> 다시 예약내역리스트로 가거나... 일단 내껄로~!
-		String seq = "49";
-		String status ="A";
-		map.put("seq", seq);//예약seq
-		map.put("status", status);//상태
+		
 		boolean isc = iService.cancelPay(map);
+		
+		String seq = (String)map.get("seq");
+		model.addAttribute("seq", seq);
+
 		if(isc) {
-			return "redirect:/reservation/????";
-			//내꺼 업데이트하고 예약에서 상태 A를 취소(C?)로 업데이트해주는 & paynum null 쿼리로 가야함 
+			// 이게 맞음 20210724 3:54 pm
+			return "redirect:/reservation/cancelReserve.do"; 
 		}else {
-			return "payment/index";
-			//취소실패페이지 -> 다시 취소할수있는 페이지로
+			return "redirect:/error/error.do";
 		}
 	}
 	
 	@RequestMapping(value="/userCancelPayRefund.do",method = RequestMethod.GET)
-	public String userCancelPayRefund(@RequestParam Map<String, Object> map ) {
+	public String userCancelPayRefund(@RequestParam Map<String, Object> map, Model model ) {
 		logger.info("PaymentController : userCancelPayRefund 사용자 결제 취소 (환불 O) - {}", map);
-		String seq = "48";
-		String status ="S";
-		map.put("seq", seq); //예약seq
-		
+
 		String imp_uid = iService.sendPayNum(map);
 
 		//환불API
@@ -101,27 +98,22 @@ public class PaymentController {
 		re.setup();
 		re.cancelPaymentByImpUid(imp_uid);
 		
-		map.put("status", status); //예약상태
-
 		boolean isc = iService.userCancelPayRefund(map);
+		
+		// 이게 맞음 20210724 3:54 pm
+		String seq = (String)map.get("seq");
+		model.addAttribute("seq", seq);
 		if(isc) {
 			System.out.println("=========================사용자 환불 성공");
-			return "payment/index"; //예약쪽 페이지가야함 //거기에서 paynum null만드는 쿼리
+			return "redirect:/reservation/cancelReserve.do";
 		}else {
 			return "redirect:/error/error.do";
-			//일단 에러페이지
-			//취소실패페이지 -> 다시 취소할수있는 페이지로
 		}
-		
-		
 	}
 	
 	@RequestMapping(value="/operCancelPayRefund.do",method = RequestMethod.GET)
-	public String operCancelPayRefund(@RequestParam Map<String, Object> map ) {
+	public String operCancelPayRefund(@RequestParam Map<String, Object> map, Model model) {
 		logger.info("PaymentController : operCancelPayRefund 병원관계자 결제 취소 (환불 O) - {}", map);
-		String seq = "47";
-		String status ="A";
-		map.put("seq", seq); //예약seq
 		
 		String imp_uid = iService.sendPayNum(map);
 
@@ -130,12 +122,14 @@ public class PaymentController {
 		re.setup();
 		re.cancelPaymentByImpUid(imp_uid);
 		
-		map.put("status", status); //예약상태
-
 		boolean isc = iService.operCancelPayRefund(map);
+		
+		String seq = (String)map.get("seq");
+		model.addAttribute("seq", seq);
+		// 이게 맞음 20210724 3:54 pm
 		if(isc) {
 			System.out.println("=========================병원관계자 환불 성공");
-			return "redirect:/payment/payment.do"; //예약쪽 페이지가야함 //거기에서 paynum null만드는 쿼리
+			return "redirect:/reservation/cancelReserve.do";
 		}else {
 			return "redirect:/error/error.do";
 		}
