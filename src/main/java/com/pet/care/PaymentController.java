@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.pet.care.dto.MemberDto;
 import com.pet.care.dto.PaymentDto;
 import com.pet.care.model.service.payment.IPaymentService;
-import com.pet.care.model.service.reservation.IReservationService;
 import com.pet.care.payment.PaymentRefund;
 
 @Controller
@@ -42,7 +42,6 @@ public class PaymentController {
 		String paynum = pDto.getPaynum();
 		boolean isc = iService.insertPay(pDto);
 		if(isc) {
-//			return "redirect:/예약컨트롤러";
 //			model.addAttribute("paynum", paynum);
 			return paynum;
 		}else {
@@ -52,9 +51,12 @@ public class PaymentController {
 	
 	@RequestMapping(value="/payList.do", method=RequestMethod.GET)
 	public String payList(Model model, HttpSession session) {
-//		String user_email = (String)session.getAttribute("user_email");
-		String user_email = "user01@gmail.com";
+		
+		MemberDto mDto = (MemberDto)session.getAttribute("member");
+		String user_email = mDto.getEmail();
+				
 		logger.info("PaymentController : payList 결제 내역 조회 - {}",user_email);
+		
 		List<PaymentDto> paylists = iService.payList(user_email);
 		System.out.println(paylists);
 		model.addAttribute("payList",paylists);
