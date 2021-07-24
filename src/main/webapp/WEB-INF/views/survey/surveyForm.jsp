@@ -9,9 +9,10 @@
 	    	<div class="row justify-content-end">
 	    		<div class="col-2">
 				<input type="button" class="btn btn-success" id="" data-bs-toggle="modal" data-bs-target="#dateModal" value="임시저장"><br>
+				<button type="button" class="btn btn-success" id="">초기화</button><br>
 				</div>
-			</div>
 				설문 제목 <input type="text" class="form-control" name="title" required="required">
+			</div>
 	    </form>
     </div>
 </div>
@@ -66,6 +67,9 @@
 	}
 	function saveForm(){
 		
+	}
+	function resetForm(){
+		 $('form').empty();
 	}
 	
 	
