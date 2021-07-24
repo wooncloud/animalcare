@@ -74,6 +74,7 @@ SELECT r1.SEQ, r1.USER_EMAIL ,r1.RESERVETYPE , TO_CHAR(r1.RESERVEDATE,'YYYY-MM-D
         FROM  USERINFO u  JOIN RESERVATION r 
         ON r.USER_EMAIL = u.EMAIL 
         AND HOSPITAL_SEQ =#{hospital_seq}
+        AND r.STATUS != 'S'
         ORDER BY RESERVEDATE DESC
 		
 	</select>

@@ -1,5 +1,7 @@
 package com.pet.care.comm;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import org.json.simple.JSONArray;
@@ -67,7 +69,9 @@ public class JsonUtil {
 			j.put("id", s.getSeq());
 			j.put("calendarId", "병원일정");
 			j.put("name", s.getTitle());
-			j.put("start", s.getSchedule());
+			SimpleDateFormat sSchedule = new SimpleDateFormat("YYYYMMDD");
+			String schedule = sSchedule.format(s.getSchedule());
+			j.put("start", schedule);
 			
 			j.put("category", "task");
 			j.put("color", "#ffffff");

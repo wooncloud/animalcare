@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="/header.jsp" %>
+${lists}
 <div class="card my-1">
    <div class="card-body">
       <div class="row">
@@ -25,7 +26,17 @@
       </div>
    </div>
 </div>
-
+<c:if test="${fn:length(lists) eq 0}">
+<div class="card my-1">
+		<div class="card-body">
+			<div class="row">
+				<div class="col">
+					<p class="card-text">예약 내용이 없습니다</p>
+				</div>
+			</div>
+		</div>
+</div>
+</c:if>
 <c:forEach var="list" items="${lists}" varStatus="vs">
 	<div class="card my-1">
 		<div class="card-body">

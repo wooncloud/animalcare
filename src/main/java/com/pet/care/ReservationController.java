@@ -19,9 +19,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.pet.care.comm.JsonUtil;
 import com.pet.care.dto.HospitalScheduleDto;
+import com.pet.care.dto.MemberDto;
 import com.pet.care.dto.ReservationDto;
 import com.pet.care.model.service.hospital.IHospitalInfoService;
 import com.pet.care.model.service.hospital.IHospitalScheduleService;
@@ -70,32 +72,36 @@ public class ReservationController {
 		return "reservation/calendar";
 	}
 	
-//	@SuppressWarnings("unchecked")
-//	@RequestMapping(value = "/calendar.do", method = RequestMethod.GET, produces = "application/text; charset=UTF-8")
-//	@ResponseBody
-//	public String Calendar(String hospital_seq) {
-//		logger.info("ReservationController Calendar 달력 {} ",hospital_seq );
-//		System.out.println(hospital_seq);
-//		
-//		Map<String, Object> rMap = new HashMap<String, Object>();
-//		rMap.put("hospital_seq",hospital_seq);
-//		
-//		Map<String, Object>hMap = new HashMap<String, Object>();
-//		hMap.put("hospital_seq", hospital_seq);
+	/*
+	 * 달력에 일정
+	 */
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/calendar.do", method = RequestMethod.GET, produces = "application/text; charset=UTF-8")
+	@ResponseBody
+	public String Calendar(String hospital_seq, Model model) {
+		logger.info("ReservationController Calendar 달력 {} ",hospital_seq );
+		System.out.println(hospital_seq);
 		
-//		List<ReservationDto>rLists= rService.hospitalReserveList(rMap);
-//		List<HospitalScheduleDto> hList = hService.monthSchedule(hMap);
+		//세션
+		Map<String, Object> rMap = new HashMap<String, Object>();
+		rMap.put("hospital_seq",hospital_seq);
 		
-//		JSONArray jarr = JsonUtil.CalenderJson(hList, rLists);
+		Map<String, Object>hMap = new HashMap<String, Object>();
+		hMap.put("hospital_seq", hospital_seq);
 		
-//		JSONObject result = new JSONObject();
-//		result.put("result",jarr);
+		List<ReservationDto>rLists= rService.hospitalReserveList(rMap);
+		List<HospitalScheduleDto> hList = hService.monthSchedule(hMap);
 		
-//		System.out.println("-=-=-=-=-=-=-=-=-=-=-=-="+result.toJSONString());
-//		
-//		return result.toString();
+		JSONArray jarr = JsonUtil.CalenderJson(hList, rLists);
 		
-//	}
+		JSONObject result = new JSONObject();
+		result.put("result",jarr);
+		
+		System.out.println("-=-=-=-=-=-=-=-=-=-=-=-="+result.toJSONString());
+		
+		return result.toString();
+		
+	}
 	
 	/*
 	 * 예약 디비 입력 insert  놀고 있는거
@@ -106,8 +112,6 @@ public class ReservationController {
 		System.out.println("+++++++++++++++++++++++++++++++++="+rDto);
 		System.out.println("------------------------------"+map);
 		rDto.setHospital_seq(3);
-		rDto.setReservedate("20210726");
-		rDto.setReservetime("15001700");
 		 map.get("name");
 		 map.get("pet_name");
 		 map.get("reservetype");
@@ -121,23 +125,23 @@ public class ReservationController {
 	}
 	
 	/*
-	 * 놀고 있는거
+	 * 결제 없이 입력 테스트
 	 */
-	@RequestMapping(value = "/insertReservation.do", method = RequestMethod.GET)
-	public String insertReservation(Model model) {
-		logger.info("ReservationController insertReservation 양식 입력  " );
-		Map<String, Object> map = new HashMap<String, Object>();
-		//세션에서 ? 
-		map.put("user_email", "user01@gmail.com");
-		
-		//이건 반려동물 정보 가져오기 위한 것
-		List<String>lists = rService.getUserPet(map);
-
-		model.addAttribute("userPet",lists);
-		
-		return "reservation/insertReservation";
-		
-	}
+//	@RequestMapping(value = "/insertReservation.do", method = RequestMethod.GET)
+//	public String insertReservation(Model model, HttpSession session) {
+//		logger.info("ReservationController insertReservation 양식 입력  " );
+//		Map<String, Object> map = new HashMap<String, Object>();
+//		//세션에서 ? 
+//		map.put("user_email", "user01@gmail.com");
+//		
+//		//이건 반려동물 정보 가져오기 위한 것
+//		List<String>lists = rService.getUserPet(map);
+//
+//		model.addAttribute("userPet",lists);
+//		
+//		return "redirect:/reservation/userReserveList.do";
+//		
+//	}
 	
 	/*
 	 * 결제 컨트롤러로
@@ -169,7 +173,13 @@ public class ReservationController {
 		logger.info("ReservationController userReserveList 사용자 예약 목록 조회  " );
 		//user_email은 세션에서 가져와야함
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("user_email", "kckt66@naver.com");
+		
+		MemberDto mDto = (MemberDto)session.getAttribute("member");
+	
+		String email = mDto.getEmail();
+		
+		map.put("user_email", email);
+		
 		List<ReservationDto> lists = rService.userReserveList(map);
 		
 		model.addAttribute("lists",lists);
@@ -192,6 +202,8 @@ public class ReservationController {
 		map.put("seq", "103");
 		ReservationDto rDto = rService.userRejectDetail(map);
 		
+
+		
 		model.addAttribute("rejectDto",rDto);
 		
 		return "reservation/userRejectDetail";
@@ -203,16 +215,18 @@ public class ReservationController {
 	 * 사용자 예약 상세 조회
 	 */
 	@RequestMapping(value = "/userReserveDetail.do", method = RequestMethod.GET)
-	public String userReserveDetail(Model model, @RequestParam Map<String, Object> map) {
+	public String userReserveDetail(Model model, @RequestParam Map<String, Object> map, HttpSession session) {
 		
 		logger.info("ReservationController userRejectDetail 사용자 예약 상세 조회 " );
 		//user_email은 세션에서 가져와야함
 		//seq는 예약번호 request
+		 MemberDto mDto =(MemberDto)session.getAttribute("member");
+		 String user_email = mDto.getEmail();
 		String seq = (String) map.get("seq");
 		System.out.println(seq);
 		
 		Map<String, Object> uMap = new HashMap<String, Object>();
-		uMap.put("user_email", "kckt66@naver.com");
+		uMap.put("user_email", user_email);
 		uMap.put("seq", seq);
 		ReservationDto rDto = rService.userReserveDetail(uMap);
 		
@@ -260,9 +274,7 @@ public class ReservationController {
 	/*
 	 * 병원 예약 미처리 목록 조회
 	 */
-	@SuppressWarnings("unchecked")
-	@RequestMapping(value = "/hospitalStandReserveList.do", method=RequestMethod.GET ,produces = "application/text; charset=UTF-8")
-	@ResponseBody
+	@RequestMapping(value = "/hospitalStandReserveList.do", method=RequestMethod.GET)
 	public String hospitalStandReserveList(Model model) {
 		logger.info("ReservationController hospitalStandReserveList 병원 예약 미처리 목록 조회 {}");
 		Map<String, Object>map = new HashMap<String, Object>();
@@ -270,12 +282,9 @@ public class ReservationController {
 		map.put("hospital_seq",3);
 		List<ReservationDto>lists = rService.hospitalStandReserveList(map);
 		
-		JSONObject jObj = new JSONObject();
-		jObj.put("lists", lists);
+		model.addAttribute("lists",lists);
 		
-		System.out.println(jObj.toJSONString());
-		
-		return jObj.toString();
+		return "reservation/hospitalReserveList";
 	}
 	
 	//1번 문자
@@ -335,15 +344,19 @@ public class ReservationController {
 	 * 선택일 예약 목록 조회 
 	 */
 	@RequestMapping(value = "/selectdayReserveList.do", method = RequestMethod.GET)
-	public String selectdayReserveList(@RequestParam Map<String, Object>map, Model model) {
+	public String selectdayReserveList(@RequestParam Map<String, Object>map, Model model, HttpSession session) {
 		logger.info("ReservationController selectdayReserveList 선택일 예약 목록 조회 {}", map );
 		
 	      String reservedate = (String)map.get("reservedate");
+
+	      MemberDto mDto =  (MemberDto)session.getAttribute("member");
+	      String user_email = mDto.getEmail();
+	      
 	      
 	      Map<String, Object>rMap = new HashMap<String, Object>();
 	      rMap.put("hospital_seq",3);
 	      rMap.put("reservedate",reservedate);
-	      map.put("user_email","user01@gmail.com");
+	      map.put("user_email",user_email);
 	      List<String>petLists = rService.getUserPet(map);
 
 	      //반려 동물 목록
@@ -356,12 +369,7 @@ public class ReservationController {
 	      return "reservation/selectdayReserveList";
 
 	}
-	
 
-	
-	
-	
-	
 	/*
 	 * 결제 컨트롤러 -> 예약 취소(쿼리실행)
 	 * 사용자 취소
@@ -407,13 +415,13 @@ public class ReservationController {
 	 * 병원 관계자 예약 반려
 	 */
 	@RequestMapping(value = "/rejectReserve.do", method = RequestMethod.POST)
-	public String rejectReserve(@RequestParam Map<String,Object>map) {
+	public String rejectReserve(@RequestParam Map<String,Object>map, Model model) {
 		logger.info("ReservationController acceptReserve 예약 확정  {}", map );
 		String seq = (String)map.get("seq");
 		boolean isc = rService.rejectReserve(map);
-		
+		model.addAttribute("seq",seq);
 		if(isc) {
-			return "reservation/hospitalStandReserveList.do";
+			return "redirect:/reservation/hospitalStandReserveList.do";
 		}else {
 			return "reservation/index";
 		}

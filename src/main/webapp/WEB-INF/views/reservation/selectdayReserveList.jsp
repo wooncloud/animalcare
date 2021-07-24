@@ -4,7 +4,6 @@
 
 <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
 
-${todayReserve}
 <div class="card my-1">
 	<div class="card-body">
 		<div class="row">
@@ -23,8 +22,8 @@ ${todayReserve}
 		</div>
 	</div>
 </div>
-<c:if test="${todayReserve != null}">
-	<c:forEach var="today" items="${todayReserve}" varStatus="vs">
+<c:set value="4" var="cnt"/>
+	<c:forEach var="today" items="${todayReserve}" varStatus="vs" >
 		<div class="card my-1">
 			<div class="card-body">
 				<div class="row">
@@ -38,7 +37,7 @@ ${todayReserve}
 						<p class="card-text">${today.reservetype}</p>
 					</div>
 					<div class="col-3">
-						<p class="card-text">예약 안됨</p>
+						<p class="card-text">예약 불가</p>
 					</div>
 					<div class="col-1">
 						<p class="card-text"></p>
@@ -48,11 +47,8 @@ ${todayReserve}
 			</div>
 		</div>
 	</c:forEach>
-</c:if>
-<!-- 리스트가 4개 있으면 0개 3개있으면 1개 2개있으면 2개 1개있으면 3개  -->
-<c:set property="${todayReserve}" var="list"/>
-<c:if test="${fn:length(list) != 0}" >
-   <c:forEach items="${list}" begin="${fn:length(list)}" end="4" step="1">
+<c:if test="${fn:length(todayReserve) != 4}" >
+   <c:forEach  begin="1" end="${cnt - fn:length(todayReserve)}"  varStatus="vs">
 	  <div class="card my-1">
 		 <div class="card-body">
 			<div class="row">
@@ -66,7 +62,7 @@ ${todayReserve}
 				  <p class="card-text"></p>
 			   </div>
 			   <div class="col-3">
-				  <p class="card-text">예약 가능</p>
+				  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#testModal">예약</button>
 			   </div>
 			   <div class="col-1">
 				  <p class="card-text"></p>
@@ -76,7 +72,7 @@ ${todayReserve}
 	  </div>
    </c:forEach>
 </c:if>
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#testModal">예약</button>
+
 <div class="modal fade" id="testModal" tabindex="-1" aria-hidden="true">
    <div class="modal-dialog">
 	  <div class="modal-content">
@@ -86,7 +82,7 @@ ${todayReserve}
 		 </div>
 		 <div class="modal-body">
 			<div>
-<!-- form -->      <form action="./insertReservation.do" method="post">
+		   <form action="./insertReservation.do" method="post">
 				  <div class="form-group">
 					 <label>예약 종류:</label>
 					 <select name="reservetype">
@@ -111,26 +107,27 @@ ${todayReserve}
 				  </div>
 				  <div class="form-group">
 					 <label for="reservetime">예약 시간:</label>
-					 <input type="text" class="form-control" id="reservetime" name="reservetime" value="${reservedate}" readonly>
+					 <input type="text" class="form-control" id="reservetime" name="reservetime">
 				  </div>
 				  <div class="form-group">
 					 <label for="name">이름:</label>
-					 <input type="text" class="form-control" id="name" name="name">
+					 <input type="text" class="form-control" id="name" name="name" value="${sessionScope.member.name}" readonly="readonly">
 				  </div>
 				  <div class="form-group">
 					 <label for="email">이메일:</label>
-					 <input type="text" class="form-control" id="user_email" name="user_email">
+					 <input type="text" class="form-control" id="user_email" name="user_email" value="${sessionScope.member.email}" readonly="readonly">
 				  </div>
 				  <div class="form-group">
 					 <label for="phone">전화번호:</label>
-					 <input type="text" class="form-control" id="phone" name="phone">
+					 <input type="text" class="form-control" id="phone" name="phone" value="010-1234-0000" readonly="readonly">
 				  </div>
 <!-- form -->      </form>
 			</div>
 		 </div>
 		 <div class="modal-footer">
-			<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-			<input type="button" class="btn btn-primary" value="예약신청" onclick="makeReserve()">
+			<button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >Close</button>
+			<input type="button" class="btn btn-primary" value="예약신청" onclick="makeReserve('${sessionScope.member.email}', '${sessionScope.member.name}')">
+			
 		 </div>
 	  </div>
    </div>
@@ -138,12 +135,18 @@ ${todayReserve}
 
 		
 <script type="text/javascript">
-	function makeReserve(){
+	function makeReservetest(){
 	
 	var frm = document.forms[0];
+	
+		frm.submit();
+	}
 </script>
 <script>
-	function makeReserve() {
+
+
+
+	function makeReserve(user_email,user_name) {
 
 		var frm = document.forms[0];
 
@@ -157,10 +160,10 @@ ${todayReserve}
 		} else if (reservetype == "default" && petname == "default") {
 			alert("예약 종류와 반료동물을 선택해주세요")
 		} else {
-			var email = 'user01@gmail.com'; //ex) ${userInfo.email};
-			var name = 'GDJ'; //ex) ${userInfo.name};
+			var email = user_email; //ex) ${userInfo.email};
+			var name = user_name; //ex) ${userInfo.name};
 			var phone = '010-1234-1111'; //ex) ${userInfo.phone};
-			var address = '서울특별시 금천구'; //ex) ${userInfo.address};
+// 			var address = '서울특별시 금천구'; //ex) ${userInfo.address};
 			var hospitalName = 'CDC 동물병원 '; //ex) ${hospitalInfo.name};
 
 			console.log('왜 안될까');
@@ -175,8 +178,8 @@ ${todayReserve}
 				amount : 100, //예약금 10000원
 				buyer_email : email, // 구매자 이메일
 				buyer_name : name, // 구매자 이름
-				buyer_tel : phone, // 구매자 핸드폰
-				buyer_addr : address
+				buyer_tel : phone // 구매자 핸드폰
+// 				buyer_addr : address
 			}, function(rsp) {
 				console.log(rsp);
 				console.log(rsp.paid_amount);

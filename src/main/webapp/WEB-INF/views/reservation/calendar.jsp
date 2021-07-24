@@ -125,8 +125,7 @@ var cal = new tui.Calendar('#calendar', {
 		modalContent.innerText = 
 			"스케줄 seq : " + schedule.id + 			
 			"\n스케줄 제목 : " + schedule.title+
-			"\n 시간 : " + starttimeString+"~"+endtimeString+
-			"\n 이름 :" + schedule.name;
+			"\n 시간 : " + starttimeString+"~"+endtimeString
 	});
   
 	
@@ -174,11 +173,13 @@ var cal = new tui.Calendar('#calendar', {
 	      
 	      console.log(nDay);
 	      
-	      if(fullday < nDay || fullday - nDay > 20 ){
-	    	  alert("해당일은 예약이 가능한 날짜가 아닙니다.")
-	      }else{
+	     
+	      
+// 	      if(fullday < nDay || fullday - nDay > 20 ){
+// 	    	  alert("해당일은 예약이 가능한 날짜가 아닙니다.")
+// 	      }else{
 	    	  location.href="./selectdayReserveList.do?reservedate="+fullday;
-	      }
+// 	      }
 
 	        
 	        
