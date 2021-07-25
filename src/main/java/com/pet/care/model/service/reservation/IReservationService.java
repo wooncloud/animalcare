@@ -48,4 +48,16 @@ public interface IReservationService {
 	
 	//병원 해당일 목록 예약 보기
 	public List<ReservationDto> selectdayReserveList(Map<String, Object>map);
+	
+	//사용자 예약 목록 페이징 
+	public int userReserveListCount(Map<String, Object>map);
+	
+	//병원 관계자 예약 처리 목록 페이징
+	public int hospitalReserveListCount(Map<String, Object>map);
+	
+	//병원 관계자 예약 미처리 목록 페이징
+	public int hospitalStandReserveListCount(Map<String, Object>map);
+	
+	//병원 예약 리스트 달력
+	public List<ReservationDto> hospitalCalendarList(Map<String, Object>map);
 }

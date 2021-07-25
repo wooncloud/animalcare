@@ -3,7 +3,7 @@
 <%@ include file="/header.jsp"%>
 
 <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
-
+<h3>${reservedate} 예약 현황</h3>
 <div class="card my-1">
 	<div class="card-body">
 		<div class="row">
@@ -17,12 +17,11 @@
 				<h5 class="card-title">예약종류</h5>
 			</div>
 			<div class="col-4">
-				<h5 class="card-title">예약 가능 여부</h5>
+				<h5 class="card-title">예약 여부</h5>
 			</div>
 		</div>
 	</div>
 </div>
-<c:set value="4" var="cnt"/>
 	<c:forEach var="today" items="${todayReserve}" varStatus="vs" >
 		<div class="card my-1">
 			<div class="card-body">
@@ -30,10 +29,10 @@
 					<div class="col-2">
 						<p class="card-text">${vs.count}</p>
 					</div>
-					<div class="col-3">
-						<p class="card-text">${today.reservetime}</p>
+					<div class="col-3 ">
+						<p class="card-text time">${today.reservetime}</p>
 					</div>
-					<div class="col-3">
+					<div class="col-3" >
 						<p class="card-text">${today.reservetype}</p>
 					</div>
 					<div class="col-3">
@@ -47,8 +46,10 @@
 			</div>
 		</div>
 	</c:forEach>
+<!-- 리스트가 4개 있으면 0개 3개있으면 1개 2개있으면 2개 1개있으면 3개  -->
+<c:set value="4" var="cnt"/>
 <c:if test="${fn:length(todayReserve) != 4}" >
-   <c:forEach  begin="1" end="${cnt - fn:length(todayReserve)}"  varStatus="vs">
+<%--    <c:forEach  begin="1" end="${cnt - fn:length(todayReserve)}" > --%>
 	  <div class="card my-1">
 		 <div class="card-body">
 			<div class="row">
@@ -56,13 +57,13 @@
 				  <p class="card-text"></p>
 			   </div>
 			   <div class="col-3">
-				  <p class="card-text"></p>
+				  <p class="card-text" ></p>
 			   </div>
 			   <div class="col-3">
 				  <p class="card-text"></p>
 			   </div>
 			   <div class="col-3">
-				  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#testModal">예약</button>
+				  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#testModal" >예약</button>
 			   </div>
 			   <div class="col-1">
 				  <p class="card-text"></p>
@@ -70,9 +71,7 @@
 			</div>
 		 </div>
 	  </div>
-   </c:forEach>
 </c:if>
-
 <div class="modal fade" id="testModal" tabindex="-1" aria-hidden="true">
    <div class="modal-dialog">
 	  <div class="modal-content">
@@ -85,16 +84,16 @@
 		   <form action="./insertReservation.do" method="post">
 				  <div class="form-group">
 					 <label>예약 종류:</label>
-					 <select name="reservetype">
+					 <select class="form-select" aria-label="Default select example" name="reservetype">
 						<option value="default" selected="selected">선택</option>
-						<option value="REV001">일반진료</option>
-						<option value="REV002">건강검진</option>
+						<option value="REV001">일반</option>
 						<option value="REV003">예방접종</option>
+						<option value="REV004">건강검진</option>
 					 </select>
 				  </div>
 				  <div class="form-group">
 					 <label>반려 동물:</label>
-					 <select name=pet_name>
+					 <select class="form-select" aria-label="Default select example" name=pet_name>
 						<option value="default">선택</option>
 						<c:forEach items="${userPet}" var="pet">
 						   <option value="${pet}">${pet}</option>
@@ -107,7 +106,12 @@
 				  </div>
 				  <div class="form-group">
 					 <label for="reservetime">예약 시간:</label>
-					 <input type="text" class="form-control" id="reservetime" name="reservetime">
+						<select class="form-select" aria-label="Default select example" name="reservetime" id="reservetime">
+						<option id="09001100" value="09001100">0900~1100</option>
+						<option id="11001300" value="11001300">1100~1300</option>
+						<option id="13001500" value="13001500">1300~1500</option>
+						<option id="15001700" value="15001700">1500~1700</option>						
+						</select>
 				  </div>
 				  <div class="form-group">
 					 <label for="name">이름:</label>
@@ -135,12 +139,7 @@
 
 		
 <script type="text/javascript">
-	function makeReservetest(){
-	
-	var frm = document.forms[0];
-	
-		frm.submit();
-	}
+
 </script>
 <script>
 
@@ -235,8 +234,26 @@
 	}
 </script>
 <script type="text/javascript">
-	function requestPay() {
-
+window.onload = function(){
+	var doc = document.getElementsByClassName("card-text time");
+	
+	console.log(document.getElementById("09001100"));
+	console.log(document.getElementById("11001300"));
+	console.log(document.getElementById("13001500"));
+	console.log(document.getElementById("15001700"));
+	
+	for (var i = 0; i < doc.length; i++) {
+		console.log(doc[i].textContent);
+		if(doc[i].textContent == '09001100'){
+			document.getElementById("09001100").remove();
+		} else if(doc[i].textContent == '11001300'){
+			document.getElementById("11001300").remove();
+		} else if(doc[i].textContent == '13001500' ){
+			document.getElementById("13001500").remove();
+		} else if(doc[i].textContent == '15001700' ){
+			document.getElementById("15001700").remove();
+		}
 	}
+}
 </script>
 <%@ include file="/footer.jsp"%>

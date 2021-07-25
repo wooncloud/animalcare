@@ -81,22 +81,49 @@ public class ReservationServiceImpl implements IReservationService {
 
 	@Override
 	public List<ReservationDto> todayReserveList(Map<String, Object> map) {
+		logger.info(" ReservationServiceImpl todayReserveList {}", map);
 		return rDao.todayReserveList(map);
 	}
 
 	@Override
 	public ReservationDto hospitalReserveDetail(Map<String, Object> map) {
+		logger.info(" ReservationServiceImpl hospitalReserveDetail {}", map);
 		return rDao.hospitalReserveDetail(map);
 	}
 
 	@Override
 	public List<String> getUserPet(Map<String, Object> map) {
+		logger.info(" ReservationServiceImpl getUserPet {}", map);
 		return rDao.getUserPet(map);
 	}
 
 	@Override
 	public List<ReservationDto> selectdayReserveList(Map<String, Object> map) {
+		logger.info(" ReservationServiceImpl selectdayReserveList {}", map);
 		return rDao.selectdayReserveList(map);
 	}
 
+	@Override
+	public int userReserveListCount(Map<String, Object> map) {
+		logger.info(" ReservationServiceImpl userReserveListCount {}", map);
+		return rDao.userReserveListCount(map);
+	}
+
+	@Override
+	public int hospitalReserveListCount(Map<String, Object> map) {
+		logger.info(" ReservationServiceImpl hospitalReserveListCount {}", map);
+		return rDao.hospitalReserveListCount(map);
+	}
+
+	@Override
+	public int hospitalStandReserveListCount(Map<String, Object> map) {
+		logger.info(" ReservationServiceImpl hospitalStandReserveListCount {}", map);
+		return rDao.hospitalStandReserveListCount(map);
+	}
+
+	@Override
+	public List<ReservationDto> hospitalCalendarList(Map<String, Object> map) {
+		logger.info(" ReservationServiceImpl hospitalCalendarList {}", map);
+		return rDao.hospitalCalendarList(map);
+	}
 }

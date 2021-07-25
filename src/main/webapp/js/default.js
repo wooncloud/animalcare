@@ -140,39 +140,7 @@ function setRenderRangeText() {
 
 function setSchedules() {
   cal.clear();
-//  generateSchedule(cal.getViewName(), cal.getDateRangeStart(), cal.getDateRangeEnd());
-//  cal.createSchedules(ScheduleList);
-//  refreshScheduleVisibility();
-	
 
-//	var doc = document.getElementsByClassName("tui-full-calendar-weekday-grid-header");
-//	var root = document.getElementsByClassName("tui-full-calendar-weekday-grid-header")[0]
-//	var first = document.getElementsByClassName("tui-full-calendar-weekday-grid-header")[0].childNodes[1].innerText;
-	
-	
-//	console.log(doc);
-//	console.log(root);
-//	console.log(doc.length);
-//	console.log(first);
-
-//	for(var i = 0; i < doc.length; i++){
-//		cal.createSchedules([
-//			{
-//				id: i,
-//				calendarId: 'CDC', // 
-//				title: '예약가능',
-//				category: 'time', // 
-//				start: '2021-07-'+''+first+i+''+'07:00:00',
-//				end: '2021-07-'+''+first+i+''+'09:00:00',
-//				color: '#black', // 일정 색상을 직접 지정할 수 있음
-//				bgColor: '#ccc',
-//				dragBgColor: '#03bd9e',
-//				borderColor: '#03bd9e'
-//			}	
-//		]);
-//	}
-
-	
 	$.ajax({
 		type:"get",
 		url:"./calendar.do?hospital_seq=3",
@@ -184,7 +152,6 @@ function setSchedules() {
 				console.log(key);
 				console.log(value);
 				var list = value;
-
 				$.each(list,function(k,v){
 					console.log(cal);
 //					console.log(k);
@@ -202,7 +169,7 @@ function setSchedules() {
 						calendarId: v.calendarId, // 
 						title: v.title,
 						category: v.category, // 
-						start: v.start,
+						start: 	v.start,
 						color: v.color, 
 						bgColor: v.bgcolor,
 						dragBgColor: v.dragBgColor,
@@ -221,7 +188,7 @@ function setSchedules() {
 			{
 				id: '3',
 				calendarId: 'CDC', // 
-				title: '예약가능',
+				title: '예약',
 				category: 'time', // 
 				start: '2021-07-14 07:00:00',
 				end: '2021-07-14 09:00:00',
@@ -233,7 +200,7 @@ function setSchedules() {
 				{
 				id: '4',
 				calendarId: 'CDC', // 
-				title: '예약가능',
+				title: '예약',
 				category: 'time', // 
 				start: '2021-07-14 09:00:00',
 				end: '2021-07-14 11:00:00',

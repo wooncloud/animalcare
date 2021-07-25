@@ -1,9 +1,13 @@
 package com.pet.care;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.json.simple.JSONArray;
@@ -21,9 +25,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import com.pet.care.comm.CalendarDate;
 import com.pet.care.comm.JsonUtil;
+import com.pet.care.comm.PageUtil;
+import com.pet.care.comm.Util;
 import com.pet.care.dto.HospitalScheduleDto;
 import com.pet.care.dto.MemberDto;
+import com.pet.care.dto.PageDto;
 import com.pet.care.dto.ReservationDto;
 import com.pet.care.model.service.hospital.IHospitalInfoService;
 import com.pet.care.model.service.hospital.IHospitalScheduleService;
@@ -73,7 +81,7 @@ public class ReservationController {
 	}
 	
 	/*
-	 * 달력에 일정
+	 * 달력에 일정 2021.07.26
 	 */
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/calendar.do", method = RequestMethod.GET, produces = "application/text; charset=UTF-8")
@@ -89,7 +97,7 @@ public class ReservationController {
 		Map<String, Object>hMap = new HashMap<String, Object>();
 		hMap.put("hospital_seq", hospital_seq);
 		
-		List<ReservationDto>rLists= rService.hospitalReserveList(rMap);
+		List<ReservationDto>rLists= rService.hospitalCalendarList(rMap);
 		List<HospitalScheduleDto> hList = hService.monthSchedule(hMap);
 		
 		JSONArray jarr = JsonUtil.CalenderJson(hList, rLists);
@@ -100,7 +108,6 @@ public class ReservationController {
 		System.out.println("-=-=-=-=-=-=-=-=-=-=-=-="+result.toJSONString());
 		
 		return result.toString();
-		
 	}
 	
 	/*
@@ -168,21 +175,44 @@ public class ReservationController {
 	 * 사용자 예약 목록 조회
 	 */
 	@RequestMapping(value = "/userReserveList.do", method = RequestMethod.GET)
-	public String userReserveList(HttpSession session, Model model) {
+	public String userReserveList(HttpSession session, Model model, @RequestParam Map<String, Object>map) {
 		
-		logger.info("ReservationController userReserveList 사용자 예약 목록 조회  " );
+		logger.info("ReservationController userReserveList 사용자 예약 목록 조회 {}", map, session );
 		//user_email은 세션에서 가져와야함
-		Map<String, Object> map = new HashMap<String, Object>();
-		
 		MemberDto mDto = (MemberDto)session.getAttribute("member");
-	
 		String email = mDto.getEmail();
+		System.out.println("이메일ㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹ"+email);
+		Map<String, Object>uMap = new HashMap<String, Object>();
+		uMap.put("user_email", email);
 		
+		//페이징
+		PageDto page = new PageDto();
+		String strIdx = (String)map.get("page");
+		if(strIdx == null) {
+			strIdx = "1";
+		}
+		
+		int idx = Integer.parseInt(strIdx);
+		int allPageCnt = 0;
+		
+		
+		allPageCnt = rService.userReserveListCount(uMap);
+		
+		//PageDto 셋팅
+		PageUtil.reserveDefaultPagingSetting(page, allPageCnt);
+		
+		page.setPage(idx);
+		page.setStartPage(idx);
+		page.setEndPage(page.getCountPage());
+		
+		map.put("first", page.getPage() * page.getCountList() - (page.getCountList() - 1));
+		map.put("last", page.getPage() * page.getCountList());
 		map.put("user_email", email);
-		
+
 		List<ReservationDto> lists = rService.userReserveList(map);
 		
 		model.addAttribute("lists",lists);
+		model.addAttribute("page",page);
 	
 		return "reservation/userReserveList";
 		
@@ -195,15 +225,15 @@ public class ReservationController {
 	public String userRejectDetail(Model model) {
 		
 		logger.info("ReservationController userRejectDetail 사용자 반려 상세 조회 " );
+		
 		//user_email은 세션에서 가져와야함
 		//seq는 예약번호 request
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("user_email", "user01@gmail.com");
 		map.put("seq", "103");
-		ReservationDto rDto = rService.userRejectDetail(map);
-		
 
-		
+		ReservationDto rDto = rService.userRejectDetail(map);
+			
 		model.addAttribute("rejectDto",rDto);
 		
 		return "reservation/userRejectDetail";
@@ -255,36 +285,91 @@ public class ReservationController {
 	}
 	
 	/*
-	 * 병원 예약 목록 조회
+	 * 병원 예약 목록 조회 2021.07.26
 	 */
 	@RequestMapping(value = "/hospitalReserveList.do", method = RequestMethod.GET)
-	public String hospitalReserveList(Model model) {
+	public String hospitalReserveList(@RequestParam Map<String, Object>hMap, Model model) {
 		logger.info("ReservationController hospitalReserveList 병원 예약 목록 조회 " );
-		//seq 병원번호 session
+		//seq 병원번호 session? request
 		Map<String, Object>map = new HashMap<String, Object>();
 		map.put("hospital_seq", 3);
-		
+
+		//페이징
+				PageDto page = new PageDto();
+				String strIdx = (String)hMap.get("page");
+				if(strIdx == null) {
+					strIdx = "1";
+				}
+				
+				int idx = Integer.parseInt(strIdx);
+				int allPageCnt = 0;
+				
+				
+				allPageCnt = rService.hospitalReserveListCount(map);
+				
+				//PageDto 셋팅
+				PageUtil.reserveDefaultPagingSetting(page, allPageCnt);
+				
+				page.setPage(idx);
+				page.setStartPage(idx);
+				page.setEndPage(page.getCountPage());
+				
+				map.put("first", page.getPage() * page.getCountList() - (page.getCountList() - 1));
+				map.put("last", page.getPage() * page.getCountList());
+
+	
 		List<ReservationDto>lists = rService.hospitalReserveList(map);
 		
 		model.addAttribute("lists",lists);
+		model.addAttribute("page",page);
 		
 		return "reservation/hospitalReserveList";
 	}
 	
 	/*
-	 * 병원 예약 미처리 목록 조회
+	 * 병원 예약 미처리 목록 조회 2021.07.26
 	 */
 	@RequestMapping(value = "/hospitalStandReserveList.do", method=RequestMethod.GET)
-	public String hospitalStandReserveList(Model model) {
+	public String hospitalStandReserveList(@RequestParam Map<String, Object>hMap, Model model) {
 		logger.info("ReservationController hospitalStandReserveList 병원 예약 미처리 목록 조회 {}");
 		Map<String, Object>map = new HashMap<String, Object>();
-		//병원 seq 임의 입력 session?에서 가져오던가 해야함
+		//병원 seq 임의 입력 session? reqeuest에서 가져오던가 해야함
 		map.put("hospital_seq",3);
+		//페이징
+		PageDto page = new PageDto();
+		String strIdx = (String)hMap.get("page");
+		if(strIdx == null) {
+			strIdx = "1";
+		}
+		
+		int idx = Integer.parseInt(strIdx);
+		int allPageCnt = 0;
+		
+		
+		allPageCnt = rService.hospitalStandReserveListCount(map);
+		
+		//PageDto 셋팅
+		PageUtil.reserveDefaultPagingSetting(page, allPageCnt);
+		
+		page.setPage(idx);
+		page.setStartPage(idx);
+		page.setEndPage(page.getCountPage());
+		
+		map.put("first", page.getPage() * page.getCountList() - (page.getCountList() - 1));
+		map.put("last", page.getPage() * page.getCountList());
+
 		List<ReservationDto>lists = rService.hospitalStandReserveList(map);
 		
-		model.addAttribute("lists",lists);
+		model.addAttribute("slists",lists);
+		model.addAttribute("page",page);
 		
 		return "reservation/hospitalReserveList";
+	}
+	
+	@RequestMapping(value ="/hospitalPaging.do", method = RequestMethod.GET)
+	public String hospitalPaging() {
+		
+		return "result";
 	}
 	
 	//1번 문자
@@ -341,14 +426,13 @@ public class ReservationController {
 	}
 	
 	/*
-	 * 선택일 예약 목록 조회 
+	 * 선택일 예약 목록 조회
 	 */
 	@RequestMapping(value = "/selectdayReserveList.do", method = RequestMethod.GET)
 	public String selectdayReserveList(@RequestParam Map<String, Object>map, Model model, HttpSession session) {
 		logger.info("ReservationController selectdayReserveList 선택일 예약 목록 조회 {}", map );
 		
 	      String reservedate = (String)map.get("reservedate");
-
 	      MemberDto mDto =  (MemberDto)session.getAttribute("member");
 	      String user_email = mDto.getEmail();
 	      
@@ -357,12 +441,14 @@ public class ReservationController {
 	      rMap.put("hospital_seq",3);
 	      rMap.put("reservedate",reservedate);
 	      map.put("user_email",user_email);
+	      
 	      List<String>petLists = rService.getUserPet(map);
 
 	      //반려 동물 목록
 	      model.addAttribute("userPet",petLists);
 	      
 	      List<ReservationDto> lists = rService.selectdayReserveList(rMap);
+	      
 	      model.addAttribute("reservedate", reservedate);
 	      model.addAttribute("todayReserve", lists);
 	      //가져갈방법????????
@@ -396,7 +482,7 @@ public class ReservationController {
 //			rService.cancelReserve(map);
 			return "확정 상태 취소 결제 컨트롤러";
 		}	
-	}
+	}  
 	
 	/*
 	 * 병원 관계자 예약 확정
@@ -426,6 +512,24 @@ public class ReservationController {
 			return "reservation/index";
 		}
 		
+	}
+	
+	@RequestMapping(value = "/getSunday.do", method = RequestMethod.GET)
+	public String getSunday(String date, HttpServletResponse resp, Model model) throws ParseException, IOException {
+		
+		CalendarDate cal = new CalendarDate();
+		boolean isc = cal.CalSunday(date);
+		
+		String msg = "일요일은 휴무입니다.";
+		String redirectUri = "./moveCalendar.do";
+	
+		if(isc) {
+			Util.PrintWriterMsg(resp, msg ,redirectUri);
+		} else {
+			model.addAttribute("reservedate",date);
+			return "redirect:/reservation/selectdayReserveList.do";
+		}
+			return "redirect:/reservation/moveCalendar.do";
 	}
 	
 

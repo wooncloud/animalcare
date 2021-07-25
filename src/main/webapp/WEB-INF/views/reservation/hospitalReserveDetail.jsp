@@ -1,7 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@include file="/header.jsp" %>
-${hospitalReserveDetail}
-
 <div class="card">
    <div class="card-body">
       <h5 class="card-title my-3">병원관계자 예약 상세 내역</h5>

@@ -93,5 +93,28 @@ public class ReservationDaoImpl implements IReservationDao {
 	public List<ReservationDto> selectdayReserveList(Map<String, Object> map) {
 		return session.selectList(NS+"selectdayReserveList", map);
 	}
+
+	@Override
+	public int userReserveListCount(Map<String, Object> map) {
+		return session.selectOne(NS+"userReserveListCount",map);
+	}
+
+	@Override
+	public int hospitalReserveListCount(Map<String, Object> map) {
+		return session.selectOne(NS+"hospitalReserveListCount", map);
+	}
+
+	@Override
+	public int hospitalStandReserveListCount(Map<String, Object> map) {
+		return session.selectOne(NS+"hospitalStandReserveListCount",map);
+	}
+
+	@Override
+	public List<ReservationDto> hospitalCalendarList(Map<String, Object> map) {
+		return session.selectList(NS+"hospitalCalendarList", map);
+	}
+	
+	
+	
 	
 }
