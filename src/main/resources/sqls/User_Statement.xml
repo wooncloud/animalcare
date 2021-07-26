@@ -12,7 +12,7 @@
 			UNION
 			SELECT EMAIL, NAME, PASSWORD, DELFLAG, 'ROLE_USER' AS USERTYPE FROM USERINFO
 		) 
-		WHERE EMAIL = #{email} AND PASSWORD = #{password}
+		WHERE EMAIL = #{email} AND PASSWORD = #{password} AND DELFLAG = 'N'
 	</select>
 
 
@@ -84,14 +84,22 @@
 	<select id="detailOper" parameterType="java.lang.String" resultType="OperDto">
 		SELECT EMAIL, NAME, PHONE, CORPREGNUM, LICENSENUM, APPROVALFLAG
 		FROM OPERATORINFO
-		WHERE EMAIL = #{email}
+		WHERE EMAIL = #{email} AND DELFLAG = 'N'
 	</select>
 
 
 	<!-- 병원관계자 정보 수정 - 회원 정보 수정 -->
 	<update id="modifyOper" parameterType="java.util.Map">
 		UPDATE OPERATORINFO
-		SET PHONE = #{phone}
+		SET
+		<choose>
+			<when test="phone != null">
+				PHONE = #{phone}
+			</when>
+			<when test="password != null">
+				PASSWORD = #{password}
+			</when>
+		</choose>
 		WHERE EMAIL = #{email}
 	</update>
 
@@ -115,7 +123,7 @@
 	<select id="detailUser" parameterType="java.lang.String" resultType="UserDto">
 		SELECT EMAIL, NAME, ADDRESS1, ADDRESS2, PHONE
 		FROM USERINFO
-		WHERE EMAIL = #{email}
+		WHERE EMAIL = #{email} AND DELFLAG = 'N'
 	</select>
 
 
@@ -172,7 +180,7 @@
 			UNION
 			SELECT EMAIL, NAME, PASSWORD, DELFLAG, 'ROLE_USER' AS USERTYPE FROM USERINFO
 		) 
-		WHERE EMAIL = #{email}
+		WHERE EMAIL = #{email} AND DELFLAG = 'N'
 	</select>
 	
 	<insert id="insertVerificationCode" parameterType="java.util.Map">
