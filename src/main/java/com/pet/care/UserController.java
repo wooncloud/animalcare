@@ -227,7 +227,14 @@ public class UserController {
 		MemberDto confirmMember = userService.userLogin(map);
 		if (confirmMember != null && member.getEmail().equals(confirmMember.getEmail())) {
 			map.put("password", param.get("npw"));
-			boolean isc = userService.modifyUser(map);
+			
+			boolean isc = false;
+			if(member.getUsertype().equals("ROLE_USER")) {
+				isc = userService.modifyUser(map);
+			}
+			else if(member.getUsertype().equals("ROLE_OPER")) {
+				isc = userService.modifyOper(map);
+			}
 
 			if (isc) {
 				return "success"; // 성공
@@ -301,6 +308,7 @@ public class UserController {
 		} else {
 			map.put("email", member.getEmail());
 			map.put("type", "modify");
+			map.put("role", member.getUsertype());
 		}
 		map.put("phone", param.get("phone"));
 		map.put("code", param.get("code"));

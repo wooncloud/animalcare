@@ -91,7 +91,15 @@
 	<!-- 병원관계자 정보 수정 - 회원 정보 수정 -->
 	<update id="modifyOper" parameterType="java.util.Map">
 		UPDATE OPERATORINFO
-		SET PHONE = #{phone}
+		SET
+		<choose>
+			<when test="phone != null">
+				PHONE = #{phone}
+			</when>
+			<when test="password != null">
+				PASSWORD = #{password}
+			</when>
+		</choose>
 		WHERE EMAIL = #{email}
 	</update>
 
