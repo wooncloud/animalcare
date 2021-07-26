@@ -93,13 +93,14 @@
             <h5 class="modal-title">반려 사유</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
          </div>
-         <form action="./rejectReserve.do" method="post">                           <!-- 수정필요~!!!!!!!!!!!!!!!!반려status로 update하고 그다음 payment 컨트롤러로  -->
+         <form action="./rejectReserve.do" method="post">
          <div class="modal-body">
          <div class="card">
 				<div class="card-body">
 					  <div class="form-group">
                      <input type="text" class="form-control" id="commnet" name="commnet">
                      <input type="hidden" value="${hospitalReserveDetail.seq}" name="seq">
+                     <input type="hidden" value="${hospitalReserveDetail.status}" name="status"><!-- 이게 맞음 20210724 4:36pm -->
                   </div>
 				</div>
 			</div>
@@ -158,7 +159,8 @@ function operCancelReservation(seq,status,reservedate){
 	} else{
 		var frm = confirm("취소 하시겠습니까?");
 	if(frm){
-		location.href="./cancelReserve.do?seq="+seq+"&status="+status;
+		// 이게 맞음 20210724 4:17 pm
+		location.href="../payment/operCancelPayRefund.do?seq="+seq+"&status="+status;
 	}
 }	
 }
@@ -175,7 +177,7 @@ function rejectReservation(){
 		var chk = confirm("반려하시겠습니까?");
 		
 		if(chk){
-			//여기서 그냥 결제 컨트롤러로 보낼게 내가 보낸 반려내용하고 seq 갖고 취소플래그 바꾸고 다시주라
+			// 이게 맞음 20210724 4:37 pm
 			frm.submit();
 		}
 		

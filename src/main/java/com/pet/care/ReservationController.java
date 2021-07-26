@@ -460,7 +460,8 @@ public class ReservationController {
 	 * 결제 컨트롤러 -> 예약 취소(쿼리실행)
 	 * 사용자 취소
 	 */
-	@RequestMapping(value = "/cancelReserve.do", method = RequestMethod.GET)
+	// 이게 맞음 20210724 4:08 pm
+	@RequestMapping(value = "/cancelReservation.do", method = RequestMethod.GET)
 	public String cancelReservation(@RequestParam Map<String, Object> map, Model model) {
 		logger.info("ReservationController selectdayReserveList 예약 취소 결제 보내기{}", map );
 		//세션에 병원 seq 있으면 병원 관계자 결제 컨트롤러
@@ -473,16 +474,41 @@ public class ReservationController {
 		model.addAttribute("status", status);
 		
 		//status도 보내주세요~~
-		if(status == "S") {
+		if(status.equals("S")) {
 			//status 받아서 대기이면 환불 결제 컨트롤러
-//			rService.cancelReserve(map);
-			return "대기 상태 취소 결제 컨트롤러";
+			return "redirect:/payment/userCancelPayRefund.do";//"대기 상태 취소 결제 컨트롤러";
 		} else {
 			//status 받아서 확정이면 환불X 결제 컨트롤러
-//			rService.cancelReserve(map);
-			return "확정 상태 취소 결제 컨트롤러";
+			return "redirect:/payment/cancelPay.do";//"확정 상태 취소 결제 컨트롤러";
 		}	
-	}  
+	}
+	
+	
+	// 이게 맞음 20210724 4:08 pm
+	@RequestMapping(value="/cancelReserve.do", method=RequestMethod.GET)
+	public String cancelReserve(@RequestParam Map<String, Object> map, Model model, HttpSession session) {
+		logger.info("ReservationController cancelReservationResult 예약 취소하기{}", map);
+		boolean isc = rService.cancelReserve(map);
+		
+		String seq = (String)map.get("seq");
+		model.addAttribute("seq", seq);
+		
+		MemberDto mDto =  (MemberDto)session.getAttribute("member");
+	    String userType = mDto.getUsertype();	
+	    
+		if(isc) {
+			if(userType.equals("ROLE_USER")) {
+				return "redirect:/reservation/userReserveDetail.do";
+			}else if(userType.equals("ROLE_OPER")){
+				return "redirect:/reservation/hospitalReserveDetail.do";
+			}else {
+				return "redirect:/error/error.do";
+			}
+		}else {
+			return "redirect:/error/error.do";
+		}
+	}
+	
 	
 	/*
 	 * 병원 관계자 예약 확정
@@ -500,16 +526,22 @@ public class ReservationController {
 	/*
 	 * 병원 관계자 예약 반려
 	 */
+	// 이게 맞음 20210724 4:08 pm
 	@RequestMapping(value = "/rejectReserve.do", method = RequestMethod.POST)
 	public String rejectReserve(@RequestParam Map<String,Object>map, Model model) {
-		logger.info("ReservationController acceptReserve 예약 확정  {}", map );
+		logger.info("ReservationController rejectReserve 예약 반려  {}", map );
 		String seq = (String)map.get("seq");
+		String status =(String) map.get("status");
+
 		boolean isc = rService.rejectReserve(map);
+		
 		model.addAttribute("seq",seq);
+		model.addAttribute("status",status);
+		
 		if(isc) {
-			return "redirect:/reservation/hospitalStandReserveList.do";
+			return "redirect:/payment/operCancelPayRefund.do";
 		}else {
-			return "reservation/index";
+			return "redirect:/reservation/hospitalReserveDetail.do";
 		}
 		
 	}

@@ -183,7 +183,6 @@ function setSchedules() {
 		}
 	});
 	
-
 	cal.createSchedules([
 			{
 				id: '3',
@@ -233,7 +232,6 @@ function setSchedules() {
 				borderColor: '#03bd9e'
 			}
 		]);
-
 }
 
 

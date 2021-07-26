@@ -142,8 +142,8 @@ function cancelReservation(seq,status,reservedate){
 		var frm = confirm("취소 하시겠습니까?");
 		console.log(seq,status);
 	if(frm){
-		
-		location.href="./cancelStandReservation.do?seq="+seq+"&status="+status;
+		// 이게 맞음 20210724 3:54 pm
+		location.href="./cancelReservation.do?seq="+seq+"&status="+status;
 		
 	}
 }
