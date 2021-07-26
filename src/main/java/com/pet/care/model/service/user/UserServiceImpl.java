@@ -138,7 +138,18 @@ public class UserServiceImpl implements IUserService {
 		String realCode = (String) map.get("PHONE_CONFIRM");
 		
 		if (realCode.equals(userCode)) {
-			int n = type.equals("modify") ? dao.modifyUser(param) : 1;
+			
+			int n = 0;
+			if(type.equals("modify")) {
+				if(param.get("role").equals("ROLE_USER")) {
+					n = dao.modifyUser(param);
+				}else if (param.get("role").equals("ROLE_OPER")) {
+					n = dao.modifyOper(param);
+				}
+			}
+			else {
+				n = 1;
+			}
 			
 			if(n > 0) {
 				n = dao.deleteVerification((String)param.get("email"));

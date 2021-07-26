@@ -12,6 +12,7 @@
 		font-size: small;
 	}
 </style>
+<script src="https://unpkg.com/imask"></script>
 <script type="text/javascript" src="${path}/js/login.js"></script>
 
 <div class="signup-container">
@@ -76,7 +77,7 @@
 			</div>
 			<div class="signup-row my-3">
 				<label for="licenseNum" class="form-label">면허 번호</label>
-				<input type="text" class="form-control" id="licenseNum" name="licensenum" placeholder="수의사 면허번호를 입력하세요.">
+				<input type="number" class="form-control" id="licenseNum" name="licensenum" placeholder="수의사 면허번호를 입력하세요.">
 			</div>
 		</div>
 		<div class="my-5 text-center">

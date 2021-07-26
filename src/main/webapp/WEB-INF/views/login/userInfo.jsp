@@ -6,6 +6,7 @@
 		margin: calc( 50vh - 400px ) auto 0 auto;
 	}
 </style>
+<script src="https://unpkg.com/imask"></script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script type="text/javascript" src="${path}/js/login.js"></script>
 <div class="card myinfo-div">
@@ -14,7 +15,7 @@
 	</div>
 	<div class="card-body">
 		<div class="my-3">
-			<label class="text-muted">아이디</label>
+			<label class="text-muted">이메일</label>
 			<div><input type="text" class="form-control" value="${user.email}" readonly></div>
 		</div>
 		<div class="my-3">
