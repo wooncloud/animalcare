@@ -11,6 +11,7 @@
 		font-size: small;
 	}
 </style>
+<script src="https://unpkg.com/imask"></script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script type="text/javascript" src="${path}/js/login.js"></script>
 
