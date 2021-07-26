@@ -191,6 +191,7 @@ SELECT r1.SEQ, r1.USER_EMAIL, (SELECT CODENAME FROM TYPECODE t  WHERE CODEID =r1
         ON r.USER_EMAIL = u.EMAIL 
         WHERE TO_CHAR(RESERVEDATE,'YYYYMMDD')= #{reservedate}
         AND HOSPITAL_SEQ =#{hospital_seq}
+        AND STATUS ='S'
         ORDER BY RESERVETIME
    </select>
 </mapper>

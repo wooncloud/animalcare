@@ -127,7 +127,6 @@ var cal = new tui.Calendar('#calendar', {
 			"\n스케줄 제목 : " + schedule.title+
 			"\n 시간 : " + starttimeString+"~"+endtimeString
 	});
-  
 	
 	cal.on({
 	    'clickSchedule': function(e) {

@@ -49,11 +49,14 @@ public class JsonUtil {
 		//병원 스케줄 하고 예약 리스트하고 집어넣으면 JSON으로 뽑아
 		for (ReservationDto r : reservationList) {
 			JSONObject j = new JSONObject();
-			j.put("id", r.getSeq());
+			j.put("id", String.valueOf(r.getSeq()));
 			j.put("calendarId", "예약");
 			j.put("title", r.getReservetype()); // 제목 어떻게 할지 정해야 함.
-			j.put("start", r.getReservetime());
-			
+			j.put("start",r.getReservedate()+"T"+ r.getReservetime().substring(0,2)+":"+r.getReservetime().substring(2,4)+":00");
+//			SimpleDateFormat rReserve = new SimpleDateFormat("YYYY-MM-DD HH:mm:ss");
+//			String reserve = rReserve.format(r.getReservedate()+r.getReservetime());
+//			j.put("start", reserve);
+			j.put("end", r.getReservedate()+"T"+ r.getReservetime().substring(0,2)+":"+r.getReservetime().substring(2,4)+":00");
 			// 예약 상태에 따른 다른 색깔
 			j.put("category", "task");
 			j.put("color", "#ffffff");
@@ -66,13 +69,13 @@ public class JsonUtil {
 		
 		for (HospitalScheduleDto s : HospitalScheduleList) {
 			JSONObject j = new JSONObject();
-			j.put("id", s.getSeq());
+			j.put("id", String.valueOf(s.getSeq()));
 			j.put("calendarId", "병원일정");
-			j.put("name", s.getTitle());
-			SimpleDateFormat sSchedule = new SimpleDateFormat("YYYYMMDD");
+//			j.put("name", s.getTitle());
+			SimpleDateFormat sSchedule = new SimpleDateFormat("YYYY-MM-DD HH:mm:ss");
 			String schedule = sSchedule.format(s.getSchedule());
 			j.put("start", schedule);
-			
+			j.put("end", schedule);
 			j.put("category", "task");
 			j.put("color", "#ffffff");
 			j.put("bgColor", "#A569BD");

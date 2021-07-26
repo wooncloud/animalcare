@@ -103,7 +103,7 @@ public class ReservationController {
 		JSONArray jarr = JsonUtil.CalenderJson(hList, rLists);
 		
 		JSONObject result = new JSONObject();
-		result.put("result",jarr);
+		result.put("result",jarr.toString());
 		
 		System.out.println("-=-=-=-=-=-=-=-=-=-=-=-="+result.toJSONString());
 		
