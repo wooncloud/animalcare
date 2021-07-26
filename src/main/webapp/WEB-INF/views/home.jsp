@@ -10,5 +10,7 @@
 	<a class="btn btn-secondary" href="./reservation/userReserveList.do">사용자 예약목록</a>
 	<a class="btn btn-secondary" href="./reservation/hospitalReserveList.do">병원 예약목록</a>
 	<a class="btn btn-secondary" href="./reservation/insertReservation.do">신청</a>
+
+	
 <%@ include file="/footer.jsp" %>
 

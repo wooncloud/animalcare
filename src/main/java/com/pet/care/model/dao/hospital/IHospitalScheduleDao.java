@@ -7,6 +7,9 @@ import com.pet.care.dto.HospitalScheduleDto;
 
 public interface IHospitalScheduleDao {
 
+	//병원 seq구하기용
+	public int findSeq(String email);
+	
 	//병원 일정 등록
 	public boolean insertSchedule(HospitalScheduleDto dto);
 	
@@ -23,6 +26,6 @@ public interface IHospitalScheduleDao {
 	public boolean modifySchedule(HospitalScheduleDto dto);
 	
 	// 병원 일정 삭제
-	public boolean deleteSchedule(HospitalScheduleDto dto);
+	public boolean deleteSchedule(int seq);
 	
 }

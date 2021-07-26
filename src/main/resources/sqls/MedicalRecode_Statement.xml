@@ -26,8 +26,8 @@
           					ON p.ID = m.PET_ID 
        						JOIN USERINFO u 
             				ON u.EMAIL = p.USER_EMAIL 
-     					WHERE m.HOSPITAL_SEQ = '1')
-     		WHERE RN BETWEEN 1 AND 5
+     					WHERE m.HOSPITAL_SEQ = #{seq})
+     		WHERE RN BETWEEN #{first} AND #{last}
       		ORDER BY SEQ DESC
 	</select>
 

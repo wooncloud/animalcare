@@ -97,13 +97,8 @@
 							</a>
 						</li>
 						<li>
-							<a href="${path}/" class="nav-link px-4 link-dark">
+							<a href="${path}/hospital/insertOrDetail.do" class="nav-link px-4 link-dark">
 								<i class="fas fa-hospital"></i> 병원정보
-							</a>
-						</li>
-						<li>
-							<a href="${path}/hospital/insertHospital.do" class="nav-link px-4 link-dark">
-								<i class="fas fa-search"></i> 병원등록
 							</a>
 						</li>
 						<li>

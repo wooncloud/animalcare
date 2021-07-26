@@ -12,6 +12,7 @@
 		<result property="operator_email " column="OPERATOR_EMAIL "/>
 		<result property="tel" column="TEL"/>
 		<result property="emergency" column="EMERGENCY"/>
+		<result property="delflag" column="DELFLAG"/>
 <!-- 		<collection property="" resultMap="UserDto"/> -->
 		<collection property="pettypedto" resultMap="PetTypeDto"/>
 		<collection property="operatordto" resultMap="OperatorDto"/>
@@ -22,8 +23,10 @@
 <!-- 	</resultMap> -->
 	
 	<resultMap type="com.pet.care.dto.PetTypeDto" id="PetTypeDto">
+		<result property="seq" column="SEQ"/>
 		<result property="hospital_seq" column="HOSPITAL_SEQ"/>
 		<result property="pettype" column="PETTYPE"/>
+		<result property="delflag" column="DELFLAG"/>
 	</resultMap>
 	
 	<resultMap type="com.pet.care.dto.OperatorDto" id="OperatorDto">
@@ -117,14 +120,36 @@
 	<insert id="insertHospital" parameterType="HospitalInfoDto">
 		INSERT INTO HOSPITALINFO
   				(SEQ, OPERATOR_EMAIL, NAME,
-				ADDRESS1, ADDRESS2, CONTENT,
+				ADDRESS1, ADDRESS2, CONTENT, TEL,
 				EMERGENCY, OPENTIME, DELFLAG)
-        VALUES(HOSPITALINFO_SEQ.NEXTVAL, 'quddnjs03@gmail.com', '병원03',
-                        '서울 금천구 독산로 272', '101동101호', '병원정보내용', 
-                        'N', '24시', 'N')
+        VALUES(HOSPITALINFO_SEQ.NEXTVAL, #{operator_email}, #{name},
+                        #{address1}, #{address2}, #{content}, #{tel},
+                        #{emergency}, #{opentime}, 'N')
+	</insert>
+	
+<!-- 	병원 정보 입력시 치료가능 항목 같이 추가  -->
+	<insert id="insertPetType" parameterType="PetTypeDto">
+		INSERT INTO PETTYPE
+			(SEQ, HOSPITAL_SEQ, PETTYPE, DELFLAG)
+		VALUES(PETTYPE_SEQ.NEXTVAL, (SELECT MAX(SEQ) FROM HOSPITALINFO h) , #{pettype}, 'N')
 	</insert>
 
-<!-- 	병원 상세정보 조회  -->
+<!-- 	병원 상세정보 조회  (병원관계자)  -->
+	<select id="detailHospitalOper" resultMap="HospitalJoinDto">
+		SELECT h.SEQ, h.OPERATOR_EMAIL , h.NAME , h.ADDRESS1 ,
+                h.ADDRESS2 , o.PHONE , LISTAGG(p.PETTYPE,',') PETTYPE ,
+                h.CONTENT , h.EMERGENCY , h.OPENTIME , h.TEL
+        FROM HOSPITALINFO h 
+                JOIN PETTYPE p 
+                ON h.SEQ = p.HOSPITAL_SEQ
+                JOIN  OPERATORINFO o 
+                ON o.EMAIL = h.OPERATOR_EMAIL 
+        WHERE o.EMAIL = #{email}
+                AND h.DELFLAG = 'N'
+        GROUP BY h.SEQ, h.OPERATOR_EMAIL , h.NAME , h.ADDRESS1 , o.PHONE , 
+                        h.ADDRESS2 , h.CONTENT , h.EMERGENCY , h.OPENTIME , h.TEL
+	</select>
+<!-- 	병원 상세정보 조회  (사용자)  -->
 	<select id="detailHospital" resultMap="HospitalJoinDto">
 		SELECT h.SEQ, h.OPERATOR_EMAIL , h.NAME , h.ADDRESS1 ,
                 h.ADDRESS2 , o.PHONE , LISTAGG(p.PETTYPE,',') PETTYPE ,
@@ -143,14 +168,27 @@
 <!-- 	병원 정보 수정  -->
 	<update id="modifyHospital" parameterType="HospitalInfoDto">
 		UPDATE  HOSPITALINFO 
-                SET NAME = '난병원01',
-                        ADDRESS1 = '서울 금천구 시흥대로 276',
-                        ADDRESS2 = '101동101호',
-                        CONTENT = '이름이 젤리만 진료가능',
-                        EMERGENCY = 'Y',
-                        OPENTIME = '열고싶을때'
-                WHERE SEQ = '3'
+                SET NAME = #{name},
+                		Tel=#{tel},
+                        ADDRESS1 = #{address1},
+                        ADDRESS2 = #{address2},
+                        CONTENT = #{content},
+                        EMERGENCY = #{emergency},
+                        OPENTIME = #{opentime}
+                WHERE SEQ = #{seq}
 	</update>
+<!-- 	병원 정보 수정시 기존 진료항목 전체 삭제  -->
+	<delete id="deletePetType" parameterType="PetTypeDto">
+		DELETE 
+			FROM PETTYPE p 
+			WHERE HOSPITAL_SEQ = #{hospital_seq}
+	</delete>
+<!-- 	진료항목 전체삭제 후 선택한 진료항목 새로 입력  -->
+	<insert id="modifyPetType" parameterType="PetTypeDto">
+		INSERT INTO PETTYPE
+			(SEQ, HOSPITAL_SEQ, PETTYPE, DELFLAG)
+			VALUES(PETTYPE_SEQ.NEXTVAL, #{hospital_seq} , #{pettype}, 'N')
+	</insert>
 	
 <!-- 	병원 정보 삭제  -->
 	<update id="deleteHospital" parameterType="java.lang.Integer">
