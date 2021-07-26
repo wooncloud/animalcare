@@ -33,7 +33,7 @@ public class SurveyController {
 	@RequestMapping(value="/surveyForm.do", method = RequestMethod.GET)
 	public String surveyForm() {
 		logger.info("SurveyController : surveyForm 설문 폼 작성 페이지");
-		return "/survey/surveyForm";
+		return "/survey/surveyForm2";
 	}
 	
 	@RequestMapping(value="/insertSurveyForm.do", method = RequestMethod.POST)

@@ -6,12 +6,20 @@
 <div class="card my-1">
 	<div class="card-body">
 	    <form action="./survey/insertSurveyForm.do" method="post" name="question">
-	    	<div class="row justify-content-end">
-	    		<div class="col-2">
-				<input type="button" class="btn btn-success" id="" data-bs-toggle="modal" data-bs-target="#dateModal" value="임시저장"><br>
-				<button type="button" class="btn btn-success" id="">초기화</button><br>
+	    	<div class="row text-center justify-content-end">
+	    		<div class="col-2 text-center">
+					<input type="button" class="btn btn-success" id="" data-bs-toggle="modal" data-bs-target="#dateModal" value="임시저장">
 				</div>
-				설문 제목 <input type="text" class="form-control" name="title" required="required">
+				<div class="col-2 text-center">
+					<button type="button" class="btn btn-success" id="" onclick="resetForm()">초기화</button>
+				</div>
+				<br>
+			</div>
+			<br>
+			설문 제목<br>
+			<input type="text" class="form-control" name="title" required>
+			<div id="formQuestion">
+			
 			</div>
 	    </form>
     </div>
@@ -52,7 +60,7 @@
 	    html += "		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span>1&nbsp;&nbsp;2&nbsp;&nbsp;3&nbsp;&nbsp;4&nbsp;&nbsp;5</span>";
 	    html += "	</div>";
 	    html += "</div>";
-	    $("form").append(html);
+	    $("form>#formQuestion").append(html);
 	}
 	function essayQuestion(){
 	    html = "";
@@ -63,13 +71,14 @@
 	    html += "	답변 <textarea rows='5' class='form-control'></textarea>";
 	    html += "	</div>";
 	    html += "</div>";
-	    $("form").append(html);
+	    $("form>#formQuestion").append(html);
 	}
 	function saveForm(){
-		
+// 		var 
+		//여기서 다 확ㅇ니해줘햐임라ㅓㄴ;ㅇ러 ;
 	}
 	function resetForm(){
-		 $('form').empty();
+		 $("form>#formQuestion").empty();
 	}
 	
 	
