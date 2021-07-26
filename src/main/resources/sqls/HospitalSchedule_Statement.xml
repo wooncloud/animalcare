@@ -2,6 +2,21 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.pet.care.model.dao.hospital.IHospitalScheduleDao">
 
+<!-- 병원 seq구하기용 쿼리 seq가 존재하지 않으면 0 반환-->
+	<select id="findSeq" resultType="java.lang.Integer">
+		SELECT SEQ 	
+			FROM HOSPITALINFO h 
+			WHERE OPERATOR_EMAIL = #{operator_email}
+		UNION ALL
+		SELECT 0 AS SEQ
+			FROM HOSPITALINFO h 
+			WHERE NOT EXISTS (
+				SELECT SEQ 	
+					FROM HOSPITALINFO h 
+					WHERE OPERATOR_EMAIL = #{operator_email})
+		AND ROWNUM = 1
+	</select>
+
 <!-- 병원 일정 등록-->
 	<insert id="insertSchedule" parameterType="HospitalScheduleDto">
 		INSERT INTO HOSPITALSCHEDULE
@@ -17,7 +32,7 @@
 		SELECT SEQ , HOSPITAL_SEQ , CONTENT ,
                 SCHEDULE , "CHECK" , DELFLAG 
      		FROM HOSPITALSCHEDULE h 
-     		WHERE HOSPITAL_SEQ = '3'
+     		WHERE HOSPITAL_SEQ = #{hospital_seq}
                 AND DELFLAG = 'N'
                 AND TO_CHAR(SCHEDULE,'YYYYMM') =
                         TO_CHAR(SYSDATE, 'YYYYMM')
@@ -35,28 +50,28 @@
 	</select>
 	
 <!-- 병원 일정 상세정보 조회-->
-	<select id="detailSchedule">
+	<select id="detailSchedule" resultType="HospitalScheduleDto">
 		SELECT SEQ , HOSPITAL_SEQ , TITLE, CONTENT ,
                 SCHEDULE , "CHECK" , DELFLAG
    			FROM HOSPITALSCHEDULE h 
-   			WHERE SEQ = '1'
+   			WHERE SEQ = #{seq}
                 AND DELFLAG = 'N'
 	</select>
 	
 <!-- 병원 일정 수정-->
-	<update id="modifySchedule">
+	<update id="modifySchedule" parameterType="HospitalScheduleDto">
 		UPDATE HOSPITALSCHEDULE
-  			SET TITLE='젤리야 거긴행복하니',
-                CONTENT='젤리님 영접하러 가는 날',
-                SCHEDULE='2021-07-15',
-                "CHECK"='Y'
-    		WHERE SEQ = 1
+  			SET TITLE=#{title},
+                CONTENT=#{content},
+                SCHEDULE=#{schedule},
+                "CHECK"= #{check}
+    		WHERE SEQ = #{seq}
 	</update>
 	
 <!-- 병원 일정 삭제-->
-	<update id="deleteSchedule">
+	<update id="deleteSchedule" parameterType="java.lang.Integer">
 		UPDATE HOSPITALSCHEDULE SET DELFLAG ='Y'
-  			WHERE SEQ ='1'
+  			WHERE SEQ = #{seq}
 	</update>
 	
 </mapper>

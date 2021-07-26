@@ -61,12 +61,7 @@
 								<i class="fas fa-search"></i> 병원찾기
 							</a>
 						</li>
-	
-						<li>
-							<a href="${path}/hospital/insertHospital.do" class="nav-link px-4 link-dark">
-								<i class="fas fa-search"></i> 병원등록(임시생성)
-							</a>
-						</li>
+		
 					</c:if>
 					<c:if test="${sessionScope.member.usertype eq 'ROLE_USER'}">
 						<li>
@@ -102,7 +97,7 @@
 							</a>
 						</li>
 						<li>
-							<a href="${path}/" class="nav-link px-4 link-dark">
+							<a href="${path}/hospital/insertOrDetail.do" class="nav-link px-4 link-dark">
 								<i class="fas fa-hospital"></i> 병원정보
 							</a>
 						</li>

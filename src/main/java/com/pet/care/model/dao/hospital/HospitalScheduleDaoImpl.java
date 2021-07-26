@@ -17,6 +17,12 @@ public class HospitalScheduleDaoImpl implements IHospitalScheduleDao {
 	@Autowired
 	private SqlSessionTemplate sqlSession;
 
+	//병원 seq구하기용
+	@Override
+	public int findSeq(String email) {
+		return sqlSession.selectOne(NS+"findSeq", email);
+	}
+	
 	//병원 일정 등록
 	@Override
 	public boolean insertSchedule(HospitalScheduleDto dto) {
@@ -51,8 +57,8 @@ public class HospitalScheduleDaoImpl implements IHospitalScheduleDao {
 
 	// 병원 일정 삭제
 	@Override
-	public boolean deleteSchedule(HospitalScheduleDto dto) {
-		int n = sqlSession.update(NS + "deleteSchedule", dto);
+	public boolean deleteSchedule(int seq) {
+		int n = sqlSession.update(NS + "deleteSchedule", seq);
 		return (n > 0) ? true : false;
 	}
 	
