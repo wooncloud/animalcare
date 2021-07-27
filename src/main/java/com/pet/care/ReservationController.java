@@ -3,6 +3,7 @@ package com.pet.care;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,7 +41,7 @@ import com.pet.care.model.service.reservation.IReservationService;
 @Controller
 @RequestMapping("/reservation")
 public class ReservationController {
-
+	
 	@Autowired
 	private IReservationService rService;
 	
@@ -73,11 +74,26 @@ public class ReservationController {
 //	}
 	
 	/*
-	 * 달력 이동
+	 * 달력 이동 사용자 예약을 위한
 	 */
 	@RequestMapping(value = "/moveCalendar.do", method = RequestMethod.GET)
-	public String moveCalendar() {
-		return "reservation/calendar";
+	public String moveCalendar( HttpSession session, Model model) {
+		MemberDto mDto = (MemberDto)session.getAttribute("member");
+		String user_email = mDto.getEmail();
+		String usertype = mDto.getUsertype();
+		System.out.println(usertype);
+		Map<String, Object>map = new HashMap<String, Object>();
+		map.put("user_email",user_email);
+	
+		Map<String, Object>rMap = new HashMap<String, Object>();
+		rMap.put("hospital_seq", 3);
+
+		
+		if(usertype.equals("ROLE_USER")) {			
+			return "reservation/userCalendar";
+		}
+			return "reservation/operCalendar";
+		
 	}
 	
 	/*
@@ -274,13 +290,13 @@ public class ReservationController {
 		logger.info("ReservationController todayReserveList 오늘의 예약 조회 " );
 		//seq는 병원번호 session
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("seq",4);
+		map.put("seq",3);
 		
 		List<ReservationDto> lists = rService.todayReserveList(map);
-		model.addAttribute("todayLists",lists);
+		model.addAttribute("tlists",lists);
 		
 		
-		return "reservation/todayReserveList";
+		return "reservation/hospitalReserveList";
 		
 	}
 	
@@ -397,7 +413,7 @@ public class ReservationController {
 	public String hospitalReserveDetail(@RequestParam Map<String,Object>map, Model model) {
 		logger.info("ReservationController hospitalReserveDetail 병원 예약 상세 조회 완료 " );
 		String seq = (String)map.get("seq");
-		System.out.println("seq======================"+seq);
+		System.out.println("seq============hospitalReserveDetail=========="+seq);
 		Map<String, Object> hMap = new HashMap<String, Object>();
 		hMap.put("seq", seq);
 		hMap.put("hospital_seq", 3);
@@ -413,16 +429,26 @@ public class ReservationController {
 	 * 예약 수정 
 	 */
 	@RequestMapping(value = "/modifyReserve.do", method=RequestMethod.POST)
-	public String modifyReserve() {
+	public String modifyReserve(@RequestParam Map<String,Object>map, Model model) {
+		logger.info("ReservationController modifyReserve 병원 예약 수정 {}", map );
 		//예약 seq , 병원변호 seq
-//		
-//		 boolean isc = service.modifyReserve(null);
-//		 
-//		 if(isc) {
-//			 
-//		 }
-//		
-		return "reservation/modifyReserve";
+		String seq = (String)map.get("seq");
+		String reservedate = (String)map.get("reservedate");
+		String reservetime = (String)map.get("reservetime");
+
+		Map<String, Object>rMap = new HashMap<String, Object>();
+		rMap.put("seq", seq);
+		rMap.put("reservedate", reservedate);
+		rMap.put("reservetime", reservetime);
+		
+		 boolean isc = rService.modifyReserve(rMap);
+		 
+		 model.addAttribute("seq", map.get("seq"));
+		 if(isc) {
+			 return "redirect:/reservation/hospitalReserveDetail.do";
+		 }
+		
+		return "reservation/index";
 	}
 	
 	/*
@@ -548,7 +574,7 @@ public class ReservationController {
 	
 	@RequestMapping(value = "/getSunday.do", method = RequestMethod.GET)
 	public String getSunday(String date, HttpServletResponse resp, Model model) throws ParseException, IOException {
-		
+		logger.info("ReservationController getSunday 일요일 확인  {}",date );
 		CalendarDate cal = new CalendarDate();
 		boolean isc = cal.CalSunday(date);
 		
@@ -557,29 +583,22 @@ public class ReservationController {
 	
 		if(isc) {
 			Util.PrintWriterMsg(resp, msg ,redirectUri);
-		} else {
+		} 		
+//			return "redirect:/reservation/moveCalendar.do";
 			model.addAttribute("reservedate",date);
 			return "redirect:/reservation/selectdayReserveList.do";
-		}
-			return "redirect:/reservation/moveCalendar.do";
+		
 	}
-	
-
-	/*
-	 * 오늘의 예약 목록 조회 (병원 관계자 페이지에서 볼거)
-	 */
-//	@RequestMapping(value = "/todayReserveList.do", method = RequestMethod.GET)
-//	public String selectdayReserveList(Model model) {
-//	
-//		
-//		Map<String, Object>rMap = new HashMap<String, Object>();
-//		rMap.put("hospital_seq",3);
-//		
-//		List<ReservationDto> lists = rService.todayReserveList(rMap);
-//		
-//		model.addAttribute("todayReserve", lists);
-//		
-//		return "reservation/insertReservation";
-//	}
+	@RequestMapping(value = "/checkReservation.do", method = RequestMethod.GET)
+	@ResponseBody
+	public String checkReservation(@RequestParam Map<String,Object> map) {
+		logger.info("ReservationController checkReservation 예약 중복 확인   {}",map );
+		map.put("hospital_seq", 3);
+		boolean isc = rService.checkReservation(map);
+		
+		String resultIsc = String.valueOf(isc);
+		
+		return resultIsc;
+	}
 }
 	

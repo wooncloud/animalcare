@@ -60,4 +60,7 @@ public interface IReservationService {
 	
 	//병원 예약 리스트 달력
 	public List<ReservationDto> hospitalCalendarList(Map<String, Object>map);
+	
+	//예약 중복 검사
+	public boolean checkReservation(Map<String, Object>map);
 }

@@ -113,8 +113,12 @@ public class ReservationDaoImpl implements IReservationDao {
 	public List<ReservationDto> hospitalCalendarList(Map<String, Object> map) {
 		return session.selectList(NS+"hospitalCalendarList", map);
 	}
-	
-	
-	
+
+	@Override
+	public boolean checkReservation(Map<String, Object> map) {
+		int cnt  = session.selectOne(NS+"checkReservation", map);
+		return (cnt>0)?true:false;
+	}
+
 	
 }

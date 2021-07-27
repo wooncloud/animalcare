@@ -126,4 +126,12 @@ public class ReservationServiceImpl implements IReservationService {
 		logger.info(" ReservationServiceImpl hospitalCalendarList {}", map);
 		return rDao.hospitalCalendarList(map);
 	}
+
+	@Override
+	public boolean checkReservation(Map<String, Object> map) {
+		logger.info(" ReservationServiceImpl checkReservation {}", map);
+		return rDao.checkReservation(map);
+	}	
+	
+	
 }
