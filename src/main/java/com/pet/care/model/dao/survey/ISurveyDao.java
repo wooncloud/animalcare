@@ -19,5 +19,8 @@ public interface ISurveyDao {
 	//설문 폼 상세 페이지
 	public SurveyDto surveyDetail(Map<String, Object> map);
 	
+	//다중삭제
+	public int delflagForm(Map<String, String[]> map);
+
 	
 }
