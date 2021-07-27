@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pet.care.model.dao.favorite.IFavoriteDao">
+	
+	<select id="favoriteList" parameterType="java.lang.String" resultType="FavoriteDto">
+		SELECT f.SEQ, h.NAME, h.ADDRESS1, h.ADDRESS2, h.TEL, h.OPENTIME, p.PETTYPE 
+		FROM HOSPITALINFO h 
+			JOIN FAVORITE f ON h.SEQ = f.HOSPITAL_SEQ 
+			JOIN (
+					SELECT DISTINCT(p.HOSPITAL_SEQ), 
+						LISTAGG(p.PETTYPE, ', ') WITHIN GROUP (ORDER BY p.PETTYPE) OVER(PARTITION BY p.HOSPITAL_SEQ) PETTYPE 
+					FROM PETTYPE p
+				) p
+			ON h.SEQ = p.HOSPITAL_SEQ 
+		WHERE f.USER_EMAIL = #{email}
+		ORDER BY f.SEQ
+	</select>
+	
+	<insert id="favoriteInsert" parameterType="java.util.Map">
+		INSERT INTO FAVORITE
+		(SEQ, USER_EMAIL, HOSPITAL_SEQ)
+		VALUES(FAVORITE_SEQ.NEXTVAL, #{email}, #{hospital_seq})
+	</insert>
+	
+	<delete id="favoriteDelete" parameterType="java.lang.Integer">
+		DELETE FROM FAVORITE WHERE SEQ = ${seq}
+	</delete>
+
+</mapper>
