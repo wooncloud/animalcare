@@ -53,6 +53,7 @@
 	</c:forEach>
 	<c:if test="${sessionScope.member.usertype eq 'ROLE_USER'}">
  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#testModal" >예약</button>
+ <button type="button" class="btn btn-warning" onclick="javascript:history.back(-1);">뒤로가기</button>
  </c:if>
 	<div class="modal fade" id="testModal" tabindex="-1" aria-hidden="true">
 	   <div class="modal-dialog">

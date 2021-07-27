@@ -20,7 +20,7 @@ a{
           <div class="col-2">
             <h5 class="card-title"> 반려 동물</h5>
           </div>
-          <div class="col-2">
+          <div class="col-3">
              <h5 class="card-title"> 병원명</h5>
           </div>
           <div class="col-2"> 
@@ -48,7 +48,7 @@ a{
 		<div class="card-body">
 			<div class="row">
 				<div class="col-1">
-					<p class="card-text">${vs.count}</p>
+					<p class="card-text">${vs.index}</p>
 				</div>
 				<div class="col-2">
 					<p class="card-text">${list.reservetype}</p>
@@ -57,13 +57,13 @@ a{
 					<p class="card-text">
 					<a href="./userReserveDetail.do?seq=${list.seq}">${list.pet_name}</a></p>
 				</div>
-				<div class="col-2">
+				<div class="col-3">
 					<p class="card-text">${list.name}</p>
 				</div>
 				<div class="col-2">
 					<p class="card-text">${list.reservedate}</p>
 				</div>
-				<div class="col-1">
+				<div class="col-2">
 						<c:if test="${list.status eq 'S'}">
 							<p class="card-text">대기</p>
 						</c:if>
