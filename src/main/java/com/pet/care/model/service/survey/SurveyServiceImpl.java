@@ -43,5 +43,11 @@ public class SurveyServiceImpl implements ISurveyService {
 		return iDao.surveyDetail(map);
 	}
 
+	@Override
+	public int delflagForm(Map<String, String[]> map) {
+		logger.info("SurveyServiceImpl : delflagForm 설문 폼 삭제 - {}",map);
+		return iDao.delflagForm(map);
+	}
+
 	
 }

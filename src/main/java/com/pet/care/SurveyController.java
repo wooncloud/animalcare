@@ -1,5 +1,7 @@
 package com.pet.care;
 
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -80,7 +82,15 @@ public class SurveyController {
 		
 	}
 	
-	
+	@RequestMapping(value="/delflagForm.do", method=RequestMethod.POST)
+	public String delflagForm(String[] chkVal) {
+		logger.info("SurveyController : delflagForm 설문 폼 다중 삭제 - {}", Arrays.toString(chkVal));
+		Map<String, String[]> map = new HashMap<String, String[]>();
+		map.put("seqs", chkVal);
+		int n = iService.delflagForm(map);
+		logger.info("SurveyController 설문 폼 다중 삭제 : {}",n);
+		return "redirect:/survey/adminSurveyList.do";
+	}
 	
 	
 	

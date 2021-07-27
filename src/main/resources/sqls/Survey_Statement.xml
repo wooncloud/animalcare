@@ -4,6 +4,7 @@
 <select id="adminSurveyList" resultType="SurveyDto">
 	SELECT SEQ, TITLE, TO_CHAR(REGDATE,'yyyy-mm-dd') AS REGDATE, DELFLAG
 		FROM SURVEY
+		WHERE DELFLAG ='N'
 		ORDER BY REGDATE DESC
 </select>
  
@@ -28,6 +29,14 @@
 		WHERE SEQ=#{seq}
 </update>
 
+<update id="delflagForm" parameterType="java.util.Map">
+	UPDATE SURVEY SET DELFLAG ='Y'
+		WHERE DELFLAG='N'
+		AND SEQ IN
+		<foreach collection="seqs" item="seq" open="(" separator="," close=")">
+			#{seq}
+		</foreach>
+</update>
 
 
 </mapper>
