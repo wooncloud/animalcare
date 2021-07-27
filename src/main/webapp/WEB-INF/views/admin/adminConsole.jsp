@@ -30,12 +30,12 @@
 					<tbody>
 						<c:forEach var="o" items="${operList}" varStatus="vs">
 							<tr>
-								<td>${o.email}</td>
-								<td>${o.name}</td>
-								<td>${o.phone}</td>
-								<td>${o.corpregnum}</td>
-								<td>${o.licensenum}</td>
-								<td>
+								<td class="email">${o.email}</td>
+								<td class="name">${o.name}</td>
+								<td class="phone">${o.phone}</td>
+								<td class="crn">${o.corpregnum}</td>
+								<td class="ln">${o.licensenum}</td>
+								<td class="flag">
 									<c:choose>
 										<c:when test="${o.approvalflag eq 'Y'}"><span class="badge bg-success">승인</span></c:when>
 										<c:when test="${o.approvalflag eq 'N'}"><span class="badge bg-danger">거부</span></c:when>

@@ -37,7 +37,7 @@ public interface IUserService {
 	/**
 	 * 가입신청 처리
 	 */
-	public boolean grantOper(String email);
+	public boolean grantOper(Map<String, Object> map);
 
 	/**
 	 * 병원관계자 정보 조회
