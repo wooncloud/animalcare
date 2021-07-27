@@ -6,19 +6,20 @@ public class SurveyDto {
 
 	private int seq;
 	private String question;
-	private Date regdate;
-	private Date startdate;
-	private Date enddate;
+	private String regdate;
+	private String startdate;
+	private String enddate;
 	private String delflag;
 	private String title;
 	private int hospital_seq;
+	private String surveyflag;
 	
 	public SurveyDto() {
 		super();
 	}
 
-	public SurveyDto(int seq, String question, Date regdate, Date startdate, Date enddate, String delflag, String title,
-			int hospital_seq) {
+	public SurveyDto(int seq, String question, String regdate, String startdate, String enddate, String delflag,
+			String title, int hospital_seq, String surveyflag) {
 		super();
 		this.seq = seq;
 		this.question = question;
@@ -28,13 +29,14 @@ public class SurveyDto {
 		this.delflag = delflag;
 		this.title = title;
 		this.hospital_seq = hospital_seq;
+		this.surveyflag = surveyflag;
 	}
 
 	@Override
 	public String toString() {
 		return "SurveyDto [seq=" + seq + ", question=" + question + ", regdate=" + regdate + ", startdate=" + startdate
 				+ ", enddate=" + enddate + ", delflag=" + delflag + ", title=" + title + ", hospital_seq="
-				+ hospital_seq + "]";
+				+ hospital_seq + ", surveyflag=" + surveyflag + "]";
 	}
 
 	public int getSeq() {
@@ -53,27 +55,27 @@ public class SurveyDto {
 		this.question = question;
 	}
 
-	public Date getRegdate() {
+	public String getRegdate() {
 		return regdate;
 	}
 
-	public void setRegdate(Date regdate) {
+	public void setRegdate(String regdate) {
 		this.regdate = regdate;
 	}
 
-	public Date getStartdate() {
+	public String getStartdate() {
 		return startdate;
 	}
 
-	public void setStartdate(Date startdate) {
+	public void setStartdate(String startdate) {
 		this.startdate = startdate;
 	}
 
-	public Date getEnddate() {
+	public String getEnddate() {
 		return enddate;
 	}
 
-	public void setEnddate(Date enddate) {
+	public void setEnddate(String enddate) {
 		this.enddate = enddate;
 	}
 
@@ -99,6 +101,14 @@ public class SurveyDto {
 
 	public void setHospital_seq(int hospital_seq) {
 		this.hospital_seq = hospital_seq;
+	}
+
+	public String getSurveyflag() {
+		return surveyflag;
+	}
+
+	public void setSurveyflag(String surveyflag) {
+		this.surveyflag = surveyflag;
 	}
 	
 }
