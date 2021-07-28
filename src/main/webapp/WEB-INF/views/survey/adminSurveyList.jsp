@@ -50,13 +50,18 @@
 					<p class="card-text"><a href="./surveyDetail.do?seq=${survey.seq}">${survey.title}</a></p>
 			    </div>
 			    <div class="col-3">
-  					<p class="card-text"></p>
+			    	<c:if test="${survey.startdate eq null}">
+  					<p class="card-text"> - </p>
+			    	</c:if>
+			    	<c:if test="${survey.startdate != null}">
+  					<p class="card-text">${survey.startdate} ~ ${survey.enddate}</p>
+  					</c:if>
 			    </div>
 			    <div class="col-2">
 			    	<p class="card-text">${survey.regdate}</p>
 			    </div>
 			    <div class="col-1">
-			    	<p class="card-text"></p>
+			    	<p class="card-text">${survey.surveyflag}</p>
 			    </div>
 			    <div class="col-1">
 			    	<p class="card-text">${survey.delflag}</p>

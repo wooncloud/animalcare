@@ -66,7 +66,7 @@ public class SurveyController {
 		}else {
 			return "redirect:/error/error.do";
 		}
-	}
+	} 
 	
 	@RequestMapping(value="/updateDateForm.do", method=RequestMethod.POST)
 	public String updateDateForm(@RequestParam Map<String, Object> map, HttpServletRequest request) {

@@ -43,7 +43,6 @@
 	var qnum = document.getElementsByName("qnum");
 	var qtitle = document.getElementsByName("qtitle");
 
-
 	function choiceQuestion() {
 	    html = "";
 	    html += "<div class='card my-1'>";
@@ -68,7 +67,6 @@
 			"choiceAnswer" : ""
 	    })
 	    
-	    
 	}
 	
 	function essayQuestion(){
@@ -88,79 +86,59 @@
 			"essayAnswer" : ""
 	    })
 	    
-	    console.log(qtitle.value);
 	}
 	
 	function saveForm(){
 
 		var frm = document.forms[0];
-
-// 		var formQuestion = document.getElementById("formQuestion");
-// 		var formContext = formQuestion.innerHTML;
-// 		console.log(formContext);
-// 		//이게 아닌거같고
-		
 		var title = document.getElementsByName("title")[0].value;
 		var qnum = document.getElementsByName("qnum");
 		var qtitle = document.getElementsByName("qtitle");
 
-
 		//관리자가 작성한 설문 질문으로 값을 업데이트함
 		updateQtitle();
 		
-		
 		var sendData = {
-				"title" : title,
-				"question" : JSON.stringify(question)
-				}
-		
-// 		console.log(JSON.stringfy(question));
+			"title" : title,
+			"question" : JSON.stringify(question)
+		}
 		console.log("sendData"+JSON.stringify(sendData));
 		
+		//수정 필요
 // 		if(title==""){
 // 			alert("설문 제목을 입력해주세요");
-// 			return false;
+// 			return false; //이거 왜 안될까
 // 		}else if(count == 0){
 // 			alert("설문 질문을 등록해주세요")
 // 			return false;
 // 		}else {
+			
+// 		}
 	
 		var frm2 = document.forms[1];
 		var startdate = document.getElementsByName("startdate").value;
 		var enddate = document.getElementsByName("enddate").value;
-// 		var seqDate = "";
-		console.log("시작ㄴㄴㄴㄴㄴㄴㄴ"+startdate)
-			$.ajax({
-				type : "POST",
-				url : "./insertSurveyForm.do",
-				data : sendData,
-				datatype : "JSON",
-				success : function(data){
-					console.log("성공");
-					console.log(data);
-					var seqData = data; 
-					seqDate = "";
-					seqDate += "<input type='hidden' name='seq' value='"+seqData+"'>";
-					frm2.append(seqDate);
-					
-					if(typeof startdate != "undefined" && typeof enddate != "undefined"){
-						updateDateForm();
-						console.log("확ㅇ닌ㄴㄴㄴㄴㄴ")
-					}else if(startdate==''){
-			 			alert("설문 배포 시작 날짜를 입력해주세요");
-					}else if(enddate==''){
-						alert("설문 배포 끝 날짜를 입력해주세요");
-					}else{
-						alert("날짜를 입력하거나 취소버튼을 누르세요");
-					}
-				},
-				error : function(msg2){
-					
-				}
-			})
+
+		$.ajax({
+			type : "POST",
+			url : "./insertSurveyForm.do",
+			data : sendData,
+			datatype : "JSON",
+			success : function(data){
+				console.log("성공");
+// 				console.log(data);
+				var seqData = data;
 				
-		}
-// 	}
+				var emt = document.createElement("div");
+				emt.innerHTML = "<input type='hidden' name='seq' value='"+seqData+"'>";
+				frm2.append(emt);
+			},
+			error : function(msg2){
+				
+			}
+		})
+				
+	}
 	
 	function updateQtitle(){
 		var qtitle = document.getElementsByName("qtitle");
@@ -177,12 +155,24 @@
 		 count =0;
 	}
 	
-	
 	function updateDateForm(){
 		var frm2 = document.forms[1];
+		var startdate = document.getElementsByName("startdate").value;
+		var enddate = document.getElementsByName("enddate").value;
+		
+		if(typeof startdate != "undefined" && typeof enddate != "undefined"){
+			updateDateForm();
+			console.log("확ㅇ닌ㄴㄴㄴㄴㄴ")
+		}else if(startdate==''){
+ 			alert("설문 배포 시작 날짜를 입력해주세요");
+		}else if(enddate==''){
+			alert("설문 배포 끝 날짜를 입력해주세요");
+		}else{
+			alert("날짜를 입력하거나 취소버튼을 누르세요");
+		}
+		
 		frm2.submit();
 	}
-	
 	
 </script>
     
