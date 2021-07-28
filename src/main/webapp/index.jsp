@@ -23,7 +23,7 @@
 			<button type="button" class="btn btn-outline-danger">Danger</button>
 			<button type="button" class="btn btn-outline-warning">Warning</button>
 			<button type="button" class="btn btn-outline-info">Info</button>
-			<button type="button" class="btn btn-outline-light">Light</button>
+			<button type="but	ton" class="btn btn-outline-light">Light</button>
 			<button type="button" class="btn btn-outline-dark">Dark</button>
 		</div>
 		<hr class="my-3">

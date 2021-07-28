@@ -18,6 +18,13 @@ public class HospitalScheduleServiceImpl implements IHospitalScheduleService {
 	
 	@Autowired IHospitalScheduleDao dao;
 
+	//병원 seq구하기용
+	@Override
+	public int findSeq(String email) {
+		logger.info("[findSeq - {}] : 조회된 seq", email);
+		return dao.findSeq(email);
+	}
+	
 	//병원 일정 등록
 	@Override
 	public boolean insertSchedule(HospitalScheduleDto dto) {
@@ -55,9 +62,9 @@ public class HospitalScheduleServiceImpl implements IHospitalScheduleService {
 
 	// 병원 일정 삭제
 	@Override
-	public boolean deleteSchedule(HospitalScheduleDto dto) {
-		logger.info("[deleteSchedule - {}] : 병원 일정 삭제", dto);
-		return dao.deleteSchedule(dto);
+	public boolean deleteSchedule(int seq) {
+		logger.info("[deleteSchedule - {}] : 병원 일정 삭제", seq);
+		return dao.deleteSchedule(seq);
 	}
 	
 }

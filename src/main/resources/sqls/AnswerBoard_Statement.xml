@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pet.care.model.dao.answerboard.AnswerBoardDaoImpl">
+
+	<insert id="insertUserBoard" parameterType="AnswerBoardDto">
+	INSERT INTO ANSWERBOARD (SEQ, EMAIL, PASSWORD, TITLE, CONTENT, REGDATE, PARENT_SEQ, DELFLAG)
+	  VALUES (ANSWERBOARD_SEQ.NEXTVAL,#{email},'',#{title},#{content},SYSDATE,ANSWERBOARD_SEQ.CURRVAL,'N')
+	</insert>
+
+	<insert id="insertNonUserBoard" parameterType="AnswerBoardDto">
+	INSERT INTO ANSWERBOARD (SEQ, EMAIL, PASSWORD, TITLE, CONTENT, REGDATE, PARENT_SEQ, DELFLAG)
+        VALUES (ANSWERBOARD_SEQ.NEXTVAL,#{email},#{password},#{title},#{content},SYSDATE,ANSWERBOARD_SEQ.CURRVAL,'N')
+	
+	</insert>
+	
+	<update id="modifyUserBoard" parameterType="java.util.Map">
+	UPDATE ANSWERBOARD
+		SET TITLE=#{title}, CONTENT=#{content}, DELFLAG='N'
+		WHERE SEQ=#{seq}
+	
+	</update>
+	
+	<update id="modifyNonUserBoard" parameterType="java.util.Map">
+	UPDATE ANSWERBOARD
+		SET TITLE=#{title}, CONTENT=#{content}, DELFLAG='N'
+		WHERE SEQ=#{seq} AND EMAIL=#{email} AND PASSWORD =#{password}
+	</update>
+	
+	<delete id="deleteUserBoard" parameterType="java.util.Map">
+	UPDATE ANSWERBOARD 
+		 SET DELFLAG ='Y'
+		WHERE SEQ = #{seq}
+	</delete>
+	
+	<delete id="deleteNonUserBoard" parameterType="java.util.Map">
+	UPDATE ANSWERBOARD
+		SET DELFLAG='Y'
+		WHERE SEQ=#{seq} AND EMAIL=#{email} AND PASSWORD =#{password}
+	
+	</delete>
+	
+	<select id="selUserBoard" parameterType="java.util.Map" resultType="AnswerBoardDto">
+	SELECT a.SEQ, u.NAME , a.TITLE, a.REGDATE, u.EMAIL
+	FROM USERINFO u JOIN
+			(SELECT SEQ,TITLE, CONTENT, REGDATE, EMAIL
+		        FROM ANSWERBOARD
+		        WHERE EMAIL=#{email} AND DELFLAG ='N') a
+		        ON u.EMAIL = a.EMAIL
+	</select>
+	
+	<select id="selNonUserBoard" parameterType="java.util.Map" resultType="AnswerBoardDto">
+	SELECT SEQ,TITLE, CONTENT, REGDATE
+        FROM ANSWERBOARD
+        WHERE EMAIL=#{email} AND PASSWORD =#{password} AND DELFLAG ='N'
+	</select>
+	
+	<select id="selAllBoard" resultType="AnswerBoardDto">
+SELECT a.SEQ, u.NAME , a.TITLE, a.REGDATE
+	FROM USERINFO u JOIN
+			(SELECT SEQ, EMAIL, PASSWORD, TITLE, CONTENT, REGDATE, PARENT_SEQ, DELFLAG
+			        FROM ANSWERBOARD 
+			        WHERE DELFLAG ='N') a
+			        ON u.EMAIL = a.EMAIL 
+			        ORDER BY PARENT_SEQ,SEQ
+	</select>
+	
+	<select id="selUserDetail" parameterType="java.util.Map" resultType="AnswerBoardDto">
+	SELECT a.SEQ, u.NAME , a.TITLE, a.REGDATE, u.PHONE , a.CONTENT, u.EMAIL
+		FROM USERINFO u JOIN
+			(SELECT SEQ, TITLE,CONTENT,REGDATE, EMAIL
+	        FROM ANSWERBOARD
+	        WHERE SEQ=#{seq} AND DELFLAG ='N') a
+	        ON u.EMAIL = a.EMAIL
+
+	</select>
+	
+	<select id="selNonUserDetail" parameterType="java.util.Map" resultType="AnswerBoardDto">
+	SELECT TITLE,CONTENT,REGDATE 
+        FROM ANSWERBOARD a
+        WHERE SEQ=#{seq} AND EMAIL =#{email} AND PASSWORD =#{password} AND DELFLAG ='N' 
+	</select>
+	
+	<insert id="insertReply" parameterType="AnswerBoardDto">
+	INSERT INTO ANSWERBOARD (SEQ, EMAIL ,TITLE, CONTENT, REGDATE, PARENT_SEQ, DELFLAG)
+        VALUES (ANSWERBOARD_SEQ.NEXTVAL,#{email} ,#{title},#{content},SYSDATE,(SELECT PARENT_SEQ FROM ANSWERBOARD a WHERE SEQ=#{seq}),'N')
+	</insert>
+	
+</mapper>

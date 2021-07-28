@@ -9,6 +9,15 @@
 	flex-wrap: wrap;
 }
 
+
+.choice-hover:hover{
+	background-color: #f2ffff;
+}
+.choice-hover:hover .change-here{
+	font-weight:bolder;
+	color:#7d9ffb;
+}
+
 .petTypeBox{
 	width: 200px;
 	background-color: #7d9ffb;
@@ -27,4 +36,9 @@
 
 .scheduleName{
 	width: 100%;
+}
+
+.close-btn{
+	width: 100%;
+	height: 50px;
 }

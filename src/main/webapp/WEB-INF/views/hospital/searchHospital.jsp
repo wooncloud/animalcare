@@ -50,13 +50,13 @@
      					 진료 항목
   					</div>
   					<div class="col-2" >
-							<select class="form-select" id="selectPetType" onchange="selectType()">
-								<option value="" selected>&nbsp;선택&nbsp;</option>
-								<c:forEach var="dto" items="${petlist}" varStatus="vs">
-									<option  value="${dto.codeid}" >${dto.codename}</option>
-								</c:forEach>
-							</select>
-						</div>
+						<select class="form-select" id="selectPetType" onchange="selectType()">
+							<option value="selectOne" selected>&nbsp;선택&nbsp;</option>
+							<c:forEach var="dto" items="${petlist}" varStatus="vs">
+								<option  value="${dto.codeid}" >${dto.codename}</option>
+							</c:forEach>
+						</select>
+					</div>
   				</div>				
  				<div class="choice-div" id="choice">
  					
@@ -105,7 +105,7 @@
 					<div class="col text-center">
 		     			전화번호
 		    		</div>
-		    		<c:if test="${sessionScope.auth eq 'user'}">
+		    		<c:if test="${sessionScope.member.usertype eq 'ROLE_USER'}">
 						<div class="col text-center">
 		     			 	관심등록
 		    			</div>
@@ -115,9 +115,9 @@
 		</div>
 		<c:forEach var="dto" items="${lists}" varStatus="vs">
 			<div class="card">
-				<div class="card-body">
+				<div class="choice-hover card-body">
 					<div class="row">
-						<div class="col-4 text-center" onclick="location.href='./detailHospital.do?seq=${dto.seq}'; " style="cursor:pointer;">
+						<div class="change-here col-4 text-center" onclick="location.href='./detailHospital.do?seq=${dto.seq}'; " style="cursor:pointer;">
 		     				${dto.name}
 						</div>
 						<div class="col-3">
@@ -129,9 +129,9 @@
 						<div class="col text-center">
 					     	${dto.tel}
 					    </div>
-					    <c:if test="${sessionScope.auth eq 'user'}">
+					    <c:if test="${sessionScope.member.usertype eq 'ROLE_USER'}">
 							<div class="col text-center">
-					     		추천☆즐찾
+					     		☆즐찾★
 						    </div>
 					    </c:if>
 					</div>

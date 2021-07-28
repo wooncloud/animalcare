@@ -1,6 +1,7 @@
 package com.pet.care.dto;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class PetTypeDto implements Serializable{
 
@@ -10,22 +11,37 @@ public class PetTypeDto implements Serializable{
 	private String pettype;
 	private int hospital_seq;
 	private String delflag;
+	
+	private List<HospitalInfoDto> hospitalinfodto;
 	                  
+	public List<HospitalInfoDto> getHospitalinfodto() {
+		return hospitalinfodto;
+	}
+
+	public void setHospitalinfodto(List<HospitalInfoDto> hospitalinfodto) {
+		this.hospitalinfodto = hospitalinfodto;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
 	public PetTypeDto() {
 	}
 
-	public PetTypeDto(int seq, String pettype, int hospital_seq, String delflag) {
+	public PetTypeDto(int seq, String pettype, int hospital_seq, String delflag, List<HospitalInfoDto> hospitalinfodto) {
 		super();
 		this.seq = seq;
 		this.pettype = pettype;
 		this.hospital_seq = hospital_seq;
 		this.delflag = delflag;
+		this.hospitalinfodto = hospitalinfodto;
 	}
 
 	@Override
 	public String toString() {
 		return "PetTypeDto [seq=" + seq + ", pettype=" + pettype + ", hospital_seq=" + hospital_seq + ", delflag="
-				+ delflag + "]";
+				+ delflag + ", hospitalinfodto="+hospitalinfodto+"]";
 	}
 
 	public int getSeq() {
