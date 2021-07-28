@@ -37,7 +37,7 @@ public interface IUserDao {
 	/**
 	 * 가입신청 처리
 	 */
-	public int grantOper(String email);
+	public int grantOper(Map<String, Object> map);
 
 	/**
 	 * 병원관계자 정보 조회

@@ -40,7 +40,6 @@
 		<mapper resource="/sqls/MedicalRecode_Statement.xml"/>
 		<mapper resource="/sqls/Survey_Statement.xml"/>
 		<mapper resource="/sqls/User_Statement.xml"/>
-
 	</mappers>
 
 </configuration>

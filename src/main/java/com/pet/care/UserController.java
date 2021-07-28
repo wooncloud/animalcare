@@ -56,7 +56,7 @@ public class UserController {
 
 			// 관리자
 			if (member.getUsertype().equals("ROLE_ADMIN")) {
-				return "admin/adminConsole";
+				return "redirect:/admin/adminConsole.do";
 			}
 			// 병원관계자
 			else if (member.getUsertype().equals("ROLE_OPER")) {
