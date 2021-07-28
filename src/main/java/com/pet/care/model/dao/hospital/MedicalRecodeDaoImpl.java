@@ -18,6 +18,12 @@ public class MedicalRecodeDaoImpl implements IMedicalRecodeDao {
 	@Autowired
 	private SqlSessionTemplate sqlSession;
 
+	//진료내역 추가전 페이지에 기본 입력되어 있는 데이터
+	@Override
+	public MedicalRecodeJoinDto insertsBasicData(int seq) {	 
+		return sqlSession.selectOne(NS+"insertBasicData", seq);
+	}
+	
 	// 진료내역 추가
 	@Override
 	public boolean insertRecode(MedicalRecodeDto dto) {
@@ -31,7 +37,7 @@ public class MedicalRecodeDaoImpl implements IMedicalRecodeDao {
 		return sqlSession.selectList(NS+"recodeList", map);
 	}
 
-	// 병원 질료내역 전채 글 갯수(페이징 쿼리)
+	// 병원 진료내역 전채 글 갯수(페이징 쿼리)
 	@Override
 	public int recodeCount(Map<String, Object> map) {
 		return sqlSession.selectOne(NS+"recodeCount", map);

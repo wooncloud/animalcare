@@ -2,19 +2,49 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.pet.care.model.dao.hospital.IMedicalRecodeDao">
 
+	<resultMap type="com.pet.care.dto.MedicalRecodeJoinDto" id="MedicalRecodeJoinDto">
+		<result property="seq" column="SEQ"/>
+		<result property="pet_name" column="PET_NAME"/>
+		<result property="symptom" column="SYMPTOM"/>
+		<result property="treatment" column="TREATMENT"/>
+		<result property="prescription" column="PRESCRIPTION"/>
+		<result property="treatdate" column="TREATDATE"/>
+		<result property="pet_id" column="PET_ID"/>
+		<result property="hospital_seq" column="HOSPITAL_SEQ"/>
+		<collection property="petdto" resultMap="PetDto"/>
+		<collection property="userdto" resultMap="UserDto"/>
+		<collection property="hospitalinfodto" resultMap="HospitalInfoDto"/>
+	</resultMap>
+	
+	<resultMap type="com.pet.care.dto.PetDto" id="PetDto">
+		<result property="name" column="PETNAME"/>
+		<result property="id" column="ID"/>
+		<result property="user_email" column="USER_EMAIL "/>
+	</resultMap>
+	
+	<resultMap type="com.pet.care.dto.UserDto" id="UserDto">
+		<result property="name" column="NAME"/>
+		<result property="email" column="EMAIL"/>
+	</resultMap>
+	
+	<resultMap type="com.pet.care.dto.HospitalInfoDto" id="HospitalInfoDto">
+		<result property="seq" column="SEQ"/>
+		<result property="name" column="HOSPITALNAME"/>
+	</resultMap>
+
 <!-- 진료내역 추가 -->
-	<insert id="insertRecode">
+	<insert id="insertRecode" parameterType="MedicalRecodeDto">
 		INSERT INTO MEDICALRECODE
    				(SEQ, PET_ID, SYMPTOM,
    				TREATMENT, PRESCRIPTION, TREATDATE,
     			HOSPITAL_SEQ)
-		VALUES(MEDICALRECODE_SEQ.NEXTVAL, 'kckt66002M01', '설사',
-       			'과식', '설사약', SYSDATE,
-          		 '1')
+		VALUES(MEDICALRECODE_SEQ.NEXTVAL, #{pet_id}, #{symptom},
+       			#{treatment}, #{prescription}, SYSDATE,
+          		 #{hospital_seq})
 	</insert>
-	
+
 <!-- 병원 진료내역 리스트 조회 -->
-	<select id="recodeList">
+	<select id="recodeList" parameterType="java.util.Map" resultMap="MedicalRecodeJoinDto">
 		SELECT SEQ , PETNAME , SYMPTOM ,
       				NAME , TREATDATE , HOSPITAL_SEQ 
     		FROM(
@@ -26,27 +56,28 @@
           					ON p.ID = m.PET_ID 
        						JOIN USERINFO u 
             				ON u.EMAIL = p.USER_EMAIL 
-     					WHERE m.HOSPITAL_SEQ = #{seq})
+     					WHERE m.HOSPITAL_SEQ = #{hospital_seq})
      		WHERE RN BETWEEN #{first} AND #{last}
       		ORDER BY SEQ DESC
 	</select>
+	
 
 <!-- 병원 진료내역 전체 글 갯수(페이징 쿼리) -->
-	<select id="recodeCount">
+	<select id="recodeCount" parameterType="java.util.Map" resultType="java.lang.Integer">
 		SELECT COUNT(*) 
   			FROM MEDICALRECODE m 
                 JOIN PETINFO p 
                 ON p.ID = m.PET_ID 
                 JOIN USERINFO u 
                 ON u.EMAIL = p.USER_EMAIL 
-        	WHERE m.HOSPITAL_SEQ = '1';
+        	WHERE m.HOSPITAL_SEQ = #{hospital_seq}
 	</select>
 
 <!-- 진료내역 상세정보 조회 -->
-	<select id="detailRecode">
-		SELECT m.SEQ , p.NAME , m.SYMPTOM ,
+	<select id="detailRecode" parameterType="java.lang.Integer" resultMap="MedicalRecodeJoinDto">
+		SELECT m.SEQ , p.NAME PETNAME , m.SYMPTOM ,
        			u.NAME , m.TREATMENT , m.PRESCRIPTION ,
-       			m.TREATDATE , h.NAME 
+       			m.TREATDATE , h.NAME HOSPITALNAME 
         	FROM MEDICALRECODE m 
                 JOIN PETINFO p 
                 ON p.ID = m.PET_ID 
@@ -54,17 +85,28 @@
                 ON u.EMAIL = p.USER_EMAIL 
                 JOIN HOSPITALINFO h 
                 ON h.SEQ = m.HOSPITAL_SEQ 
-    		WHERE m.SEQ = '9'
+    		WHERE m.SEQ = #{seq}
 	</select>
 
 <!-- 진료내역 수정 -->
-	<update id="modifyRecode">
+	<update id="modifyRecode" parameterType="MedicalRecodeDto">
 		UPDATE MEDICALRECODE
- 			SET PET_ID='kckt66002M01',
-                SYMPTOM='설사',
-                TREATMENT='과식',
-                PRESCRIPTION='설사약 과 하루 금식령'
-			WHERE SEQ=9
+ 			SET TREATMENT=#{treatment},
+                PRESCRIPTION=#{prescription}
+			WHERE SEQ=#{seq}
 	</update>
+	
+<!-- 진료내역 추가전 페이지에 기본 입력되어 있는 데이터 -->
+	<select id="insertBasicData" parameterType="java.lang.Integer" resultMap="MedicalRecodeJoinDto">
+		SELECT r.PET_NAME , u.NAME , r.SYMPTOM ,h.NAME , p.ID , h.SEQ 
+			FROM RESERVATION r 
+				JOIN USERINFO u 
+				ON u.EMAIL = r.USER_EMAIL 
+				JOIN HOSPITALINFO h 
+				ON h.SEQ = r.HOSPITAL_SEQ 
+				JOIN PETINFO p 
+				ON p.NAME = r.PET_NAME 
+		WHERE r.SEQ = #{SEQ}
+	</select>		
 
 </mapper>

@@ -462,3 +462,59 @@ function deleteSchedule(){
 	
 }
 
+//병원 진료기록 리스트 페이지 이동
+function medicalListPage(){
+	location.href = "./recodeList.do";
+}
+
+//병원 진료기록 입력 페이지 이동
+function insertRecodePage(){
+	location.href = "./insertRecodePage.do";
+}
+
+//병원 진료기록 수정 에디터 설정
+//진료내용
+let modifyTreatmentContents = {
+		editor: null,
+		init: function (modifyTreatmentContent) {
+			
+			// editor
+			this.editor = new toastui.Editor({
+				el: document.querySelector('#treatmentEditor'),
+				previewStyle: 'vertical',
+				initialEditType: "wysiwyg",
+				height: '300px',
+				previewHighlight: true,
+				language: 'ko',
+				initialValue: modifyTreatmentContent
+			});			
+		}
+}
+//처방내용
+let modifyPrescriptionContents = {
+		editor: null,
+		init: function (modifyPrescriptionContent) {
+			
+			// editor
+			this.editor = new toastui.Editor({
+				el: document.querySelector('#prescriptionEditor'),
+				previewStyle: 'vertical',
+				initialEditType: "wysiwyg",
+				height: '300px',
+				previewHighlight: true,
+				language: 'ko',
+				initialValue: modifyPrescriptionContent
+			});			
+		}
+}
+
+//병원 진료기록 수정 에디터 내용 DB전송하려고 담아줌
+function modifyRecodeChk(){
+	
+	//진료내용
+	let modifyTreatmentContent = modifyTreatmentContents.editor.getHTML();
+	document.getElementById("modifyTreatmentContent").value = modifyTreatmentContent;
+	//처방내용
+	let modifyPrescriptionContent = modifyPrescriptionContents.editor.getHTML();
+	document.getElementById("modifyPrescriptionContent").value = modifyPrescriptionContent;
+}
