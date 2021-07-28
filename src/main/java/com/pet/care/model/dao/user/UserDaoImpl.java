@@ -61,8 +61,8 @@ public class UserDaoImpl implements IUserDao {
 	}
 
 	@Override
-	public int grantOper(String email) {
-		return sqlSession.update(NS + "grantOper", email);
+	public int grantOper(Map<String, Object> map) {
+		return sqlSession.update(NS + "grantOper", map);
 	}
 
 	@Override

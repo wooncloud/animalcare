@@ -53,9 +53,9 @@ public class UserServiceImpl implements IUserService {
 	}
 
 	@Override
-	public boolean grantOper(String email) {
-		logger.info("grantOper : {}", email);
-		return dao.grantOper(email) > 0 ? true : false;
+	public boolean grantOper(Map<String, Object> map) {
+		logger.info("grantOper : {}", map);
+		return dao.grantOper(map) > 0 ? true : false;
 	}
 
 	@Override
@@ -138,7 +138,18 @@ public class UserServiceImpl implements IUserService {
 		String realCode = (String) map.get("PHONE_CONFIRM");
 		
 		if (realCode.equals(userCode)) {
-			int n = type.equals("modify") ? dao.modifyUser(param) : 1;
+			
+			int n = 0;
+			if(type.equals("modify")) {
+				if(param.get("role").equals("ROLE_USER")) {
+					n = dao.modifyUser(param);
+				}else if (param.get("role").equals("ROLE_OPER")) {
+					n = dao.modifyOper(param);
+				}
+			}
+			else {
+				n = 1;
+			}
 			
 			if(n > 0) {
 				n = dao.deleteVerification((String)param.get("email"));

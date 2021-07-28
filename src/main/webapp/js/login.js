@@ -1,16 +1,20 @@
 window.onload = function () {
-	let pathname = window.location.pathname;
+	let pathnameSplits = window.location.pathname.split('/');
+	let pathname = pathnameSplits[pathnameSplits.length - 1];
 
 	if (pathname.indexOf('login') != -1) {
 		login.init();
 	}
-	if (pathname.indexOf('signupUserForm') != -1) {
+	else if (pathname.indexOf('Info') != -1) {
+		myinfo.init();
+	}
+	else if (pathname.indexOf('signupUserForm') != -1) {
 		signupUser.init();
 	}
-	if (pathname.indexOf('signupOperForm') != -1) {
+	else if (pathname.indexOf('signupOperForm') != -1) {
 		signupOper.init();
 	}
-	if (pathname.indexOf('signupSelect') != -1) {
+	else if (pathname.indexOf('signupSelect') != -1) {
 		select.init();
 	}
 }
@@ -20,9 +24,12 @@ const login = {
 		if (getParam('type') == "empty") {
 			swal.alert_txt("로그인 실패", "로그인에 실패했습니다.\n이메일과 비밀번호를 확인후 다시 시도하세요.", "");
 		}
-		if (getParam('type') == "approval") {
+		else if (getParam('type') == "approval") {
 			swal.alert_txt("로그인 실패", "승인되지 않은 계정입니다.\n관리자에게 문의하세요.", "");
 		}
+
+		document.getElementById('email').addEventListener('keypress', this.enterLogin);
+		document.getElementById('password').addEventListener('keypress', this.enterLogin);
 	},
 	login: function () {
 		let form = document.forms[0];
@@ -39,6 +46,11 @@ const login = {
 		}
 
 		form.submit();
+	},
+	enterLogin: function(e){
+		if(e.keyCode == 13){
+			this.login();
+		}
 	}
 }
 
@@ -89,6 +101,9 @@ const signupUser = {
 		document.getElementById('email').addEventListener('change', function () {
 			signupUser.status.edc = false;
 		});
+
+		// mask
+		IMask(document.getElementById('phone'), { mask: '000-0000-0000' });
 
 		signupUser.status.edc = false;
 		signupUser.status.evc = false;
@@ -365,6 +380,10 @@ const signupOper = {
 			signupUser.status.edc = false;
 		});
 
+		// mask
+		IMask(document.getElementById('phone'), { mask: '000-0000-0000' });
+		IMask(document.getElementById('corpregNum'), { mask: '000-00-00000' });
+
 		signupUser.status.edc = false;
 		signupUser.status.evc = false;
 		signupUser.status.pvc = false;
@@ -446,6 +465,9 @@ const signupOper = {
 }
 
 const myinfo = {
+	init: function(){
+		IMask(document.getElementById('phone'), { mask: '000-0000-0000' });
+	},
 	changePW: function () {
 		let pw = document.getElementById('pw').value;
 		let npw = document.getElementById('npw').value;
@@ -574,6 +596,10 @@ const myinfo = {
 						"전화번호가 변경 되었습니다.",
 						"success"
 					);
+					
+					// 전화번호 옮겨적기
+					let newPhone = document.getElementById('phone').value;
+					document.getElementById('infoPhone').value = newPhone;
 				} else if (msg == 'error') {
 					errorAlert();
 				}

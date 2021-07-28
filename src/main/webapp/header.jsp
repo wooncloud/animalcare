@@ -61,12 +61,7 @@
 								<i class="fas fa-search"></i> 병원찾기
 							</a>
 						</li>
-	
-						<li>
-							<a href="${path}/hospital/insertHospital.do" class="nav-link px-4 link-dark">
-								<i class="fas fa-search"></i> 병원등록(임시생성)
-							</a>
-						</li>
+		
 					</c:if>
 					<c:if test="${sessionScope.member.usertype eq 'ROLE_USER'}">
 						<li>
@@ -102,7 +97,7 @@
 							</a>
 						</li>
 						<li>
-							<a href="${path}/" class="nav-link px-4 link-dark">
+							<a href="${path}/hospital/insertOrDetail.do" class="nav-link px-4 link-dark">
 								<i class="fas fa-hospital"></i> 병원정보
 							</a>
 						</li>
@@ -136,7 +131,14 @@
 							</a>
 							<ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
 								<li class="ms-3">
-									<div>${sessionScope.member.name}님</div>
+									<div>
+										${sessionScope.member.name}
+										<c:choose>
+											<c:when test="${sessionScope.member.usertype eq 'ROLE_ADMIN'}">관리자님</c:when>
+											<c:when test="${sessionScope.member.usertype eq 'ROLE_OPER'}">원장님</c:when>
+											<c:otherwise>회원님</c:otherwise>
+										</c:choose>
+									</div>
 									<div style="font-size:small">안녕하세요.</div>
 								</li>
 								<li>
@@ -163,7 +165,7 @@
 								</li>
 								<c:if test="${sessionScope.member.usertype eq 'ROLE_USER'}">
 									<li>
-										<a class="dropdown-item" href="#">
+										<a class="dropdown-item" href="${path}/favo/list.do">
 											<i class="fas fa-star"></i> 관심병원
 										</a>
 									</li>

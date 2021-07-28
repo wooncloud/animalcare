@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import com.pet.care.dto.CodeDto;
 import com.pet.care.dto.HospitalInfoDto;
 import com.pet.care.dto.HospitalJoinDto;
+import com.pet.care.dto.PetTypeDto;
 
 @Repository
 public class HospitalInfoDaoImpl implements IHospitalInfoDao {
@@ -55,17 +56,41 @@ public class HospitalInfoDaoImpl implements IHospitalInfoDao {
 		int n = sqlSession.insert(NS + "insertHospital", dto); 
 		return (n > 0) ? true : false;
 	}
+	//병원 정보 입력시 치료가능 항목 같이 추가
+	@Override
+	public boolean insertPetType(PetTypeDto dto) {
+		int n = sqlSession.insert(NS + "insertPetType", dto); 
+		return (n > 0) ? true : false;
+	}
 	
-	//병원 상세정보 조회 
+	//병원 상세정보 조회 - 사용자
 	@Override
 	public HospitalJoinDto detailHospital(int seq) {
 		return sqlSession.selectOne(NS+"detailHospital", seq);
+	}
+	
+	//병원 상세정보 조회 - 병원 관계자
+	@Override
+	public HospitalJoinDto detailHospitalOper(String email) {
+		return sqlSession.selectOne(NS+"detailHospitalOper", email);
 	}
 	
 	//병원 정보 수정
 	@Override
 	public boolean modifyHospital(HospitalInfoDto dto) {
 		int n = sqlSession.update(NS + "modifyHospital", dto);
+		return (n > 0) ? true : false;
+	}
+	//병원정보 수정시 기존 진료항목 전체 삭제
+	@Override
+	public boolean deletePetType(PetTypeDto dto) {
+		int n = sqlSession.delete(NS + "deletePetType", dto);
+		return (n > 0) ? true : false;
+	}
+	// 진료항목 전체 삭제 후 선택한 진료항목 새로 입력
+	@Override
+	public boolean modifyPetType(PetTypeDto dto) {
+		int n = sqlSession.insert(NS + "modifyPetType", dto);
 		return (n > 0) ? true : false;
 	}
 

@@ -21,8 +21,8 @@
 						<div class="col-3 text-center ">
 							일정 제목
 						</div>
-						<div id="scheduleName" class="col">
-							<input class="scheduleName m-1" type="text" id="scheduleName" name="scheduleName">
+						<div id="scheduleName" class=" col">
+							<input class="scheduleName form-control m-1" type="text" id="scheduleName" name="scheduleName">
 						</div>
 					</div>				
 				</div>
@@ -52,11 +52,11 @@
 			</div>
 			<div class="card">
 				<div class="card-body">
-					<div class="row">
-						<div class="col-3 text-center m-2">
-							일정 내용
-						</div>
-					</div>				
+<!-- 					<div class="row"> -->
+<!-- 						<div class="col-3 text-center m-2"> -->
+<!-- 							일정 내용 -->
+<!-- 						</div> -->
+<!-- 					</div>				 -->
 						<div >
 							<div id="editor" ></div>
 							<input type="hidden" name="scheduleContent" id="scheduleContent">
@@ -70,7 +70,7 @@
 		
 		<div class="d-grid gap-2 d-md-flex justify-content-md-center">				 	
 			<input type="submit" class="btn btn-outline-primary btn-lg" value="등록하기" />				 	
-			<input type="button" class="btn btn-outline-secondary btn-lg" value="취소" onclick="history.back()"/>		
+			<input type="button" class="btn btn-outline-secondary btn-lg" value="취소" onclick="goBack()"/>		
 		</div>
 
 	<br><br>
