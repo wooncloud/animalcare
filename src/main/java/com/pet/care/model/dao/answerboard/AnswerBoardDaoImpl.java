@@ -7,7 +7,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.pet.care.dto.AnswerBaordDto;
+import com.pet.care.dto.AnswerBoardDto;
 
 @Repository
 public class AnswerBoardDaoImpl implements IAnswerBoardDao {
@@ -15,16 +15,16 @@ public class AnswerBoardDaoImpl implements IAnswerBoardDao {
 	@Autowired
 	private SqlSessionTemplate session;
 	
-	private String NS = "com.pet.care.model.dao.answerBoard.AnswerBoardDaoImpl.";
+	private String NS = "com.pet.care.model.dao.answerboard.AnswerBoardDaoImpl.";
 
 	@Override
-	public boolean insertUserBoard(AnswerBaordDto dto) {
+	public boolean insertUserBoard(AnswerBoardDto dto) {
 		int cnt = session.insert(NS+"insertUserBoard", dto);
 		return (cnt>0)?true:false;
 	}
 
 	@Override
-	public boolean insertNonUserBoard(AnswerBaordDto dto) {
+	public boolean insertNonUserBoard(AnswerBoardDto dto) {
 		int cnt = session.insert(NS+"insertNonUserBoard", dto);
 		return (cnt>0)?true:false;
 	}
@@ -54,32 +54,32 @@ public class AnswerBoardDaoImpl implements IAnswerBoardDao {
 	}
 
 	@Override
-	public List<AnswerBaordDto> selUserBoard(Map<String, Object> map) {
+	public List<AnswerBoardDto> selUserBoard(Map<String, Object> map) {
 		return session.selectList(NS+"selUserBoard", map);
 	}
 
 	@Override
-	public List<AnswerBaordDto> selNonUserBoard(Map<String, Object> map) {
-		return session.selectList(NS+"selUserBoard", map);
+	public List<AnswerBoardDto> selNonUserBoard(Map<String, Object> map) {
+		return session.selectList(NS+"selNonUserBoard", map);
 	}
 
 	@Override
-	public List<AnswerBaordDto> selAllBoard() {
+	public List<AnswerBoardDto> selAllBoard() {
 		return session.selectList(NS+"selAllBoard");
 	}
 
 	@Override
-	public AnswerBaordDto selUserDetail(Map<String, Object> map) {
+	public AnswerBoardDto selUserDetail(Map<String, Object> map) {
 		return session.selectOne(NS+"selUserDetail", map);
 	}
 
 	@Override
-	public AnswerBaordDto selNonUserDetail(Map<String, Object> map) {
+	public AnswerBoardDto selNonUserDetail(Map<String, Object> map) {
 		return session.selectOne(NS+"selNonUserDetail", map);
 	}
 
 	@Override
-	public boolean insertReply(AnswerBaordDto dto) {
+	public boolean insertReply(AnswerBoardDto dto) {
 		int cnt = session.insert(NS+"insertReply", dto);
 		return (cnt>0)?true:false;
 	}

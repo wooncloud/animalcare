@@ -3,14 +3,14 @@ package com.pet.care.model.service.answerboard;
 import java.util.List;
 import java.util.Map;
 
-import com.pet.care.dto.AnswerBaordDto;
+import com.pet.care.dto.AnswerBoardDto;
 
 public interface IAnswerBoardService {
 	//로그인된 회원이 문의 글 작성
-		public boolean insertUserBoard(AnswerBaordDto dto);
+		public boolean insertUserBoard(AnswerBoardDto dto);
 		
 		//로그인하지 않은 비회원이 이메일과 비밀번호를 입력하고 문의 글을 작성
-		public boolean insertNonUserBoard(AnswerBaordDto dto);
+		public boolean insertNonUserBoard(AnswerBoardDto dto);
 		
 		//로그인된 회원이 문의 글 수정
 		public boolean modifyUserBoard(Map<String, Object>map);
@@ -25,20 +25,20 @@ public interface IAnswerBoardService {
 		public boolean deleteNonUserBoard(Map<String, Object>map);
 		
 		//로그인된 회원의 EMAIL을 통하여 작성한 문의 글을 조회
-		public List<AnswerBaordDto>  selUserBoard(Map<String, Object>map);
+		public List<AnswerBoardDto>  selUserBoard(Map<String, Object>map);
 		
 		//로그인 하지 않은 비회원이 글을 작성했던 EMAIL과 PASSWORD를 통하여 작성한 문의 글을 조회
-		public List<AnswerBaordDto>  selNonUserBoard(Map<String, Object>map);
+		public List<AnswerBoardDto>  selNonUserBoard(Map<String, Object>map);
 		
 		//전체 1:1문의 게시글 조회
-		public List<AnswerBaordDto> selAllBoard();
+		public List<AnswerBoardDto> selAllBoard();
 		
 		//회원 작성글 상세 조회
-		public AnswerBaordDto selUserDetail(Map<String, Object>map);
+		public AnswerBoardDto selUserDetail(Map<String, Object>map);
 		
 		//비회원 작성글 상세 조회
-		public AnswerBaordDto selNonUserDetail(Map<String, Object>map);
+		public AnswerBoardDto selNonUserDetail(Map<String, Object>map);
 		
 		//관리자 답글 작성
-		public boolean insertReply(AnswerBaordDto dto);
+		public boolean insertReply(AnswerBoardDto dto);
 }

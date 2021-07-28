@@ -4,8 +4,7 @@
 
 	<insert id="insertUserBoard" parameterType="AnswerBoardDto">
 	INSERT INTO ANSWERBOARD (SEQ, EMAIL, PASSWORD, TITLE, CONTENT, REGDATE, PARENT_SEQ, DELFLAG)
-	  VALUES (ANSWERBOARD_SEQ.NEXTVAL,'#{email}',,'#{title}','#{content}',SYSDATE,ANSWERBOARD_SEQ.CURRVAL,'N')
-	
+	  VALUES (ANSWERBOARD_SEQ.NEXTVAL,#{email},'',#{title},#{content},SYSDATE,ANSWERBOARD_SEQ.CURRVAL,'N')
 	</insert>
 
 	<insert id="insertNonUserBoard" parameterType="AnswerBoardDto">
@@ -41,9 +40,12 @@
 	</delete>
 	
 	<select id="selUserBoard" parameterType="java.util.Map" resultType="AnswerBoardDto">
-	SELECT SEQ,TITLE, CONTENT, REGDATE
-        FROM ANSWERBOARD
-        WHERE EMAIL=#{email }AND DELFLAG ='N'
+	SELECT a.SEQ, u.NAME , a.TITLE, a.REGDATE, u.EMAIL
+	FROM USERINFO u JOIN
+			(SELECT SEQ,TITLE, CONTENT, REGDATE, EMAIL
+		        FROM ANSWERBOARD
+		        WHERE EMAIL=#{email} AND DELFLAG ='N') a
+		        ON u.EMAIL = a.EMAIL
 	</select>
 	
 	<select id="selNonUserBoard" parameterType="java.util.Map" resultType="AnswerBoardDto">
@@ -53,16 +55,23 @@
 	</select>
 	
 	<select id="selAllBoard" resultType="AnswerBoardDto">
-	SELECT SEQ, EMAIL, PASSWORD, TITLE, CONTENT, REGDATE, PARENT_SEQ, DELFLAG
-        FROM ANSWERBOARD
-        WHERE DELFLAG ='N'
-        ORDER BY PARENT_SEQ,SEQ 
+SELECT a.SEQ, u.NAME , a.TITLE, a.REGDATE
+	FROM USERINFO u JOIN
+			(SELECT SEQ, EMAIL, PASSWORD, TITLE, CONTENT, REGDATE, PARENT_SEQ, DELFLAG
+			        FROM ANSWERBOARD 
+			        WHERE DELFLAG ='N') a
+			        ON u.EMAIL = a.EMAIL 
+			        ORDER BY PARENT_SEQ,SEQ
 	</select>
 	
 	<select id="selUserDetail" parameterType="java.util.Map" resultType="AnswerBoardDto">
-	SELECT TITLE,CONTENT,REGDATE 
-        FROM ANSWERBOARD a 
-        WHERE SEQ=#{seq} AND DELFLAG ='N' 
+	SELECT a.SEQ, u.NAME , a.TITLE, a.REGDATE, u.PHONE , a.CONTENT, u.EMAIL
+		FROM USERINFO u JOIN
+			(SELECT SEQ, TITLE,CONTENT,REGDATE, EMAIL
+	        FROM ANSWERBOARD
+	        WHERE SEQ=#{seq} AND DELFLAG ='N') a
+	        ON u.EMAIL = a.EMAIL
+
 	</select>
 	
 	<select id="selNonUserDetail" parameterType="java.util.Map" resultType="AnswerBoardDto">

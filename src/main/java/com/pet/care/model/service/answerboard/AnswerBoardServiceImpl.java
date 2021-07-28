@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.pet.care.dto.AnswerBaordDto;
+import com.pet.care.dto.AnswerBoardDto;
 import com.pet.care.model.dao.answerboard.IAnswerBoardDao;
 
 @Service
@@ -20,13 +20,13 @@ public class AnswerBoardServiceImpl implements IAnswerBoardService {
 	private Logger logger =LoggerFactory.getLogger(this.getClass());
 	
 	@Override
-	public boolean insertUserBoard(AnswerBaordDto dto) {
+	public boolean insertUserBoard(AnswerBoardDto dto) {
 		logger.info("AnswerBoardServiceImpl insertUserBoard {} ", dto);
 		return aDao.insertUserBoard(dto);
 	}
 
 	@Override
-	public boolean insertNonUserBoard(AnswerBaordDto dto) {
+	public boolean insertNonUserBoard(AnswerBoardDto dto) {
 		logger.info("AnswerBoardServiceImpl insertNonUserBoard {} ", dto);
 		return aDao.insertNonUserBoard(dto);
 	}
@@ -56,37 +56,37 @@ public class AnswerBoardServiceImpl implements IAnswerBoardService {
 	}
 
 	@Override
-	public List<AnswerBaordDto> selUserBoard(Map<String, Object> map) {
+	public List<AnswerBoardDto> selUserBoard(Map<String, Object> map) {
 		logger.info("AnswerBoardServiceImpl selUserBoard {} ", map);
 		return aDao.selUserBoard(map);
 	}
 
 	@Override
-	public List<AnswerBaordDto> selNonUserBoard(Map<String, Object> map) {
+	public List<AnswerBoardDto> selNonUserBoard(Map<String, Object> map) {
 		logger.info("AnswerBoardServiceImpl selNonUserBoard {} ", map);
 		return aDao.selNonUserBoard(map);
 	}
 
 	@Override
-	public List<AnswerBaordDto> selAllBoard() {
+	public List<AnswerBoardDto> selAllBoard() {
 		logger.info("AnswerBoardServiceImpl selAllBoard");
 		return aDao.selAllBoard();
 	}
 
 	@Override
-	public AnswerBaordDto selUserDetail(Map<String, Object> map) {
+	public AnswerBoardDto selUserDetail(Map<String, Object> map) {
 		logger.info("AnswerBoardServiceImpl selUserDetail {} ", map);
 		return aDao.selUserDetail(map);
 	}
 
 	@Override
-	public AnswerBaordDto selNonUserDetail(Map<String, Object> map) {
+	public AnswerBoardDto selNonUserDetail(Map<String, Object> map) {
 		logger.info("AnswerBoardServiceImpl selNonUserDetail {} ", map);
 		return aDao.selNonUserDetail(map);
 	}
 
 	@Override
-	public boolean insertReply(AnswerBaordDto dto) {
+	public boolean insertReply(AnswerBoardDto dto) {
 		logger.info("AnswerBoardServiceImpl insertReply {} ", dto);
 		return aDao.insertReply(dto);
 	}
