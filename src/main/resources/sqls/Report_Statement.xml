@@ -1,54 +1,76 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.pet.care.model.dao.code.IReportDao">
+<mapper namespace="com.pet.care.model.dao.report.IReportDao">
 
 	<!-- allListReport : 관리자 신고 조회 - 관리자가 신고 받은 내용을 전체 조회 -->
 	<select id="allListReport" resultType="ReportDto">
-	
+		SELECT 
+			SEQ, TITLE, CONTENT, 
+			REPORTER, DEFENDANT, RES_SEQ, 
+			MEDI_SEQ, STATUS, REGDATE, 
+			RECVDATE, PROCESSDATE, DELFLAG
+		FROM REPORT
+		ORDER BY PROCESSDATE DESC, RECVDATE
 	</select>
 
 
 	<!-- userWriteListReport : 사용자 신고 조회 (일반 사용자) - 사용자가 자신이 작성한 신고 내용을 조회 -->
 	<select id="userWriteListReport" parameterType="java.lang.String" resultType="ReportDto">
-	
+		SELECT r.SEQ, r.TITLE, r.CONTENT, 
+			r.REPORTER, h.NAME, r.RES_SEQ, 
+			r.MEDI_SEQ, r.STATUS, r.REGDATE, 
+			r.RECVDATE, r.PROCESSDATE
+		FROM REPORT r JOIN HOSPITALINFO h 
+			ON r.DEFENDANT = h.OPERATOR_EMAIL 
+		WHERE REPORTER = #{reporter}
 	</select>
 
 
 	<!-- operWriteListReport : 사용자 신고 조회 (병원관계자) - 병원관계자가 자신이 작성한 신고 내용을 조회 -->
 	<select id="operWriteListReport" parameterType="java.lang.String" resultType="ReportDto">
-	
+
 	</select>
 
 
 	<!-- insertReport : 신고 작성 - 사용자가 신고를 작성 -->
 	<insert id="insertReport" parameterType="ReportDto">
-	
+		"INSERT INTO REPORT
+		(
+				SEQ, TITLE, CONTENT, 
+				REPORTER, DEFENDANT, RES_SEQ, 
+				MEDI_SEQ, STATUS, REGDATE, DELFLAG
+		)
+		VALUES(
+				REPORT_SEQ.NEXTVAL, #{title}, #{content}, 
+				#{reporter}, #{defendant}, #{res_seq}, 
+				#{medi_seq}, 'S', SYSDATE, 'N'
+		)
 	</insert>
 
 
 	<!-- modifyReport : 신고 수정 - 사용자가 신고를 수정 -->
 	<update id="modifyReport" parameterType="java.util.Map">
-	
+		UPDATE REPORT 
+		SET CONTENT = #{content}
+		WHERE SEQ = #{seq}
 	</update>
 
 
 	<!-- adminDelReport : 신고 삭제 - 관리자 신고내용 삭제 -->
 	<update id="adminDelReport" parameterType="java.lang.Integer">
-	
+		UPDATE REPORT SET DELFLAG = 'Y' WHERE SEQ = #{seq}
 	</update>
 
 
 	<!-- acceptanceReport : 신고 처리 - 관리자가 신고를 처리 -->
 	<update id="acceptanceReport" parameterType="java.lang.Integer">
-	
+		UPDATE REPORT SET STATUS = 'A' WHERE SEQ = #{seq}
 	</update>
 
 
 	<!-- userCancleReport : 신고 철회 - 사용자가 자신의 신고를 철회 -->
 	<update id="userCancleReport" parameterType="java.lang.Integer">
-	
+		UPDATE REPORT SET STATUS = 'C' WHERE SEQ = #{seq}
 	</update>
 
-
-	
 </mapper>
