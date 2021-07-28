@@ -19,7 +19,7 @@
 	<insert id="favoriteInsert" parameterType="java.util.Map">
 		INSERT INTO FAVORITE
 		(SEQ, USER_EMAIL, HOSPITAL_SEQ)
-		VALUES(FAVORITE_SEQ.NEXTVAL, #{email}, #{hospital_seq})
+		VALUES(FAVORITE_SEQ.NEXTVAL, #{email}, #{seq})
 	</insert>
 	
 	<delete id="favoriteDelete" parameterType="java.lang.Integer">

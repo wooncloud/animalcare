@@ -11,7 +11,7 @@
 				<div class="card-header d-flex justify-content-between">
 					<h5 class="mb-0">${hos.name}</h5>
 					<div class="form-check form-switch">
-						<input class="form-check-input" type="checkbox" checked>
+						<input class="form-check-input" type="checkbox" checked onclick="modifyFavo(this, '${hos.seq}')">
 					</div>
 				</div>
 				<div class="card-body">
@@ -45,6 +45,30 @@
 			
 			e.innerText = result;
 		}
+	}
+
+	function modifyFavo(e, s) {
+		let v = e.checked;
+		let data = { "seq": s, "value": v }
+
+		$.ajax({
+			url: "./modifyFavorite.do",
+			type: "POST",
+			data: data,
+			success: function (msg) {
+				if (msg == 'success') {
+					swal.toast_s("변경 되었습니다.");
+				}
+				else {
+					swal.alert_txt("에러", "문제가 발생했습니다.\n관리자에게 문의하세요", "error");
+					e.checked = v == true ? false : true;
+				}
+			},
+			error: function(){
+				swal.alert_txt("에러", "문제가 발생했습니다.\n관리자에게 문의하세요", "error");
+				e.checked = v == true ? false : true;
+			}
+		});
 	}
 </script>
 <%@include file="/footer.jsp" %>
