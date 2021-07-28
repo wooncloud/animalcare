@@ -1,6 +1,7 @@
 package com.pet.care.model.dao.survey;
 
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.slf4j.Logger;
@@ -24,5 +25,32 @@ public class SurveyDaoImpl implements ISurveyDao {
 		logger.info("SurveyDaoImpl : adminSurveyList 설문 폼 리스트");
 		return sqlSession.selectList(NS+"adminSurveyList");
 	}
+
+	@Override
+	public boolean insertSurveyForm(Map<String, Object> map) {
+		logger.info("SurveyDaoImpl : insertSurveyForm 설문 폼 작성 - {} ", map);
+		int isc = sqlSession.insert(NS+"insertSurveyForm", map);
+		return (isc>0)?true:false; 
+	}
+
+	@Override
+	public boolean updateDateForm(Map<String, Object> map) {
+		logger.info("SurveyDaoImpl : updateDateForm 설문 폼 배포기간 설정 - {} ", map);
+		int isc = sqlSession.update(NS+"updateDateForm",map);
+		return (isc>0)?true:false;
+	}
+	
+	@Override
+	public SurveyDto surveyDetail(Map<String, Object> map) {
+		logger.info("SurveyDaoImpl : surveyDetail 설문 폼 상세 - {}",map);
+		return sqlSession.selectOne(NS+"surveyDetail",map);
+	}
+
+	@Override
+	public int delflagForm(Map<String, String[]> map) {
+		logger.info("SurveyDaoImpl : delflagForm 설문 폼 삭제 - {}",map);
+		return sqlSession.update(NS+"delflagForm",map);
+	}
+
 
 }
