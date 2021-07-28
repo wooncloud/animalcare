@@ -10,9 +10,12 @@
 <br><br>
 	<c:if test="${sessionScope.member.usertype eq 'ROLE_OPER'}">
 	<div class="my-2">
-	- 나중에 캘린더에 버튼 뜯어붙이면 됨<br>
-		<input type="button" class="btn btn-outline-primary" value="병원 일정등록" onclick="insertSchedulePage()">
-		<input type="button" class="btn btn-outline-primary" value="병원 일정 상세정보 조회" onclick="detailSchedulePage()">
+	- 다른곳에 뜯어붙일 친구들<br>
+		<input type="button" class="btn btn-outline-primary" value="일정등록(병원)" onclick="insertSchedulePage()">
+		<input type="button" class="btn btn-outline-primary" value="일정 상세정보 조회(병원)" onclick="detailSchedulePage()">
+		
+		<input type="button" class="btn btn-outline-primary" value="진료기록 조회(병원)" onclick="medicalListPage()">
+		<input type="button" class="btn btn-outline-primary" value="진료기록 추가(병원)" onclick="insertRecodePage()">
 	</div>
 	</c:if>
 	

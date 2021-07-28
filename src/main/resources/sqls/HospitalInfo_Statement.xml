@@ -196,5 +196,4 @@
 			WHERE SEQ =#{seq}
 	</update>
 	
-	
 </mapper>

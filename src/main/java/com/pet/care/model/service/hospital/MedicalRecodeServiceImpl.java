@@ -19,6 +19,13 @@ public class MedicalRecodeServiceImpl implements IMedicalRecodeService {
 	
 	@Autowired IMedicalRecodeDao dao;
 
+	//진료내역 추가전 페이지에 기본 입력되어 있는 데이터
+	@Override
+	public MedicalRecodeJoinDto insertsBasicData(int seq) {
+		logger.info("[insertsBasicData - {}] : 진료내역 상세정보 조회", seq);
+		return dao.insertsBasicData(seq);
+	}
+	
 	// 진료내역 추가
 	@Override
 	public boolean insertRecode(MedicalRecodeDto dto) {
@@ -33,7 +40,7 @@ public class MedicalRecodeServiceImpl implements IMedicalRecodeService {
 		return dao.recodeList(map);
 	}
 
-	// 병원 질료내역 전채 글 갯수(페이징 쿼리)
+	// 병원 진료내역 전채 글 갯수(페이징 쿼리)
 	@Override
 	public int recodeCount(Map<String, Object> map) {
 		logger.info("[recodeCount - {}] : 병원 질료내역 전채 글 갯수(페이징 쿼리)", map);

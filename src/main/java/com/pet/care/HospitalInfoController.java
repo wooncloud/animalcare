@@ -28,12 +28,15 @@ import com.pet.care.dto.CodeDto;
 import com.pet.care.dto.HospitalInfoDto;
 import com.pet.care.dto.HospitalJoinDto;
 import com.pet.care.dto.HospitalScheduleDto;
+import com.pet.care.dto.MedicalRecodeDto;
+import com.pet.care.dto.MedicalRecodeJoinDto;
 import com.pet.care.dto.MemberDto;
 import com.pet.care.dto.PageDto;
 import com.pet.care.dto.PetTypeDto;
 import com.pet.care.model.service.code.ICodeService;
 import com.pet.care.model.service.hospital.IHospitalInfoService;
 import com.pet.care.model.service.hospital.IHospitalScheduleService;
+import com.pet.care.model.service.hospital.IMedicalRecodeService;
 
 
 @Controller
@@ -47,6 +50,9 @@ public class HospitalInfoController {
 	
 	@Autowired 
 	private IHospitalScheduleService hsService;
+	
+	@Autowired
+	private IMedicalRecodeService mrService;
 	
 	@Autowired
 	private ICodeService codeService;
@@ -73,6 +79,8 @@ public class HospitalInfoController {
 		logger.info("[insertHospital] - {} : 병원 정보 입력 요청 ", param);
 		HospitalInfoDto hiDto = new HospitalInfoDto();
 		
+		String opentime = (String)param.get("opentime");
+		
 		hiDto.setName((String)param.get("name"));
 		hiDto.setOperator_email((String)param.get("email"));
 		hiDto.setTel((String)param.get("tel"));
@@ -80,7 +88,8 @@ public class HospitalInfoController {
 		hiDto.setAddress2((String)param.get("address2"));
 		hiDto.setContent((String)param.get("insertContent"));
 		hiDto.setEmergency((String)param.get("emergencyRadio"));
-		hiDto.setOpentime((String)param.get("opentime"));
+//		hiDto.setOpentime((String)param.get("opentime"));
+		hiDto.setOpentime(opentime.replace("\r\n","<br>"));
 		
 //		먼저 병원정보를 입력 후 성공한다면 진료항목을 입력
 		boolean isc = hiService.insertHospital(hiDto);
@@ -125,6 +134,7 @@ public class HospitalInfoController {
 		int idx = Integer.parseInt(strIdx);
 		int allPageCnt = 0;
 		
+		//볼수 있는 글의 총 갯수
 		allPageCnt = hiService.hospitalCount(param);
 		
 		//PageDto 셋팅
@@ -137,7 +147,7 @@ public class HospitalInfoController {
 		param.put("first", page.getPage() * page.getCountList() - (page.getCountList() - 1));
 		param.put("last", page.getPage() * page.getCountList());
 		
-		//볼수 있는 글의 총 갯수
+		//볼수 있는 병원 리스트
 		List<HospitalJoinDto> lists = hiService.hospitalList(param);
 		
 		//진료항목 리스트
@@ -244,11 +254,14 @@ public class HospitalInfoController {
 	
 	@RequestMapping(value = "/modifyHospital.do", method = RequestMethod.POST)
 	public void modifyHospital(@RequestParam Map<String, Object> param, HttpSession session, HttpServletResponse resp, HttpServletRequest req) throws IOException {
-
+		logger.info("[modifyHospital] - {} : 병원 정보 수정 요청 : ", param);
+		
 		HospitalInfoDto hiDto = new HospitalInfoDto();
 		
 		//페이지 이동에서 세션에 저장시킨 병원 seq 를 가져옴
 		int seq = (int) session.getAttribute("seq");
+		
+		String opentime = (String)param.get("opentime");
 
 		hiDto.setName((String)param.get("name"));
 		hiDto.setTel((String)param.get("tel"));
@@ -256,7 +269,8 @@ public class HospitalInfoController {
 		hiDto.setAddress2((String)param.get("address2"));
 		hiDto.setContent((String)param.get("modifyContents"));
 		hiDto.setEmergency((String)param.get("emergencyRadio"));
-		hiDto.setOpentime((String)param.get("opentime"));
+//		hiDto.setOpentime((String)param.get("opentime"));
+		hiDto.setOpentime(opentime.replace("\r\n","<br>"));
 		hiDto.setSeq(seq);
 		
 //		먼저 병원정보를 수정 후 성공한다면 진료항목을 수정
@@ -403,6 +417,108 @@ public class HospitalInfoController {
 			Util.PrintWriterMsg(resp, "오류가 발생했습니다. 다시 시도해주세요.", "PetCare/home.do");	
 		}
 
+	}
+	
+	@RequestMapping(value = "/recodeList.do", method = RequestMethod.GET)
+	public String recodeList(@RequestParam Map<String, Object> param, Model model, HttpSession session) {
+		logger.info("[recodeList] - {} :  병원 진료기록 리스트 페이지로 이동", model);
+		
+		MemberDto mDto = (MemberDto) session.getAttribute("member");
+		String Email = mDto.getEmail();
+		
+		// hSeq 가 존재하지않으면 0이 반환됨
+		int hSeq = hsService.findSeq(Email);
+		
+		// 병원 등록이 되어있지 않다면 진료내역도 있을 수 없으므로 홈으로 보냄
+		if(hSeq<1) {
+			return "redirect:./PetCare/home.do"; 
+		}
+		
+		//진료기록을 볼 병원의 seq 입력
+		param.put("hospital_seq", hSeq);
+		
+		//페이징
+		PageDto page = new PageDto();
+		String strIdx = (String)param.get("page");
+		if(strIdx == null) {
+			strIdx = "1";
+		}
+		
+		int idx = Integer.parseInt(strIdx);
+		int allPageCnt = 0;
+		
+		//볼수 있는 글의 총 갯수
+		allPageCnt = mrService.recodeCount(param);
+		
+		//PageDto 셋팅
+		PageUtil.defaultPagingSetting(page, allPageCnt);
+		
+		page.setPage(idx);
+		page.setStartPage(idx);
+		page.setEndPage(page.getCountPage());
+		
+		param.put("first", page.getPage() * page.getCountList() - (page.getCountList() - 1));
+		param.put("last", page.getPage() * page.getCountList());
+		
+		//볼수 있는 진료기록 리스트
+		List<MedicalRecodeJoinDto> lists = mrService.recodeList(param);
+			
+		model.addAttribute("page", page);
+		model.addAttribute("lists", lists);
+		
+		return "hospital/medicalRecodeList";
+	}
+	
+	@RequestMapping(value = "/detailRecodeHospital.do", method = RequestMethod.GET)
+	public String detailRecodeHospital(int seq, Model model) {
+		logger.info("[detailRecodeHospital] - {} :  병원관계자 진료기록 상세보기 페이지로 이동", seq);
+		
+		MedicalRecodeJoinDto dto = mrService.detailRecode(seq);
+		model.addAttribute("dto", dto);
+		
+		return "hospital/detailMedicalRecode";
+	}	
+	
+	@RequestMapping(value = "/insertRecodePage.do", method = RequestMethod.GET)
+	public String insertRecodePage(HttpSession session, Model model) {
+		logger.info("[insertRecodePage] - {} :  병원관계자 진료기록 입력하기 페이지로 이동");
+		
+		// 예약 내역 에서 진료기록 입력 누를 때 예약번호 가져와서 넣어줘야함
+		// 다른방식으로 입력하더라도 하여튼 넣어줘야함
+//		MedicalRecodeJoinDto dto = mrService.insertsBasicData(301);
+//		model.addAttribute("dto", dto);
+		
+		return "hospital/insertMedicalRecode";	
+	}
+	
+	@RequestMapping(value = "/modifyRecodeHospital.do", method = RequestMethod.GET)
+	public String modifyRecodeHospital(int seq, Model model) {
+		logger.info("[modifyRecodeHospital] - {} :  병원관계자 진료기록 수정하기 페이지로 이동", seq);
+		
+		MedicalRecodeJoinDto dto = mrService.detailRecode(seq);
+		model.addAttribute("dto", dto);
+		
+		return "hospital/modifyMedicalRecode";	
+	}
+	
+	@RequestMapping(value = "/modifyRecode.do", method = RequestMethod.POST)
+	public void modifyRecode(@RequestParam Map<String, Object> param,HttpServletResponse resp) throws IOException {
+		logger.info("[modifyRecode] - {} :  병원관계자 진료기록 수정 요청");
+		
+		MedicalRecodeDto mrDto = new MedicalRecodeDto();
+		
+		String seq = (String) param.get("hiddenSeq");
+		mrDto.setSeq(Integer.parseInt(seq));
+		mrDto.setTreatment((String)param.get("modifyTreatmentContent"));
+		mrDto.setPrescription((String)param.get("modifyPrescriptionContent"));
+		
+		boolean isc = mrService.modifyRecode(mrDto);
+		if(isc) {
+			Util.PrintWriterMsg(resp, "수정이 완료 되었습니다.", "./recodeList.do");
+		}else {
+			Util.PrintWriterMsg(resp, "오류가 발생했습니다. 다시 시도해주세요.", "PetCare/home.do");	
+		}
+		
 	}
 	
 }
