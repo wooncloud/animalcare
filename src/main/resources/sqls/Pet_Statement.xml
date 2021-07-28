@@ -3,9 +3,10 @@
 <mapper namespace="com.pet.care.model.dao.pet.IPetDao">
 	<!-- 애완동물조회 -->
 	<select id="petList" parameterType="java.lang.String" resultType="PetDto">
-		SELECT ID, NAME, GENDER, TYPEINFO
-			FROM PETINFO
-			WHERE USER_EMAIL =#{user_email}
+		SELECT ID,NAME, GENDER, t.CODENAME AS TYPE, PROFILE
+		FROM PETINFO p LEFT JOIN TYPECODE t 
+			ON p."TYPE" = t.CODEID 
+		WHERE USER_EMAIL =#{user_email}
 	</select>
 	
 	<!-- 애완동물등록 -->

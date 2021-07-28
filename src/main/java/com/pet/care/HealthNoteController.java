@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.pet.care.dto.NoteDto;
@@ -25,6 +26,7 @@ import com.pet.care.model.service.pet.IPetService;
 import oracle.security.o3logon.a;
 
 @Controller
+@RequestMapping("/healthNote")
 public class HealthNoteController {
 
 	private Logger log = LoggerFactory.getLogger(this.getClass());
@@ -49,6 +51,7 @@ public class HealthNoteController {
 	}
 
 	// 건강수첩에서 건강수첩 기록 리스트 json 뿌리기
+	@SuppressWarnings({ "unchecked", "deprecation" })
 	@RequestMapping(value = "/noteList.do", method = RequestMethod.GET)
 	@ResponseBody
 	public JSONArray notePetList(HttpSession session, String name) {
@@ -67,17 +70,17 @@ public class HealthNoteController {
 
 		for (NoteDto n : lDto) {
 			jsonObject = new JSONObject();
-			jsonObject.put("id", n.getRegdate().getYear());
+			jsonObject.put("id", n.getRegdate().getYear()+1900);
 			jsonObject.put("parent", "#");
-			jsonObject.put("text", (n.getRegdate().getYear() - 100) + "년");
+			jsonObject.put("text", (n.getRegdate().getYear() +1900) + "년");
 			if (jsonArray.contains(jsonObject) == false) {
 				jsonArray.add(jsonObject);
 			}
 		}
 		for (NoteDto n : lDto) {
 			jsonObject = new JSONObject();
-			jsonObject.put("id", n.getRegdate().getMonth() + 1);
-			jsonObject.put("parent", n.getRegdate().getYear());
+			jsonObject.put("id",n.getRegdate().getYear()+1900+"-"+ n.getRegdate().getMonth() + 1);
+			jsonObject.put("parent", n.getRegdate().getYear()+1900);
 			jsonObject.put("text", n.getRegdate().getMonth() + 1 + "월");
 			if (jsonArray.contains(jsonObject) == false) {
 				jsonArray.add(jsonObject);
@@ -85,8 +88,11 @@ public class HealthNoteController {
 		}
 		for (NoteDto n : lDto) {
 			jsonObject = new JSONObject();
-			jsonObject.put("id", n.getRegdate().getMonth() + 1 + "-" + n.getRegdate().getDate());
-			jsonObject.put("parent", n.getRegdate().getMonth() + 1);
+			jsonObject.put("id", n.getRegdate().getMonth()<9?
+					n.getRegdate().getYear()+1900+"-"+"0"+(n.getRegdate().getMonth()+1) + "-" + n.getRegdate().getDate()
+					:n.getRegdate().getYear()+1900+"-"+ n.getRegdate().getMonth() + 1 + "-" + n.getRegdate().getDate()
+						);
+			jsonObject.put("parent", n.getRegdate().getYear()+1900+"-"+ n.getRegdate().getMonth() + 1);
 			jsonObject.put("text", n.getRegdate().getDate() <= 9 ? "0" + n.getRegdate().getDate() + "일 기록"
 					: n.getRegdate().getDate() + "일 기록");
 			jsonObject.put("name", name);
@@ -99,9 +105,15 @@ public class HealthNoteController {
 	}
 
 	@RequestMapping(value = "/selDateList.do", method = RequestMethod.GET)
-	public String selnoteList(HttpSession session, Model model, String seldate) {
-
-		return "";
+	@ResponseBody
+	public List<NoteDto> selDateList(HttpSession session, Model model, @RequestParam Map<String,Object> map) {
+		log.info("HealthNoteController selDateList조회 받은 name값 : {}", map);
+		log.info(map.toString());
+//		map.put("email", session.getAttribute("user_email"));
+		map.put("email", "user01@gmail.com");
+		List<NoteDto> nDto= iNoteService.selDateList(map);
+		
+		return nDto;
 	}
 
 }

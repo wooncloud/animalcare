@@ -203,6 +203,7 @@
 	<a href="./reservation/userReserveList.do">사용자 예약목록</a>
 	<a href="./reservation/hospitalReserveList.do">병원 예약목록</a>
 	<a href="./reservation/insertReservation.do">신청</a>
+	<a href="./healthNote/healthNoteList.do">건강노트</a>
 
 	<script>
 		var toastTrigger = document.getElementById('liveToastBtn')

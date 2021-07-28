@@ -1,0 +1,23 @@
+@charset "UTF-8";
+
+
+
+#jstree{
+	width: 300px;
+/* 	margin-top: 20px; */
+/* 	border: 1px solid #00ffff; */
+/* 	background-color: #808080; */
+/* 	position: relative; */
+	display: flex;
+}
+
+#notelist{
+	width: 400px;
+	float:right;
+}
+
+#insertNote{
+	position: fixed;
+	right: 100px;
+	bottom: 300px;
+}
