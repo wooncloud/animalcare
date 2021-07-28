@@ -17,7 +17,6 @@
 		</c:when>
 		<c:otherwise>
 			<h1>PET CARE에 오신것을 환영합니다.</h1>
-			
 		</c:otherwise>
 	</c:choose>
 	

@@ -165,7 +165,7 @@
 								</li>
 								<c:if test="${sessionScope.member.usertype eq 'ROLE_USER'}">
 									<li>
-										<a class="dropdown-item" href="#">
+										<a class="dropdown-item" href="${path}/favo/list.do">
 											<i class="fas fa-star"></i> 관심병원
 										</a>
 									</li>

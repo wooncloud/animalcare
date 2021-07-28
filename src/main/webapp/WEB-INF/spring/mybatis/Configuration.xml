@@ -25,6 +25,8 @@
 		<typeAlias type="com.pet.care.dto.SurveyDto" alias="SurveyDto"/>
 		<typeAlias type="com.pet.care.dto.SurveyResultDto" alias="SurveyResultDto"/>
 		<typeAlias type="com.pet.care.dto.MemberDto" alias="MemberDto"/>
+		
+		<typeAlias type="com.pet.care.dto.FavoriteDto" alias="FavoriteDto"/>
 
 	</typeAliases>
 
@@ -40,6 +42,8 @@
 		<mapper resource="/sqls/MedicalRecode_Statement.xml"/>
 		<mapper resource="/sqls/Survey_Statement.xml"/>
 		<mapper resource="/sqls/User_Statement.xml"/>
+		
+		<mapper resource="/sqls/Favorite_Statement.xml"/>
 	</mappers>
 
 </configuration>
