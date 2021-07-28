@@ -11,7 +11,7 @@ public interface INoteService {
 	public List<NoteDto> noteList(Map<String, Object> map);
 	
 	//건강수첩 일별 리스트 조회
-	public List<NoteDto> selNoteList(Map<String, Object> map);
+	public List<NoteDto> selDateList(Map<String, Object> map);
 	
 	//건강수첩 상세조회
 	public NoteDto noteDetail(int seq);
