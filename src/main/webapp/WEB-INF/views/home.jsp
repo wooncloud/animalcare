@@ -7,7 +7,8 @@
 	<a class="btn btn-secondary" href="./reservation/userReserveList.do">사용자 예약목록</a>
 	<a class="btn btn-secondary" href="./reservation/hospitalReserveList.do">병원 예약목록</a>
 	<a class="btn btn-secondary" href="./reservation/insertReservation.do">신청</a>
-
+	<a class="btn btn-secondary" href="./answerboard/selAllBoard.do">문의</a>
+	${sessionScope.member}
 	<c:choose>
 		<c:when test="${sessionScope.member.usertype eq 'ROLE_USER'}">
 			사용자
