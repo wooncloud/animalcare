@@ -53,9 +53,9 @@ public class UserServiceImpl implements IUserService {
 	}
 
 	@Override
-	public boolean grantOper(String email) {
-		logger.info("grantOper : {}", email);
-		return dao.grantOper(email) > 0 ? true : false;
+	public boolean grantOper(Map<String, Object> map) {
+		logger.info("grantOper : {}", map);
+		return dao.grantOper(map) > 0 ? true : false;
 	}
 
 	@Override
