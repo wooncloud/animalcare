@@ -22,16 +22,16 @@
 			<div class="card">
 				<div class="card-body">
 					<div class="row">
-						<div class="col-3 text-center ">
+						<div class="col-2 text-center ">
 							반려동물 이름
 						</div>
-						<div class="col-3 border-end" >
+						<div class="col-4 border-end" >
 							${dto.petdto[0].name}	
 						</div>
-						<div class="col-3 text-center ">
+						<div class="col-2 text-center ">
 							반려인 이름
 						</div>
-						<div class="col-3 ">
+						<div class="col-4 ">
 						 	${dto.userdto[0].name }
 						</div>
 					</div>				
@@ -40,7 +40,7 @@
 			<div class="card">
 				<div class="card-body">
 					<div class="row ">
-						<div class="col-3 text-center ">
+						<div class="col-2 text-center ">
 							증상
 						</div>
 						<div id="scheduleName" class=" col">
@@ -52,7 +52,7 @@
 			<div class="card">
 				<div class="card-body">
 					<div class="row">
-						<div class="col-3 text-center">
+						<div class="col-2 text-center">
 							진료내용
 						</div>
 						<div class="col">
@@ -67,7 +67,7 @@
 			<div class="card">
 				<div class="card-body">
 					<div class="row">
-						<div class="col-3 text-center">
+						<div class="col-2 text-center">
 							처방내용
 						</div>
 						<div class="col">
@@ -82,7 +82,7 @@
 			<div class="card">
 				<div class="card-body">
 					<div class="row">
-						<div class="col-3 text-center">
+						<div class="col-2 text-center">
 							진료일자
 						</div>
 						<div class="col">
@@ -94,7 +94,7 @@
 			<div class="card">
 				<div class="card-body">
 					<div class="row">
-						<div class="col-3 text-center">
+						<div class="col-2 text-center">
 							병원이름
 						</div>
 						<div class="col">

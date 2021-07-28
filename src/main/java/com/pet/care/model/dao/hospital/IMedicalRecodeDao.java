@@ -3,14 +3,12 @@ package com.pet.care.model.dao.hospital;
 import java.util.List;
 import java.util.Map;
 
+import com.pet.care.dto.HospitalJoinDto;
 import com.pet.care.dto.MedicalRecodeDto;
 import com.pet.care.dto.MedicalRecodeJoinDto;
 
 public interface IMedicalRecodeDao {
 
-	//진료내역 추가전 페이지에 기본 입력되어 있는 데이터
-	public MedicalRecodeJoinDto insertsBasicData(int seq);
-	
 	// 진료내역 추가
 	public boolean insertRecode(MedicalRecodeDto dto);
 	

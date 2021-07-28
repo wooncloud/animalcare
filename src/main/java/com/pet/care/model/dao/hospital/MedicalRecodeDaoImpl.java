@@ -7,6 +7,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.pet.care.dto.HospitalJoinDto;
 import com.pet.care.dto.MedicalRecodeDto;
 import com.pet.care.dto.MedicalRecodeJoinDto;
 
@@ -17,12 +18,6 @@ public class MedicalRecodeDaoImpl implements IMedicalRecodeDao {
 	
 	@Autowired
 	private SqlSessionTemplate sqlSession;
-
-	//진료내역 추가전 페이지에 기본 입력되어 있는 데이터
-	@Override
-	public MedicalRecodeJoinDto insertsBasicData(int seq) {	 
-		return sqlSession.selectOne(NS+"insertBasicData", seq);
-	}
 	
 	// 진료내역 추가
 	@Override
