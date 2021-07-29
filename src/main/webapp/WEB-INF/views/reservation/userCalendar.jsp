@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     <%@ include file="/header.jsp" %>
+    <script type="text/javascript" src="${path}/js/mycalendar.js" ></script>
     	<!-- calendaer -->
   <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
   <script src="https://uicdn.toast.com/tui.code-snippet/v1.5.2/tui-code-snippet.min.js"></script>
@@ -53,14 +54,14 @@ var cal = new tui.Calendar('#calendar', {
 
 	        //선택날짜
 	        var d = e.start;
-	  		var date = new Date(d);
-	  		var day = date.getDate();
-	  		var year = date.getFullYear();
-	  		var month = (1+date.getMonth());
+	  		var seldate = new Date(d);
+	  		var day = seldate.getDate();
+	  		var year = seldate.getFullYear();
+	  		var month = (1+seldate.getMonth());
 	  		month = (month >= 10) ? month : '0' + month;
 	  		day = (day >= 10) ? day : '0' + day; 
 	  		var selday = year+""+month+""+day;
-	  		console.log(date);
+	  		console.log(seldate);//선택
 	  		console.log(selday);
 
 	      //오늘 날짜
@@ -71,19 +72,18 @@ var cal = new tui.Calendar('#calendar', {
 	      nMonth = (nMonth >= 10) ? nMonth : '0' + nMonth;
 	      nDay = (nDay >= 10) ? nDay : '0' + nDay; 
 	      var nDay =nYear+""+nMonth+""+nDay;
-	      console.log(today);
+	      console.log(today); // 오늘
 	      console.log(nDay);
-
+	      
 		 if(selday > nDay){
 			 location.href="./getSunday.do?date="+selday;
 		 } else if(selday < nDay){
-			  alert("해당일은 예약이 가능한 날짜가 아닙니다.")
-		  }
+			  Swal.fire("알림", "해당일은 예약이 가능한 날짜가 아닙니다.", "warning");
+		 }
+		 
+		 
 	    }
 	});
-
-</script>
-<script type="text/javascript">
 
 </script>
  <script src="${path}/calendarjs/default.js"></script>

@@ -1,4 +1,26 @@
-	function makeReserve(user_email,user_name) {
+window.onload = function(){
+	var doc = document.getElementsByClassName("card-text time");
+	
+	console.log(document.getElementById("09001100"));
+	console.log(document.getElementById("11001300"));
+	console.log(document.getElementById("13001500"));
+	console.log(document.getElementById("15001700"));
+	
+	for (var i = 0; i < doc.length; i++) {
+		console.log(doc[i].textContent);
+		if(doc[i].textContent == '09001100'){
+			document.getElementById("09001100").remove();
+		} else if(doc[i].textContent == '11001300'){
+			document.getElementById("11001300").remove();
+		} else if(doc[i].textContent == '13001500' ){
+			document.getElementById("13001500").remove();
+		} else if(doc[i].textContent == '15001700' ){
+			document.getElementById("15001700").remove();
+		}
+	}
+}
+
+function makeReserve(user_email,user_name) {
 
 		var frm = document.forms[0];
 
@@ -6,11 +28,9 @@
 		var petname = document.getElementsByName("pet_name")[0].value;
 
 		if (reservetype == "default") {
-			alert("예약 종류를 선택해주세요")
+			Swal.fire("알림", "예약 종류를 선택해주세요.", "warning");
 		} else if (petname == "default") {
-			alert("반려 동물을 선택해주세요")
-		} else if (reservetype == "default" && petname == "default") {
-			alert("예약 종류와 반료동물을 선택해주세요")
+			Swal.fire("알림", "반려 동물을 선택해주세요.", "warning");
 		} else {
 			var email = user_email; //ex) ${userInfo.email};
 			var name = user_name; //ex) ${userInfo.name};
@@ -60,7 +80,7 @@
 						success : function(data) {
 							console.log(data);
 							console.log("성공성공");
-							alert("예약이 완료되었습니다");
+							Swal.fire("알림", "예약이 완료되었습니다.", "warning");
 							var paynumdata = data;
 							html = "";
 							html += "<input type='hidden' name='paynum' value='"+paynumdata+"'>";
@@ -85,3 +105,141 @@
 			});
 		}
 	}
+function acceptReservation(seq){
+	Swal.fire({
+			icon: 'question',
+			title:' 확정 하시겠습니까?',
+			confirmButtonText: '확인',	
+			showCancelButton: true,
+			cancelButtonColor: 'gray',
+			cancelButtonText: '취소',
+		}).then((result) => {
+		if (result.isConfirmed) {
+			  location.href="./acceptReserve.do?seq="+seq+"&status="+status;
+		}
+		});
+
+}
+
+function operCancelReservation(seq,status,reservedate){
+	
+	var date = new Date();
+	var day = date.getDate();
+	var year = date.getFullYear();
+	var month = (1+date.getMonth());
+	month = (month >= 10) ? month : '0' + month;
+	day = (day >= 10) ? day : '0' + day; 
+		
+	var today = year+"-"+month+"-"+day;//날짜
+	
+	if(today > reservedate){
+		Swal.fire("알림", "취소가 가능한 기간이 지났습니다.", "warning");
+	} else{
+		Swal.fire({
+			icon: 'question',
+			title:' 취소 하시겠습니까?',
+			confirmButtonText: '확인',	
+			showCancelButton: true,
+			cancelButtonColor: 'gray',
+			cancelButtonText: '취소',
+		}).then((result) => {
+		if (result.isConfirmed) {
+			location.href="../payment/operCancelPayRefund.do?seq="+seq+"&status="+status;
+		}
+		});
+}	
+}
+
+function rejectReservation(){
+	
+	var commnet = document.getElementById("commnet")
+ 	var frm = document.forms[0];
+	
+	if(commnet.value == ''){
+		Swal.fire("알림", "반려 사유를 작성해주세요.", "warning");
+		return;
+	}else{
+		var chk = confirm("반려하시겠습니까?");
+		
+		if(chk){
+			// 이게 맞음 20210724 4:37 pm
+			frm.submit();
+		}
+		
+	}
+	
+}
+
+
+function modifyReserve(){
+	
+	var reservedate = document.getElementById("reservedate").value;
+	var reservetime = document.getElementById("reservetime").value;
+	console.log(reservedate);
+	console.log(reservetime);
+	
+	var frm1 = document.forms[1];
+	console.log(frm1);
+	
+	$.ajax({
+		type:"get",
+		url:"./checkReservation.do",
+		data:"reservedate="+reservedate+"&reservetime="+reservetime,
+		success:function(msg){
+			console.log("왔니"+msg);
+			
+			if(msg=='false'){
+				frm1.submit();
+			}else{
+				Swal.fire("알림", "선택한 일자로 수정이 불가능합니다.", "warning");
+				return false;
+			}
+		},
+		error:function(){
+			alert("잘못된 요청");
+			
+		}
+		
+	});
+	
+}
+
+function userCancelReservation(seq,status,reservedate){
+
+	console.log(reservedate);
+	
+	var date = new Date();
+	var day = date.getDate();
+	var year = date.getFullYear();
+	var month = (1+date.getMonth());
+	month = (month >= 10) ? month : '0' + month;
+	day = (day >= 10) ? day : '0' + day; 
+		
+	var today = year+"-"+month+"-"+day;//날짜
+	console.log(today);
+	console.log(date);
+
+	var cBtn = document.getElementsByName("cancelBtn")[0];
+	
+	
+	if(today > reservedate){
+		Swal.fire("알림", "취소가 가능한 기간이 지났습니다.", "warning");
+// 		cBtn.style.display="none";
+	} else{
+		Swal.fire({
+			icon: 'question',
+			title:' 취소 하시겠습니까?',
+			confirmButtonText: '확인',	
+			showCancelButton: true,
+			cancelButtonColor: 'gray',
+			cancelButtonText: '취소',
+		}).then((result) => {
+		if (result.isConfirmed) {
+			location.href="./cancelReservation.do?seq="+seq+"&status="+status;
+		}
+		});
+		console.log(seq,status);
+}
+}
+
+

@@ -1,35 +1,43 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="/header.jsp" %>
+<script type="text/javascript" src="${path}/js/mycalendar.js" ></script>
 <style type="text/css">
 a{
  	text-decoration: none;
  	color: black;
 }
 </style>
-<script type="text/javascript" src="${path}/js/reservation.js" ></script>
-<ul class="nav nav-tabs">
-  <li class="nav-item" >
-    <a class="nav-link active"  href="./hospitalReserveList.do">처리</a>
+<!-- <ul class="nav nav-tabs"> -->
+<!--   <li class="nav-item"> -->
+<!--     <a class="nav-link active"  aria-current="page" href="./hospitalReserveList.do">처리</a> -->
+<!--   </li> -->
+<!--   <li class="nav-item"> -->
+<!--     <a class="nav-link" href="./hospitalStandReserveList.do">미처리</a> -->
+<!--   </li> -->
+<!--   <li class="nav-item"> -->
+<!--     <a class="nav-link" href="./todayReserveList.do">오늘의 예약</a> -->
+<!--   </li> -->
+<!-- </ul> -->
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+  <li class="nav-item" role="presentation">
+    <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true" onclick="location.href='./hospitalReserveList.do'">처리</button>
   </li>
-  <li class="nav-item">
-    <a class="nav-link" aria-current="page" 	href="./hospitalStandReserveList.do">미처리</a>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false" onclick="location.href='./hospitalStandReserveList.do'">미처리</button>
   </li>
-  <li class="nav-item">
-    <a class="nav-link"  	href="./todayReserveList.do">오늘의 예약</a>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="messages-tab" data-bs-toggle="tab" data-bs-target="#messages" type="button" role="tab" aria-controls="messages" aria-selected="false" onclick="location.href='./todayReserveList.do'">오늘의 예약</button>
   </li>
 </ul>
 <div class="card my-1">
    <div class="card-body">
       <div class="row">
-          <div class="col-1">
-            <h5 class="card-title"> NO</h5>
-          </div>
           <div class="col-2">
-            <h5 class="card-title"> 예약 종류</h5>
-          </div>
-          <div class="col-1">
             <h5 class="card-title"> 예약자</h5>
+          </div>
+                    <div class="col-2">
+            <h5 class="card-title"> 예약 종류</h5>
           </div>
           <div class="col-2">
              <h5 class="card-title"> 연락처</h5>
@@ -47,19 +55,30 @@ a{
    </div>
 </div>
 <c:if test="${lists != null}">
+<c:if test="${fn:length(lists) eq 0}">
+<div class="card my-1">
+		<div class="card-body">
+			<div class="row">
+				<div class="col">
+					<p class="card-text">예약 내용이 없습니다</p>
+				</div>
+			</div>
+		</div>
+</div>
+</c:if>
 <c:forEach var="list" items="${lists}" varStatus="vs">
 	<div class="card my-1">
 		<div class="card-body">
 			<div class="row">
-				<div class="col-1">
-					<p class="card-text">${vs.count}</p>
+<!-- 				<div class="col-1"> -->
+<%-- 					<p class="card-text">${vs.count}</p> --%>
+<!-- 				</div> -->
+				<div class="col-2">
+					<p class="card-text">
+					<a href="./hospitalReserveDetail.do?seq=${list.seq}">${list.name}</a></p>
 				</div>
 				<div class="col-2">
 					<p class="card-text">${list.reservetype}</p>
-				</div>
-				<div class="col-1">
-					<p class="card-text">
-					<a href="./hospitalReserveDetail.do?seq=${list.seq}">${list.name}</a></p>
 				</div>
 				<div class="col-2">
 					<p class="card-text">${list.phone}</p>
@@ -90,19 +109,30 @@ a{
 </c:forEach>
 </c:if>
 <c:if test="${slists != null }">
+<c:if test="${fn:length(slists) eq 0}">
+<div class="card my-1">
+		<div class="card-body">
+			<div class="row">
+				<div class="col">
+					<p class="card-text">예약 내용이 없습니다</p>
+				</div>
+			</div>
+		</div>
+</div>
+</c:if>
 <c:forEach var="list" items="${slists}" varStatus="vs">
 	<div class="card my-1">
 		<div class="card-body">
 			<div class="row">
-				<div class="col-1">
-					<p class="card-text">${vs.count}</p>
+<!-- 				<div class="col-1"> -->
+<%-- 					<p class="card-text">${vs.count}</p> --%>
+<!-- 				</div> -->
+				<div class="col-2">
+					<p class="card-text">
+					<a href="./hospitalReserveDetail.do?seq=${list.seq}">${list.name}</a></p>
 				</div>
 				<div class="col-2">
 					<p class="card-text">${list.reservetype}</p>
-				</div>
-				<div class="col-1">
-					<p class="card-text">
-					<a href="./hospitalReserveDetail.do?seq=${list.seq}">${list.name}</a></p>
 				</div>
 				<div class="col-2">
 					<p class="card-text">${list.phone}</p>
@@ -133,6 +163,17 @@ a{
 </c:forEach>
 </c:if>
 <c:if test="${tlists != null }">
+<c:if test="${fn:length(tlists) eq 0}">
+<div class="card my-1">
+		<div class="card-body">
+			<div class="row">
+				<div class="col">
+					<p class="card-text">예약 내용이 없습니다</p>
+				</div>
+			</div>
+		</div>
+</div>
+</c:if>
 <c:forEach var="list" items="${tlists}" varStatus="vs">
 	<div class="card my-1">
 		<div class="card-body">
@@ -175,7 +216,6 @@ a{
 	</div>
 </c:forEach>
 </c:if>
-
 <c:if test="${lists != null}">
 <ul class="mt-3 pagination justify-content-center">
 			<c:if test="${page.startPage > page.countPage}">
@@ -222,23 +262,4 @@ a{
 			</c:if>		
 </ul>
 </c:if>
-<script type="text/javascript">
-// $(document).ready(function(){
-	
-// 	$(".nav-link")[1].click(function(){
-		
-// 		$(this).addClass("active");
-// 		$(".nav-link")[0].removeClass("active");
-		
-// 	});
-	
-// 	$(".nav-link")[0].click(function(){
-		
-// 		$(this).addClass("active");
-// 		$(".nav-link")[1].removeClass("active");
-		
-// 	});
-// })
-
-</script>
 <%@ include file="/footer.jsp" %>

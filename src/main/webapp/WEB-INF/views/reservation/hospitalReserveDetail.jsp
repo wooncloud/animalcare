@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@include file="/header.jsp" %>
-${hospitalReserveDetail}
+<script type="text/javascript" src="${path}/js/mycalendar.js" ></script>
 <div class="card">
    <div class="card-body">
       <h5 class="card-title my-3">병원관계자 예약 상세 내역</h5>
@@ -173,88 +173,26 @@ ${hospitalReserveDetail}
 
 
 <script type="text/javascript">
-function acceptReservation(seq){
-	alert("예약 확정")
-	
-   location.href="./acceptReserve.do?seq="+seq+"&status="+status;
-}
 
-function operCancelReservation(seq,status,reservedate){
+
+window.onload = function(){
+	
+	var getdate = `${hospitalReserveDetail.reservedate}`
+	var reservedate = new Date(getdate);
+	console.log(reservedate);
 	
 	var date = new Date();
-	var day = date.getDate();
-	var year = date.getFullYear();
-	var month = (1+date.getMonth());
-	month = (month >= 10) ? month : '0' + month;
-	day = (day >= 10) ? day : '0' + day; 
-		
-	var today = year+"-"+month+"-"+day;//날짜
+	console.log(date);
 	
-	if(today > reservedate){
-		alert("취소 기간이 아닙니다");
-	} else{
-		var frm = confirm("취소 하시겠습니까?");
-	if(frm){
-		// 이게 맞음 20210724 4:17 pm
-		location.href="../payment/operCancelPayRefund.do?seq="+seq+"&status="+status;
-	}
-}	
-}
 
-function rejectReservation(){
 	
-	var commnet = document.getElementById("commnet")
- 	var frm = document.forms[0];
-	
-	if(commnet.value == ''){
-		alert("반려 사유를 작성해주세요");
-		return;
-	}else{
-		var chk = confirm("반려하시겠습니까?");
-		
-		if(chk){
-			// 이게 맞음 20210724 4:37 pm
-			frm.submit();
-		}
-		
+	if(reservedate < date){
+		document.getElementsByTagName("button")[0].style.display="none";
+		document.getElementsByTagName("button")[1].style.display="none";
+		document.getElementsByTagName("button")[2].style.display="none";
 	}
 	
 }
 
-
-function modifyReserve(){
-	
-	var reservedate = document.getElementById("reservedate").value;
-	var reservetime = document.getElementById("reservetime").value;
-	console.log(reservedate);
-	console.log(reservetime);
-	
-	var frm1 = document.forms[1];
-	console.log(frm1);
-	
-	$.ajax({
-		type:"get",
-		url:"./checkReservation.do",
-		data:"reservedate="+reservedate+"&reservetime="+reservetime,
-		success:function(msg){
-			console.log("왔니"+msg);
-			
-			if(msg=='false'){
-				frm1.submit();
-			}else{
-				alert("선택한 시간으로 수정이 불가능합니다.")
-				return false;
-			}
-		},
-		error:function(){
-			alert("잘못된 요청");
-			
-		}
-		
-	});
-	
-}
 </script>
-
-
 <%@ include file="/footer.jsp" %>
