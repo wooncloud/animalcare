@@ -79,7 +79,6 @@ public class SurveyController {
 		}else {
 			return "redirect:/error/error.do";
 		}
-		
 	}
 	
 	@RequestMapping(value="/delflagForm.do", method=RequestMethod.POST)
@@ -88,9 +87,41 @@ public class SurveyController {
 		Map<String, String[]> map = new HashMap<String, String[]>();
 		map.put("seqs", chkVal);
 		int n = iService.delflagForm(map);
-		logger.info("SurveyController 설문 폼 다중 삭제 : {}",n);
+		logger.info("SurveyController 설문 폼 다중 삭제 : {}", n);
 		return "redirect:/survey/adminSurveyList.do";
 	}
+	
+	
+	@RequestMapping(value="/compareStartDate.do",method=RequestMethod.GET)
+	@ResponseBody
+	public String compareStartDate(@RequestParam Map<String, Object> map) {
+		logger.info("SurveyController : compareStartDate 설문 시작일 설정 - {}", map);
+		boolean isc = iService.compareStartDate(map);
+		return String.valueOf(isc);
+	}
+	
+	@RequestMapping(value="/compareEndDate.do",method=RequestMethod.GET)
+	@ResponseBody
+	public String compareEndDate(@RequestParam Map<String, Object> map) {
+		logger.info("SurveyController : compareStartDate 설문 마감일 설정 - {}", map);
+		boolean isc = iService.compareEndDate(map);
+		return String.valueOf(isc);
+	}
+	
+	@RequestMapping(value="/userSurveySubmit.do", method = RequestMethod.POST)
+	@ResponseBody
+	public String userSurveySubmit(@RequestParam Map<String, Object> map) {
+		logger.info("SurveyController : userSurveySubmit (사용자) 설문 폼 제출 - {}", map);
+		System.out.println("=================================="+map.get("answer"));
+
+		boolean isc = iService.userSurveySubmit(map);
+		if(isc) {
+			return String.valueOf(isc);
+		}else {
+			return "redirect:/error/error.do";
+		}
+	}
+	
 	
 	
 	

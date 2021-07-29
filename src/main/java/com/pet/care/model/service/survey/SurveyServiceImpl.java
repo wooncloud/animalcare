@@ -49,5 +49,23 @@ public class SurveyServiceImpl implements ISurveyService {
 		return iDao.delflagForm(map);
 	}
 
+	@Override
+	public boolean compareStartDate(Map<String, Object> map) {
+		logger.info("SurveyServiceImpl : compareStartDate 설문 시작일 설정 - {}",map);
+		return iDao.compareStartDate(map);
+	}
+
+	@Override
+	public boolean compareEndDate(Map<String, Object> map) {
+		logger.info("SurveyServiceImpl : compareEndDate 설문 마감일 설정 - {}",map);
+		return iDao.compareEndDate(map);
+	}
+
+	@Override
+	public boolean userSurveySubmit(Map<String, Object> map) {
+		logger.info("SurveyServiceImpl : userSurveySubmit (사용자) 설문 폼 제출 - {}", map);
+		return iDao.userSurveySubmit(map);
+	}
+
 	
 }

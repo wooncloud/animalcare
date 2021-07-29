@@ -42,14 +42,35 @@ public class SurveyDaoImpl implements ISurveyDao {
 	
 	@Override
 	public SurveyDto surveyDetail(Map<String, Object> map) {
-		logger.info("SurveyDaoImpl : surveyDetail 설문 폼 상세 - {}",map);
-		return sqlSession.selectOne(NS+"surveyDetail",map);
+		logger.info("SurveyDaoImpl : surveyDetail 설문 폼 상세 - {}", map);
+		return sqlSession.selectOne(NS+"surveyDetail", map);
 	}
 
 	@Override
 	public int delflagForm(Map<String, String[]> map) {
-		logger.info("SurveyDaoImpl : delflagForm 설문 폼 삭제 - {}",map);
-		return sqlSession.update(NS+"delflagForm",map);
+		logger.info("SurveyDaoImpl : delflagForm 설문 폼 삭제 - {}", map);
+		return sqlSession.update(NS+"delflagForm", map);
+	}
+
+	@Override
+	public boolean compareStartDate(Map<String, Object> map) {
+		logger.info("SurveyDaoImpl : compareStartDate 설문 시작일 설정 - {}", map);
+		int n = sqlSession.selectOne(NS+"compareStartDate", map);
+		return (n>0)?true:false;
+	}
+
+	@Override
+	public boolean compareEndDate(Map<String, Object> map) {
+		logger.info("SurveyDaoImpl : compareEndDate 설문 마감일 설정 - {}", map);
+		int n = sqlSession.selectOne(NS+"compareEndDate", map);
+		return (n>0)?true:false;
+	}
+
+	@Override
+	public boolean userSurveySubmit(Map<String, Object> map) {
+		logger.info("SurveyDaoImpl : userSurveySubmit (사용자) 설문 폼 제출 - {}", map);
+		int n = sqlSession.insert(NS+"userSurveySubmit", map);
+		return (n>0)?true:false;
 	}
 
 

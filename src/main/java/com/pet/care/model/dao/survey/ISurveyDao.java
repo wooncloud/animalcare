@@ -22,5 +22,13 @@ public interface ISurveyDao {
 	//다중삭제
 	public int delflagForm(Map<String, String[]> map);
 
+	//설문 시작일 설정
+	public boolean compareStartDate(Map<String, Object> map);
+	//설문 마감일 설정
+	public boolean compareEndDate(Map<String, Object> map);
+	
+	//(사용자) 설문 폼 제출
+	public boolean userSurveySubmit(Map<String, Object> map);
+	
 	
 }

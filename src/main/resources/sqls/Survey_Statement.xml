@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.pet.care.model.dao.survey.ISurveyDao">
+
 <select id="adminSurveyList" resultType="SurveyDto">
 SELECT SEQ, TITLE, TO_CHAR(REGDATE,'yyyy-mm-dd') AS REGDATE, TO_CHAR(STARTDATE,'yyyy-mm-dd') AS STARTDATE, TO_CHAR(ENDDATE,'yyyy-mm-dd') AS ENDDATE, SURVEYFLAG, DELFLAG
 	FROM SURVEY
@@ -37,6 +38,27 @@ SELECT SEQ, TITLE, TO_CHAR(REGDATE,'yyyy-mm-dd') AS REGDATE, TO_CHAR(STARTDATE,'
 			#{seq}
 		</foreach>
 </update>
+
+<select id="compareStartDate" parameterType="java.util.Map" resultType="java.lang.Integer">
+	<![CDATA[SELECT COUNT(*)
+			FROM SURVEY s 
+			WHERE SEQ=#{seq} AND (TO_CHAR(SYSDATE,'yyyy-mm-dd') < TO_DATE(#{startdate},'yyyy-mm-dd'))]]>
+</select>
+
+<select id="compareEndDate" parameterType="java.util.Map" resultType="java.lang.Integer">
+	<![CDATA[SELECT COUNT(*)
+			FROM SURVEY s 
+			WHERE SEQ=#{seq} AND (TO_DATE(#{startdate},'yyyy-mm-dd') < TO_DATE(#{enddate},'yyyy-mm-dd'))]]>
+</select>
+
+<insert id="userSurveySubmit" parameterType="java.util.Map">
+	INSERT INTO SURVEYRESULT
+		(SEQ, SURVEY_SEQ, HOSPITAL_SEQ, TITLE, ANSWER, REGDATE)
+		VALUES(SURVEYRESULT_SEQ.NEXTVAL, #{survey_seq}, '3', #{title}, #{answer}, SYSDATE)
+</insert>
+
+
+
 
 
 </mapper>
