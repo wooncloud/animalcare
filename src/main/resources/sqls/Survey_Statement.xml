@@ -57,8 +57,32 @@ SELECT SEQ, TITLE, TO_CHAR(REGDATE,'yyyy-mm-dd') AS REGDATE, TO_CHAR(STARTDATE,'
 		VALUES(SURVEYRESULT_SEQ.NEXTVAL, #{survey_seq}, '3', #{title}, #{answer}, SYSDATE)
 </insert>
 
+<!-- 설문답변이 비었는지 확인 -->
+<select id="checkEmptyResponser" parameterType="java.util.Map" resultType="java.lang.Integer">
+SELECT COUNT(*)
+	FROM SURVEYRESPONSER s
+	WHERE SURVEY_SEQ = #{survey_seq}
+</select>
+
+<!-- 비어있으면 설문 작성자 -->
+<insert id="insertFirstResponser" parameterType="java.util.Map">
+INSERT INTO SURVEYRESPONSER
+	(SEQ, SURVEY_SEQ, RESPONSER)
+	VALUES(SURVEYRESPONSER_SEQ.NEXTVAL, #{survey_seq}, #{responser}||',')
+</insert>
+
+<!-- 비어있지 않으면 작성자 추가 -->
+<update id="updateResponsers" parameterType="java.util.Map">
+UPDATE SURVEYRESPONSER
+	SET RESPONSER=RESPONSER||#{responser}||',' 
+	WHERE SURVEY_SEQ = #{survey_seq}
+</update>
 
 
-
+<select id="checkSameResponser" parameterType="java.util.Map" resultType="java.lang.Integer">
+SELECT INSTR(RESPONSER,#{responser},1) 
+	FROM SURVEYRESPONSER s 
+	WHERE SURVEY_SEQ = #{survey_seq}
+</select>
 
 </mapper>

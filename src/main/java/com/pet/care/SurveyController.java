@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.pet.care.dto.MemberDto;
 import com.pet.care.dto.SurveyDto;
 import com.pet.care.model.service.survey.ISurveyService;
 
@@ -110,20 +112,37 @@ public class SurveyController {
 	
 	@RequestMapping(value="/userSurveySubmit.do", method = RequestMethod.POST)
 	@ResponseBody
-	public String userSurveySubmit(@RequestParam Map<String, Object> map) {
+	public String userSurveySubmit(@RequestParam Map<String, Object> map,HttpSession session) {
 		logger.info("SurveyController : userSurveySubmit (사용자) 설문 폼 제출 - {}", map);
-		System.out.println("=================================="+map.get("answer"));
 
+		MemberDto mDto = (MemberDto)session.getAttribute("member");
+		String responser = mDto.getEmail().split("@")[0];
+		map.put("responser", responser);
+				
 		boolean isc = iService.userSurveySubmit(map);
-		if(isc) {
-			return String.valueOf(isc);
-		}else {
-			return "redirect:/error/error.do";
-		}
+		return String.valueOf(isc);
 	}
 	
+	@RequestMapping(value="/userSurveyList.do", method = RequestMethod.GET)
+	public String userSurveyList(Model model) {
+		logger.info("SurveyController : userSurveyList 설문 폼 리스트 조회");
+//		List<SurveyDto> list = iService.adminSurveyList();
+//		model.addAttribute("userSurveyList",list);
+		return "/survey/userSurveyList";
+	}
 	
-	
-	
-	
+//	public String insertResponser(@RequestParam Map<String, Object> map, HttpSession session) {
+//		logger.info("SurveyController : insertResponser 사용자 설문 폼 작성 {}", map);
+//		MemberDto mDto = (MemberDto)session.getAttribute("member");
+//		String responser = mDto.getEmail().split("@")[0];
+//		System.out.println("responser 확인 =============="+responser);
+//		int n = iService.checkEmptyResponser(map);
+//		if(n>0) {
+//			
+//		}
+//		
+//		
+//		
+//		return "";
+//	}
 }

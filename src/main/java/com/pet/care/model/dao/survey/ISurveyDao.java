@@ -30,5 +30,14 @@ public interface ISurveyDao {
 	//(사용자) 설문 폼 제출
 	public boolean userSurveySubmit(Map<String, Object> map);
 	
+	//설문 답변 유무 확인
+	public int checkEmptyResponser(Map<String, Object> map);
+	//설문 답변 비어 있을 때 작성자 등록
+	public boolean insertFirstResponser(Map<String, Object> map);
+	//설문 답변 비어 있지 않을 때 작성자 추가
+	public boolean updateResponsers(Map<String, Object> map);
+
+	//설문 답변 작성자 중복확인
+	public int checkSameResponser(Map<String, Object> map);
 	
 }

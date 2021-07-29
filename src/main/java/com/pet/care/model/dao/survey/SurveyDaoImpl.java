@@ -73,5 +73,30 @@ public class SurveyDaoImpl implements ISurveyDao {
 		return (n>0)?true:false;
 	}
 
+	@Override
+	public int checkEmptyResponser(Map<String, Object> map) {
+		logger.info("SurveyDaoImpl : checkEmptyResponser 설문 답변 유무 확인 - {}", map);
+		return sqlSession.selectOne(NS+"checkEmptyResponser", map);
+	}
+
+	@Override
+	public boolean insertFirstResponser(Map<String, Object> map) {
+		logger.info("SurveyDaoImpl : insertFirstResponser 설문 답변 비어 있을 때 작성자 등록 - {}", map);
+		int n = sqlSession.insert(NS+"insertFirstResponser", map);
+		return (n>0)?true:false;
+	}
+
+	@Override
+	public boolean updateResponsers(Map<String, Object> map) {
+		logger.info("SurveyDaoImpl : updateResponsers 설문 답변 비어 있지 않을 때 작성자 추가 등록 - {}", map);
+		int isc = sqlSession.update(NS+"updateResponsers", map);
+		return (isc>0)?true:false;
+	}
+
+	@Override
+	public int checkSameResponser(Map<String, Object> map) {
+		logger.info("SurveyDaoImpl : checkSameResponser 설문 답변 작성자 중복 확인 - {}", map);
+		return sqlSession.selectOne(NS+"checkSameResponser", map);
+	}
 
 }

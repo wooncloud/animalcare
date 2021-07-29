@@ -29,4 +29,5 @@ public interface ISurveyService {
 	
 	//(사용자) 설문 폼 제출
 	public boolean userSurveySubmit(Map<String, Object> map);
+	
 }

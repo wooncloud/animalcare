@@ -202,9 +202,10 @@ function submitForm(){
 			console.log(data);
 			if(data == "true"){
 				alert("제출이 완료되었습니다. 설문에 응해주셔서 감사합니다.");
-				location.href="./";//사용자 리스트로 이동
+				location.href="redirect:/survey/adminSurveyList.do";//사용자 리스트로 이동
 			}else{
-				location.href="/"//에러페이지
+				alert("이미 작성한 설문입니다. 설문 리스트로 돌아갑니다");
+				location.href="redirect:/survey/adminSurveyList.do";//에러페이지
 			}
 		},
 		error : function(msg2){
