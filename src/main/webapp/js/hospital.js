@@ -518,3 +518,50 @@ function modifyRecodeChk(){
 	let modifyPrescriptionContent = modifyPrescriptionContents.editor.getHTML();
 	document.getElementById("modifyPrescriptionContent").value = modifyPrescriptionContent;
 }
+
+//병원 진료기록 입력 에디터 설정
+//진료내용
+let insertTreatmentContents = {
+		editor: null,
+		init: function () {
+			
+			// editor
+			this.editor = new toastui.Editor({
+				el: document.querySelector('#treatmentEditor'),
+				previewStyle: 'vertical',
+				initialEditType: "wysiwyg",
+				height: '300px',
+				previewHighlight: true,
+				language: 'ko',
+				initialValue: ""
+			});			
+		}
+}
+//처방내용
+let insertPrescriptionContents = {
+		editor: null,
+		init: function () {
+			
+			// editor
+			this.editor = new toastui.Editor({
+				el: document.querySelector('#prescriptionEditor'),
+				previewStyle: 'vertical',
+				initialEditType: "wysiwyg",
+				height: '300px',
+				previewHighlight: true,
+				language: 'ko',
+				initialValue: ""
+			});			
+		}
+}
+
+//병원 진료기록 입력 에디터 내용 DB전송하려고 담아줌
+function insertRecodeChk(){
+	
+	//진료내용
+	let insertTreatmentContent = insertTreatmentContents.editor.getHTML();
+	document.getElementById("insertTreatmentContent").value = insertTreatmentContent;
+	//처방내용
+	let insertPrescriptionContent = insertPrescriptionContents.editor.getHTML();
+	document.getElementById("insertPrescriptionContent").value = insertPrescriptionContent;
+}

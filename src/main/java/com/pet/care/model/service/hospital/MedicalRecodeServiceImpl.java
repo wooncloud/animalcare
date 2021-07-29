@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.pet.care.dto.HospitalJoinDto;
 import com.pet.care.dto.MedicalRecodeDto;
 import com.pet.care.dto.MedicalRecodeJoinDto;
 import com.pet.care.model.dao.hospital.IMedicalRecodeDao;
@@ -19,13 +20,6 @@ public class MedicalRecodeServiceImpl implements IMedicalRecodeService {
 	
 	@Autowired IMedicalRecodeDao dao;
 
-	//진료내역 추가전 페이지에 기본 입력되어 있는 데이터
-	@Override
-	public MedicalRecodeJoinDto insertsBasicData(int seq) {
-		logger.info("[insertsBasicData - {}] : 진료내역 상세정보 조회", seq);
-		return dao.insertsBasicData(seq);
-	}
-	
 	// 진료내역 추가
 	@Override
 	public boolean insertRecode(MedicalRecodeDto dto) {

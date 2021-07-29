@@ -21,13 +21,16 @@ public class HospitalJoinDto implements Serializable{
 	private List<UserDto> userdto;
 	private List<PetTypeDto> pettypedto;
 	private List<OperatorDto> operatordto;
+	private List<ReservationDto> reservationdto;
+	private List<PetDto> petdto;
 	
 	public HospitalJoinDto() {
 	}
 
 	public HospitalJoinDto(int seq, String operator_email, String name, String address1, String address2, String tel,
 			String emergency, String opentime, String delflag, String content, List<UserDto> userdto,
-			List<PetTypeDto> pettypedto, List<OperatorDto> operatordto) {
+			List<PetTypeDto> pettypedto, List<OperatorDto> operatordto, List<ReservationDto> reservationdto,
+			List<PetDto> petdto) {
 		super();
 		this.seq = seq;
 		this.operator_email = operator_email;
@@ -42,6 +45,8 @@ public class HospitalJoinDto implements Serializable{
 		this.userdto = userdto;
 		this.pettypedto = pettypedto;
 		this.operatordto = operatordto;
+		this.reservationdto = reservationdto;
+		this.petdto = petdto;
 	}
 
 	@Override
@@ -49,7 +54,8 @@ public class HospitalJoinDto implements Serializable{
 		return "HospitalJoinDto [seq=" + seq + ", operator_email=" + operator_email + ", name=" + name + ", address1="
 				+ address1 + ", address2=" + address2 + ", tel=" + tel + ", emergency=" + emergency + ", opentime="
 				+ opentime + ", delflag=" + delflag + ", content=" + content + ", userdto=" + userdto + ", pettypedto="
-				+ pettypedto + ", operatordto=" + operatordto + "]";
+				+ pettypedto + ", operatordto=" + operatordto + ", reservationdto=" + reservationdto + ", petdto="
+				+ petdto + "]";
 	}
 
 	public int getSeq() {
@@ -155,7 +161,23 @@ public class HospitalJoinDto implements Serializable{
 	public void setOperatordto(List<OperatorDto> operatordto) {
 		this.operatordto = operatordto;
 	}
+
+	public List<ReservationDto> getReservationdto() {
+		return reservationdto;
+	}
+
+	public void setReservationdto(List<ReservationDto> reservationdto) {
+		this.reservationdto = reservationdto;
+	}
+
+	public List<PetDto> getPetdto() {
+		return petdto;
+	}
+
+	public void setPetdto(List<PetDto> petdto) {
+		this.petdto = petdto;
+	}
 	
 	
-	
+
 }

@@ -8,7 +8,7 @@
 <script type="text/javascript" src="${path}/js/hospital.js" ></script>
 
 <div class="container">
-	<form action="./insertRecode.do" method="post" onsubmit="return insertRecodeChk(this)">
+	<form action="./insertMedicalRecode.do" method="post" onsubmit="return insertRecodeChk(this)">
 
 	<br><br>
 
@@ -19,17 +19,18 @@
 			<div class="card">
 				<div class="card-body">
 					<div class="row">
-						<div class="col-3 text-center ">
+						<div class="col-2 text-center ">
 							반려동물 이름
 						</div>
-						<div class="col-3 border-end" >
-							넣어야함
+						<div class="col-4 border-end" >
+							${dto.reservationdto[0].pet_name}
+							<input type="hidden" name="petId" value="${dto.petdto[0].id}">
 						</div>
-						<div class="col-3 text-center ">
+						<div class="col-2 text-center ">
 							반려인 이름
 						</div>
-						<div class="col-3 ">
-						 	넣어야함
+						<div class="col-4 ">
+						 	${dto.userdto[0].name}
 						</div>
 					</div>				
 				</div>
@@ -37,11 +38,12 @@
 			<div class="card">
 				<div class="card-body">
 					<div class="row ">
-						<div class="col-3 text-center ">
+						<div class="col-2 text-center ">
 							증상
 						</div>
-						<div id="scheduleName" class=" col">
-							넣어야함
+						<div class=" col">
+							${dto.reservationdto[0].symptom}
+							<input type="hidden" name="symptom" value="${dto.reservationdto[0].symptom}">
 						</div>
 					</div>				
 				</div>
@@ -49,13 +51,13 @@
 			<div class="card">
 				<div class="card-body">
 					<div class="row">
-						<div class="col-3 text-center">
+						<div class="col-2 text-center">
 							진료내용
 						</div>
 						<div class="col">
 	   						<div >
 								<div id="treatmentEditor" ></div>
-								<input type="hidden" name="modifyTreatmentContent" id="modifyTreatmentContent">
+								<input type="hidden" name="insertTreatmentContent" id="insertTreatmentContent">
 							</div>
   						</div>
 					</div>							
@@ -64,13 +66,13 @@
 			<div class="card">
 				<div class="card-body">
 					<div class="row">
-						<div class="col-3 text-center">
+						<div class="col-2 text-center">
 							처방내용
 						</div>
 						<div class="col">
 	   						<div >
 								<div id="prescriptionEditor" ></div>
-								<input type="hidden" name="modifyPrescriptionContent" id="modifyPrescriptionContent">
+								<input type="hidden" name="insertPrescriptionContent" id="insertPrescriptionContent">
 							</div>
   						</div>
 					</div>							
@@ -79,11 +81,11 @@
 			<div class="card">
 				<div class="card-body">
 					<div class="row">
-						<div class="col-3 text-center">
+						<div class="col-2 text-center">
 							병원이름
 						</div>
 						<div class="col">
-	   						ㄹ
+	   						${dto.name}
   						</div>
 					</div>							
 				</div>
@@ -104,11 +106,8 @@
 
 <script type="text/javascript">
 		window.onload = function(){
-			let modifyTreatmentContent = `${dto.treatment}`;
-			modifyTreatmentContents.init(modifyTreatmentContent);
-			
-			let modifyPrescriptionContent = `${dto.prescription}`;
-			modifyPrescriptionContents.init(modifyPrescriptionContent);
+			insertTreatmentContents.init();			
+			insertPrescriptionContents.init();
 			
 		}
 </script>

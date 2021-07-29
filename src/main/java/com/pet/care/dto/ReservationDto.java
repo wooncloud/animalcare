@@ -24,6 +24,7 @@ public class ReservationDto implements Serializable {
 	private String name;
 	private String address1;
 	private String phone;
+	private String symptom;
 
 	
 	public ReservationDto() {
@@ -34,7 +35,7 @@ public class ReservationDto implements Serializable {
 
 	public ReservationDto(int seq, int hospital_seq, String user_email, String pet_name, String reservetype,
 			Date regdate, String reservedate, String status, String paynum, String reservetime, String commnet,
-			String name, String address1, String phone) {
+			String name, String address1, String phone, String symptom) {
 		super();
 		this.seq = seq;
 		this.hospital_seq = hospital_seq;
@@ -50,6 +51,8 @@ public class ReservationDto implements Serializable {
 		this.name = name;
 		this.address1 = address1;
 		this.phone = phone;
+		this.symptom = symptom;
+		
 	}
 
 
@@ -60,7 +63,8 @@ public class ReservationDto implements Serializable {
 		return "ReservationDto [seq=" + seq + ", hospital_seq=" + hospital_seq + ", user_email=" + user_email
 				+ ", pet_name=" + pet_name + ", reservetype=" + reservetype + ", regdate=" + regdate + ", reservedate="
 				+ reservedate + ", status=" + status + ", paynum=" + paynum + ", reservetime=" + reservetime
-				+ ", commnet=" + commnet + ", name=" + name + ", address1=" + address1 + ", phone=" + phone + "]";
+				+ ", commnet=" + commnet + ", name=" + name + ", address1=" + address1 + ", phone=" + phone 
+				+ ", symptom=" + symptom + "]";
 	}
 
 
@@ -127,7 +131,10 @@ public class ReservationDto implements Serializable {
 	public String getReservedate() {
 		return reservedate;
 	}
-
+	
+	public String getSymptom() {
+		return symptom;
+	}
 
 	public void setReservedate(String reservedate) {
 		this.reservedate = reservedate;
@@ -203,6 +210,9 @@ public class ReservationDto implements Serializable {
 		this.phone = phone;
 	}
 
+	public void setSymptom(String symptom) {
+		this.symptom = symptom;
+	}
 
 	
 	

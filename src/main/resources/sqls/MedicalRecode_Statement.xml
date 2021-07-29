@@ -96,17 +96,6 @@
 			WHERE SEQ=#{seq}
 	</update>
 	
-<!-- 진료내역 추가전 페이지에 기본 입력되어 있는 데이터 -->
-	<select id="insertBasicData" parameterType="java.lang.Integer" resultMap="MedicalRecodeJoinDto">
-		SELECT r.PET_NAME , u.NAME , r.SYMPTOM ,h.NAME , p.ID , h.SEQ 
-			FROM RESERVATION r 
-				JOIN USERINFO u 
-				ON u.EMAIL = r.USER_EMAIL 
-				JOIN HOSPITALINFO h 
-				ON h.SEQ = r.HOSPITAL_SEQ 
-				JOIN PETINFO p 
-				ON p.NAME = r.PET_NAME 
-		WHERE r.SEQ = #{SEQ}
-	</select>		
+	
 
 </mapper>

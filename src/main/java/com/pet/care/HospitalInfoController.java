@@ -189,7 +189,7 @@ public class HospitalInfoController {
 		MemberDto mDto = (MemberDto) session.getAttribute("member");
 		String Email = mDto.getEmail();
 		
-		// hSeq 가 존재하지않으면 0이 반환됨
+		// // 로그인한 병원의 seq  존재하지않으면 0이 반환됨
 		int hSeq = hsService.findSeq(Email);
 		if(hSeq>0) {
 //			return "redirect:./login.do";
@@ -426,7 +426,7 @@ public class HospitalInfoController {
 		MemberDto mDto = (MemberDto) session.getAttribute("member");
 		String Email = mDto.getEmail();
 		
-		// hSeq 가 존재하지않으면 0이 반환됨
+		// // 로그인한 병원의 seq  존재하지않으면 0이 반환됨
 		int hSeq = hsService.findSeq(Email);
 		
 		// 병원 등록이 되어있지 않다면 진료내역도 있을 수 없으므로 홈으로 보냄
@@ -481,14 +481,41 @@ public class HospitalInfoController {
 	
 	@RequestMapping(value = "/insertRecodePage.do", method = RequestMethod.GET)
 	public String insertRecodePage(HttpSession session, Model model) {
-		logger.info("[insertRecodePage] - {} :  병원관계자 진료기록 입력하기 페이지로 이동");
+		logger.info("[insertRecodePage] - {} :  병원관계자 진료기록 입력하기 페이지로 이동", model);
 		
 		// 예약 내역 에서 진료기록 입력 누를 때 예약번호 가져와서 넣어줘야함
 		// 다른방식으로 입력하더라도 하여튼 넣어줘야함
-//		MedicalRecodeJoinDto dto = mrService.insertsBasicData(301);
-//		model.addAttribute("dto", dto);
+		HospitalJoinDto dto = hiService.insertsBasicData(301);
+		model.addAttribute("dto", dto);
 		
 		return "hospital/insertMedicalRecode";	
+	}
+	
+	@RequestMapping(value = "/insertMedicalRecode.do", method = RequestMethod.POST)
+	public void insertMedicalRecode(@RequestParam Map<String, Object> param, HttpSession session, HttpServletResponse resp) throws IOException {
+		logger.info("[insertMedicalRecode] - {} :  병원관계자 진료기록 입력 요청", param);
+		
+		MedicalRecodeDto mrDto = new MedicalRecodeDto();
+		
+		MemberDto mDto = (MemberDto) session.getAttribute("member");
+		String Email = mDto.getEmail();
+		
+		// 로그인한 병원의 seq  존재하지않으면 0이 반환됨
+		int hSeq = hsService.findSeq(Email);
+		
+		mrDto.setHospital_seq(hSeq);
+		mrDto.setPet_id((String)param.get("petId"));
+		mrDto.setSymptom((String)param.get("symptom"));
+		mrDto.setTreatment((String)param.get("insertTreatmentContent"));
+		mrDto.setPrescription((String)param.get("insertPrescriptionContent"));
+		
+		boolean isc = mrService.insertRecode(mrDto);
+		if(isc) {
+			Util.PrintWriterMsg(resp, "입력이 완료 되었습니다.", "./recodeList.do");
+		}else {
+			Util.PrintWriterMsg(resp, "오류가 발생했습니다. 다시 시도해주세요.", "PetCare/home.do");	
+		}
+		
 	}
 	
 	@RequestMapping(value = "/modifyRecodeHospital.do", method = RequestMethod.GET)
