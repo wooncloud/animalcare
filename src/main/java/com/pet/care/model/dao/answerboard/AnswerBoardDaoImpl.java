@@ -83,4 +83,12 @@ public class AnswerBoardDaoImpl implements IAnswerBoardDao {
 		int cnt = session.insert(NS+"insertReply", dto);
 		return (cnt>0)?true:false;
 	}
+
+	@Override
+	public boolean checkNonUser(Map<String, Object> map) {
+		int cnt = session.selectOne(NS+"checkNonUser", map);
+		return (cnt>0)?true:false;
+	}
+	
+	
 }

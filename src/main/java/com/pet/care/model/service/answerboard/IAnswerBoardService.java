@@ -41,4 +41,7 @@ public interface IAnswerBoardService {
 		
 		//관리자 답글 작성
 		public boolean insertReply(AnswerBoardDto dto);
+		
+		//비회원 조회
+		public boolean checkNonUser(Map<String, Object>map);
 }

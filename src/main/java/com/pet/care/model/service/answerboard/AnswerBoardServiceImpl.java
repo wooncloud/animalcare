@@ -91,4 +91,10 @@ public class AnswerBoardServiceImpl implements IAnswerBoardService {
 		return aDao.insertReply(dto);
 	}
 
+	@Override
+	public boolean checkNonUser(Map<String, Object> map) {
+		logger.info("AnswerBoardServiceImpl checkNonUser {} ", map);
+		return aDao.checkNonUser(map);
+	}
+
 }
