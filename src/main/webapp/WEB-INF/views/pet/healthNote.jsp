@@ -81,13 +81,13 @@ function modal(seq){
 <h2>건강수첩</h2>
 </div>
 <div class="petTab">
-<div class="row">
+<ul class="nav nav-pills">
 <c:forEach var="d" items="${pList}" varStatus="vs">
-	<div class="col-2">
+	<li class="col-2">
 		<button class="btn btn-info" id="bt${vs.count}" onclick="tree('${d.name}')">${d.name}</button>
-	</div>
+	</li>
 </c:forEach>
-</div>
+</ul>
 </div>
 <div>
 	<div id="jstree" class="d-inline-flex p-2 bd-highlight">

@@ -42,8 +42,7 @@ public class HealthNoteController {
 	public String healthNoteList(HttpSession session, Model model) {
 		log.info("HealthNoteController healthNote로 이동");
 
-//		List<PetDto> pList=iPetService.petList(session.getAttribute("user_email").toString());
-		List<PetDto> pList = iPetService.petList("user01@gmail.com");
+		List<PetDto> pList = iPetService.petList((String) session.getAttribute("user_email"));
 		log.info("-------------------------- {}", pList);
 		model.addAttribute("pList", pList);
 
@@ -57,14 +56,10 @@ public class HealthNoteController {
 	public JSONArray notePetList(HttpSession session, String name) {
 		log.info("HealthNoteController noteList조회 받은 name값 : {}", name);
 		Map<String, Object> map = new HashMap<String, Object>();
-		log.info("1");
-//		map.put("email", session.getAttribute("user_email"));
-		map.put("email", "user01@gmail.com");
+		map.put("email", session.getAttribute("user_email"));
 		map.put("name", name);
-		log.info("2");
 		log.info("map : {}", map);
 		List<NoteDto> lDto = iNoteService.noteList(map);
-		log.info("3");
 		JSONObject jsonObject;
 		JSONArray jsonArray = new JSONArray();
 
@@ -109,8 +104,7 @@ public class HealthNoteController {
 	public List<NoteDto> selDateList(HttpSession session, Model model, @RequestParam Map<String,Object> map) {
 		log.info("HealthNoteController selDateList조회 받은 name값 : {}", map);
 		log.info(map.toString());
-//		map.put("email", session.getAttribute("user_email"));
-		map.put("email", "user01@gmail.com");
+		map.put("email", session.getAttribute("user_email"));
 		List<NoteDto> nDto= iNoteService.selDateList(map);
 		
 		return nDto;

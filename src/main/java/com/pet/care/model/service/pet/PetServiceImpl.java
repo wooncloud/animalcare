@@ -1,6 +1,7 @@
 package com.pet.care.model.service.pet;
 
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,9 +38,15 @@ public class PetServiceImpl implements IPetService {
 	}
 
 	@Override
-	public boolean deletePet(String id) {
+	public boolean deletePet(Map<String, Object> map) {
 		log.info("PetServiceImpl deletePet");
-		return pDao.deletePet(id);
+		return pDao.deletePet(map);
+	}
+
+	@Override
+	public PetDto detailPet(Map<String, Object> map) {
+		log.info("PetServiceImpl detailPet");
+		return pDao.detailPet(map);
 	}
 
 }

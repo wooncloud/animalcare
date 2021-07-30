@@ -1,17 +1,19 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@include file="/header.jsp"%>
+
 <div class="container">
+<div class="modal-body">
 	<h2>내 반려동물 보기</h2>
 	<div class="d-grid gap-2 d-md-flex justify-content-md-center">
-		<button type="button" class="btn btn-outline-success me-4">진료내역</button>
-		<button type="button" class="btn btn-outline-success ms-4">건강수첩</button>
+		<button type="button" class="btn btn-outline-success me-4" onclick="location.href=./petMedicalRecodeList.do">진료내역</button>
+		<button type="button" class="btn btn-outline-success ms-4" onclick="location.href='../healthNote/healthNoteList.do'">건강수첩</button>
 	</div>
 	<div class="row row-3 cols-2">
 		<c:forEach var="d" items="${pList}">
-			<div class="col-6 mt-3 px-4 py-4 border border-light">
+			<div id="${d.name}" class="col-6 mt-3 px-4 py-4 border border-light" onclick="location.href='./detailPet.do?name=${d.name}'">
 				<div class="row">
-					<div class="col-4">
+					<div class="col-5">
 						<c:choose>
 							<c:when test="${d.profile}">dd</c:when>
 							<c:otherwise>
@@ -39,21 +41,24 @@
 				</div>
 			</div>
 		</c:forEach>
-		<div class="col-6 mt-3 px-4 py-4">
+		<c:if test="${pList.size() lt 6}">
+		<div class="col-6 mt-3 px-4 py-4">									<!-- 애완동물등록 -->
 			<a type="button" data-bs-toggle="modal"
-				data-bs-target="#staticBackdrop"><img class="img-thumbnail"
+				data-bs-target="#insertModal"><img class="img-thumbnail"
 				src='${path}/img/circle_plus.png'></a>
 		</div>
+		</c:if>
 	</div>
 </div>
-<!-- Modal -->
-<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static"
+</div>
+<!-- insertModal -->
+<div class="modal fade" id="insertModal" data-bs-backdrop="static"
 	data-bs-keyboard="false" tabindex="-1"
 	aria-labelledby="staticBackdropLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="staticBackdropLabel">애완동물 등록</h5>
+				<h5 class="modal-title" id="insertModalLabel">애완동물 등록</h5>
 				<button type="button" class="btn-close" data-bs-dismiss="modal"
 					aria-label="Close"></button>
 			</div>
@@ -75,7 +80,7 @@
 						<div class="row my-2">
 							<div class="col-md-5">무게(kg)*</div>
 							<div class="col-md-7">
-								<input type="number" id="weight" name="weight" required="required">
+								<input type="text" id="weight" name="weight" required="required">
 							</div>
 						</div>
 						<div class="row my-2">
@@ -165,12 +170,9 @@
 					</div>
 			</div>
 			<div class="modal-footer">
-<!-- 				<button type="button" class="btn btn-primary">등록</button> -->
 				<input type="submit" value="등록" class="btn btn-primary">
 				<input type="button" value="취소" class="btn btn-secondary"
 					data-bs-dismiss="modal">
-<!-- 				<button type="button" class="btn btn-secondary" -->
-<!-- 					data-bs-dismiss="modal">Close</button> -->
 			</div>
 				</form>
 		</div>
