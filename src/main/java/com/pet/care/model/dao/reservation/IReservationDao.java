@@ -63,4 +63,7 @@ public interface IReservationDao {
 	
 	//예약 중복 검사
 	public boolean checkReservation(Map<String, Object>map);
+	
+	//예약 확정 상세 보기
+	public ReservationDto userAcceptDetail(Map<String, Object>map);
 }

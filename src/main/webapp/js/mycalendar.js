@@ -1,25 +1,3 @@
-window.onload = function(){
-	var doc = document.getElementsByClassName("card-text time");
-	
-	console.log(document.getElementById("09001100"));
-	console.log(document.getElementById("11001300"));
-	console.log(document.getElementById("13001500"));
-	console.log(document.getElementById("15001700"));
-	
-	for (var i = 0; i < doc.length; i++) {
-		console.log(doc[i].textContent);
-		if(doc[i].textContent == '09001100'){
-			document.getElementById("09001100").remove();
-		} else if(doc[i].textContent == '11001300'){
-			document.getElementById("11001300").remove();
-		} else if(doc[i].textContent == '13001500' ){
-			document.getElementById("13001500").remove();
-		} else if(doc[i].textContent == '15001700' ){
-			document.getElementById("15001700").remove();
-		}
-	}
-}
-
 function makeReserve(user_email,user_name) {
 
 		var frm = document.forms[0];
@@ -242,4 +220,28 @@ function userCancelReservation(seq,status,reservedate){
 }
 }
 
+let setCal={
+	init: function(){
+		
+		var hospital_seq = document.getElementsByName("hospital_seq")[0];
+		console.log(hospital_seq.value);
+		
+		cal.clear();
+			$.ajax({
+				type:"get",
+				url:"./calendar.do?hospital_seq="+hospital_seq.value,
+				dataType:"json",
+				async:true,
+				success:function(msg){
+					let data = JSON.parse(msg.result);
+					console.log(data);
+					cal.createSchedules(data);
+					
+				},
+				error:function(){
+					alert("잘못된 요청입니다.")
+				}
+			});	
+	}
+}
 

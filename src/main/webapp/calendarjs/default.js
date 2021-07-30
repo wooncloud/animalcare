@@ -3,7 +3,7 @@ function init() {
   cal.setCalendars(CalendarList);
 
   setRenderRangeText();
-  setSchedules();
+//  setSchedules();
   setEventListener();
 
 }
@@ -119,6 +119,25 @@ function onClickNavi(e) {
   setSchedules();
 }
 
+//function setSchedules() {
+//		cal.clear();
+//			$.ajax({
+//				type:"get",
+//				url:"./calendar.do?hospital_seq=3",
+//				dataType:"json",
+//				async:true,
+//				success:function(msg){
+//					let data = JSON.parse(msg.result);
+//					console.log(data);
+//					cal.createSchedules(data);
+//					
+//				},
+//				error:function(){
+//					alert("잘못된 요청입니다.")
+//				}
+//			});
+//		}
+
 function setRenderRangeText() {
   var renderRange = document.getElementById('renderRange');
   var options = cal.getOptions();
@@ -135,26 +154,6 @@ function setRenderRangeText() {
     html.push(moment(cal.getDateRangeEnd().getTime()).format('MM.DD'));
   }
   renderRange.innerHTML = html.join('');
-}
-
-function setSchedules() {
-
-	  cal.clear();
-	$.ajax({
-		type:"get",
-		url:"./calendar.do?hospital_seq=3",
-		dataType:"json",
-		async:true,
-		success:function(msg){
-			let data = JSON.parse(msg.result);
-			console.log(data);
-			cal.createSchedules(data);
-			
-		},
-		error:function(){
-			alert("잘못된 요청입니다.")
-		}
-	});
 }
 
 

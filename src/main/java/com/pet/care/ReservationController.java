@@ -86,6 +86,7 @@ public class ReservationController {
 		//세션
 		Map<String, Object> rMap = new HashMap<String, Object>();
 		rMap.put("hospital_seq",hospital_seq);
+		System.out.println("병원번호======================"+ hospital_seq);
 		
 		Map<String, Object>hMap = new HashMap<String, Object>();
 		hMap.put("hospital_seq", hospital_seq);
@@ -189,15 +190,17 @@ public class ReservationController {
 	 * 사용자 반려 상세 조회
 	 */
 	@RequestMapping(value = "/userRejectDetail.do", method = RequestMethod.GET)
-	public String userRejectDetail(Model model) {
+	public String userRejectDetail(Model model, HttpSession session) {
 		
 		logger.info("ReservationController userRejectDetail 사용자 반려 상세 조회 " );
+		
+		MemberDto mDto = (MemberDto)session.getAttribute("member");
 		
 		//user_email은 세션에서 가져와야함
 		//seq는 예약번호 request
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("user_email", "user01@gmail.com");
-		map.put("seq", "103");
+		map.put("user_email", mDto.getEmail());
+		map.put("seq", "103"); // 반려이상하다 번호
 
 		ReservationDto rDto = rService.userRejectDetail(map);
 			
@@ -333,11 +336,6 @@ public class ReservationController {
 		return "reservation/hospitalReserveList";
 	}
 	
-	@RequestMapping(value ="/hospitalPaging.do", method = RequestMethod.GET)
-	public String hospitalPaging() {
-		
-		return "result";
-	}
 	
 	/*
 	 * 병원 예약 상세 조회 완료
@@ -475,11 +473,17 @@ public class ReservationController {
 	@RequestMapping(value = "/acceptReserve.do", method = RequestMethod.GET)
 	public String acceptReserve(@RequestParam Map<String, Object>map) {
 		logger.info("ReservationController acceptReserve 병원 관계자 예약 확정 {}", map );
+		
 		String seq = (String)map.get("seq");
+		boolean isc = rService.acceptReserve(map);
+		ReservationDto rDto = rService.userAcceptDetail(map);
 		
-		rService.acceptReserve(map);
-		
-		return "redirect:/reservation/hospitalReserveDetail.do?seq="+seq;
+		if(isc) {
+			Util.sendReservation(rDto);
+			return "redirect:/reservation/hospitalReserveDetail.do?seq="+seq;
+		}else {
+			return "redirect:/reservation/index";
+		}
 	}
 	
 	/*

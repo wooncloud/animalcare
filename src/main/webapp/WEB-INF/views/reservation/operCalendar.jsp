@@ -34,6 +34,7 @@
     <div id="calendar" style="width: 800px; top:200px; margin: 0 auto;">
     </div>
 </div>	
+<input type="hidden" value="3" name="hospital_seq">
 <script type="text/javascript" class="code-js">
 var cal = new tui.Calendar('#calendar', {
     defaultView: 'month', // monthly view option
@@ -84,5 +85,10 @@ var cal = new tui.Calendar('#calendar', {
 
 </script>
 <script src="${path}/calendarjs/default.js"></script>
+ <script>
+ window.onload = function(){
+	 setCal.init();
+ }
+ </script>
 <%@ include file="/footer.jsp" %>
 

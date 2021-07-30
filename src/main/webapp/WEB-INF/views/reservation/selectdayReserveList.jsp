@@ -130,4 +130,27 @@
 		  </div>
 	   </div>
 	</div>
+	<script>
+	window.onload = function(){
+		var doc = document.getElementsByClassName("card-text time");
+		
+		console.log(document.getElementById("09001100"));
+		console.log(document.getElementById("11001300"));
+		console.log(document.getElementById("13001500"));
+		console.log(document.getElementById("15001700"));
+		
+		for (var i = 0; i < doc.length; i++) {
+			console.log(doc[i].textContent);
+			if(doc[i].textContent == '09001100'){
+				document.getElementById("09001100").remove();
+			} else if(doc[i].textContent == '11001300'){
+				document.getElementById("11001300").remove();
+			} else if(doc[i].textContent == '13001500' ){
+				document.getElementById("13001500").remove();
+			} else if(doc[i].textContent == '15001700' ){
+				document.getElementById("15001700").remove();
+			}
+		}
+	}
+	</script>
 <%@ include file="/footer.jsp"%>

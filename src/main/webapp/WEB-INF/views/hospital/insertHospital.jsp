@@ -218,8 +218,7 @@
 
 <script type="text/javascript">
 		window.onload = function(){
-			insertHospital.init();
-			
+			insertHospital.init();		
 		}
 </script>
 

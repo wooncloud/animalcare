@@ -131,6 +131,12 @@ public class ReservationServiceImpl implements IReservationService {
 	public boolean checkReservation(Map<String, Object> map) {
 		logger.info(" ReservationServiceImpl checkReservation {}", map);
 		return rDao.checkReservation(map);
+	}
+
+	@Override
+	public ReservationDto userAcceptDetail(Map<String, Object> map) {
+		logger.info(" ReservationServiceImpl userAcceptDetail {}", map);
+		return rDao.userAcceptDetail(map);
 	}	
 	
 	

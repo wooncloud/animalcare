@@ -120,5 +120,10 @@ public class ReservationDaoImpl implements IReservationDao {
 		return (cnt>0)?true:false;
 	}
 
+	@Override
+	public ReservationDto userAcceptDetail(Map<String, Object> map) {
+		return session.selectOne(NS+"userAcceptDetail",map);
+	}
+
 	
 }

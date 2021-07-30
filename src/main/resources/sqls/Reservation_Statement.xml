@@ -67,6 +67,18 @@
         ON h.SEQ = r1.HOSPITAL_SEQ 
 	</select>
 	
+	<select id="userAcceptDetail" parameterType="java.util.Map" resultType="ReservationDto">
+	SELECT SEQ, r1.USER_EAMIL ,(SELECT CODENAME FROM TYPECODE t  WHERE CODEID =r1.RESERVETYPE) AS RESERVETYPE ,TO_CHAR(r1.RESERVEDATE,'YYYY-MM-DD')  AS RESERVEDATE ,r1.RESERVETIME , r1.PET_NAME ,r1.PAYNUM ,r1.STATUS, h.NAME ,r1.COMMNET ,h.ADDRESS1 
+        FROM HOSPITALINFO h JOIN
+                        (SELECT r.RESERVETYPE , r.RESERVEDATE ,r.RESERVETIME , r.PET_NAME ,r.PAYNUM ,r.STATUS, r.COMMNET ,r.HOSPITAL_SEQ 
+                                FROM RESERVATION r 
+                                WHERE r.USER_EMAIL =#{user_email}
+                                AND r.STATUS ='A'
+                                AND r.SEQ =#{seq}) r1
+        ON h.SEQ = r1.HOSPITAL_SEQ 
+	</select>
+	
+	
 	<!-- 사용자 예약상세 조회 -->
 	<select id="userReserveDetail" parameterType="java.util.Map" resultType="ReservationDto">
 SELECT r1.SEQ, r1.USER_EMAIL, (SELECT CODENAME FROM TYPECODE t  WHERE CODEID =r1.RESERVETYPE) AS RESERVETYPE , TO_CHAR(r1.RESERVEDATE,'YYYY-MM-DD') AS RESERVEDATE ,r1.RESERVETIME , r1.PET_NAME ,r1.PAYNUM ,r1.STATUS, h.NAME ,h.ADDRESS1, r1.COMMNET
@@ -163,7 +175,7 @@ SELECT r1.SEQ, r1.USER_EMAIL, (SELECT CODENAME FROM TYPECODE t  WHERE CODEID =r1
 	<update id="rejectReserve" parameterType="java.util.Map">
 		UPDATE RESERVATION
         SET STATUS='R', COMMNET =#{commnet}
-        WHERE SEQ = #{seq} AND PAYNUM IS NOT NULL AND STATUS='S'
+        WHERE SEQ = #{seq} 
 	</update>
 	
 	<!-- 예약 완료 -->
