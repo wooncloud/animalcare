@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@include file="/header.jsp" %>
+${hospitalReserveDetail}
 <script type="text/javascript" src="${path}/js/mycalendar.js" ></script>
 <div class="card">
    <div class="card-body">
@@ -77,15 +78,20 @@
    </div>
 </div>
 <c:if test="${hospitalReserveDetail.status eq 'S'}">
-   <button type="button" class="btn btn-primary" onclick="acceptReservation('${hospitalReserveDetail.seq}')">확정</button>
-   <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#rejectReservation">반려</button>
-   <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modifyReservation">수정</button>
+   <button type="button" class="btn btn-primary" name="confirm" onclick="acceptReservation('${hospitalReserveDetail.seq}')">확정</button>
+   <button type="button" class="btn btn-primary" name="reject"  data-bs-toggle="modal" data-bs-target="#rejectReservation">반려</button>
+   <button type="button" class="btn btn-primary" name="modify" data-bs-toggle="modal" data-bs-target="#modifyReservation">수정</button>
+   <button type="button" class="btn btn-primary" name="list" onclick="javascript:history.back(-1);">목록</button>
 </c:if>
 <c:if test="${hospitalReserveDetail.status eq 'A'}">
-   <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modifyReservation">수정</button>
-   <button type="button" class="btn btn-primary" onclick="operCancelReservation('${hospitalReserveDetail.seq}','${hospitalReserveDetail.status}','${hospitalReserveDetail.reservedate}')">취소</button>
+   <button type="button" class="btn btn-primary" name="modify" data-bs-toggle="modal" data-bs-target="#modifyReservation">수정</button>
+    <button type="button" class="btn btn-primary"name="cancel"  onclick="operCancelReservation('${hospitalReserveDetail.seq}','${hospitalReserveDetail.status}','${hospitalReserveDetail.reservedate}')">취소</button>
+   <button type="button" class="btn btn-primary" name="list" onclick="javascript:history.back(-1);">목록</button>
 </c:if>
-<button type="button" class="btn btn-primary" onclick="javascript:history.back(-1);">목록</button>
+<c:if test="${hospitalReserveDetail.status eq 'R' or hospitalReserveDetail.status eq 'C'}">
+   <button type="button" class="btn btn-primary"name="list" onclick="javascript:history.back(-1);">목록</button>
+</c:if>
+
 <!-- 예약 반려 모달 -->
 <div class="modal fade" id="rejectReservation" tabindex="-1" aria-hidden="true">
    <div class="modal-dialog">
@@ -94,7 +100,7 @@
             <h5 class="modal-title">반려 사유</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
          </div>
-         <form action="./rejectReserve.do" method="post">
+         <form action="./rejectCommnetReserve.do" method="post">
          <div class="modal-body">
          <div class="card">
 				<div class="card-body">
@@ -132,19 +138,24 @@
 					  </div>
 					  <div class="form-group">
 						 <label>반려 동물:</label>
-					<input type="text" class="form-control" id="reservetype" name="reservetype" value="${hospitalReserveDetail.pet_name}" readonly>
+					<input type="text" class="form-control" id="pettype" name="pettype" value="${hospitalReserveDetail.pet_name}" readonly>
+					  </div>
+					  <div class="form-group">
+						 <label for="phone">증상:</label>
+						 <input type="text" class="form-control" id="symptom" name="symptom" >
 					  </div>
 					  <div class="form-group">
 						 <label for="reservedate">예약 일자:</label>
-						 <input type="date" class="form-control" id="reservedate" name="reservedate" value="${hospitalReserveDetail.reservedate}" >
+						 <input type="date" class="form-control" id="modifyReservedate" name="modifyReservedate" value="${hospitalReserveDetail.reservedate}" >
 					  </div>
 					  <div class="form-group">
 						 <label for="reservetime">예약 시간:</label>
-							<select class="form-select" aria-label="Default select example" name="reservetime" id="reservetime" >
-								<option id="09001100" value="09001100">0900~1100</option>
-								<option id="11001300" value="11001300">1100~1300</option>
-								<option id="13001500" value="13001500">1300~1500</option>
-								<option id="15001700" value="15001700">1500~1700</option>						
+							<select class="form-select" aria-label="Default select example" name="modifyReservetime" id="modifyReservetime" onchange="modifyChk()">
+								<option value="modifyDefault" id="modifyDefault" selected="selected">선택</option>
+								<option id="09001100" value="09001100">09:00~11:00</option>
+								<option id="11001300" value="11001300">11:00~13:00</option>
+								<option id="13001500" value="13001500">13:00~15:00</option>
+								<option id="15001700" value="15001700">15:00~17:00</option>					
 							</select>
 					  </div>
 					  <div class="form-group">
@@ -157,7 +168,7 @@
 					  </div>
 					  <div class="form-group">
 						 <label for="phone">전화번호:</label>
-						 <input type="text" class="form-control" id="phone" name="phone" value="010-1234-0000" readonly="readonly">
+						 <input type="text" class="form-control" id="phone" name="phone" value="${hospitalReserveDetail.phone}" readonly="readonly">
 					  </div>
 					  <input type="hidden" value="${hospitalReserveDetail.seq}" name="seq" id="seq">
 	    </form>
@@ -175,24 +186,32 @@
 <script type="text/javascript">
 
 
-window.onload = function(){
+// window.onload = function(){
 	
-	var getdate = `${hospitalReserveDetail.reservedate}`
-	var reservedate = new Date(getdate);
-	console.log(reservedate);
+// 	var getdate = `${hospitalReserveDetail.reservedate}`
+// 	var reservedate = new Date(getdate);
+// 	console.log(reservedate);
 	
-	var date = new Date();
-	console.log(date);
+// 	var date = new Date();
+// 	console.log(date);
 	
-
+// 	document.getElementsByName("confirm")
+// 	document.getElementsByName("reject")
+// 	document.getElementsByName("modify")
 	
-	if(reservedate < date){
-		document.getElementsByTagName("button")[0].style.display="none";
-		document.getElementsByTagName("button")[1].style.display="none";
-		document.getElementsByTagName("button")[2].style.display="none";
-	}
+// 	console.log(document.getElementsByName("confirm"));
+// 	console.log(document.getElementsByName("reject"));
+// 	console.log(document.getElementsByName("modify"));
 	
-}
+	
+// 	if(reservedate < date){
+		
+// 		document.getElementsByName("confirm")[0].style.display="none";
+// 		document.getElementsByName("reject")[0].style.display="none";
+// 		document.getElementsByName("modify")[0].style.display="none";
+// 		document.getElementsByName("modify")[1].style.display="none";
+// 	}
+// }
 
 </script>
 <%@ include file="/footer.jsp" %>

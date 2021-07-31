@@ -156,11 +156,14 @@ SELECT r1.SEQ, r1.USER_EMAIL, (SELECT CODENAME FROM TYPECODE t  WHERE CODEID =r1
 	
 	<!-- 병원 예약 상세 조회 완료-->
 	<select id="hospitalReserveDetail" parameterType="java.util.Map" resultType="ReservationDto">
-	 SELECT (SELECT CODENAME FROM TYPECODE t  WHERE CODEID =RESERVETYPE) AS RESERVETYPE, TO_CHAR(r.RESERVEDATE,'YYYY-MM-DD')  AS RESERVEDATE, r.RESERVETIME, r.PET_NAME, r.USER_EMAIL,r.STATUS,u.PHONE, u.NAME, r.SEQ
-         FROM RESERVATION r JOIN USERINFO u
-         ON r.USER_EMAIL = u.EMAIL 
-         AND r.HOSPITAL_SEQ = #{hospital_seq}
-         AND r.SEQ =#{seq}
+	SELECT p.ID, ru.NAME, ru.SEQ, (SELECT CODENAME FROM TYPECODE t  WHERE CODEID = ru.RESERVETYPE) AS RESERVETYPE, TO_CHAR(ru.RESERVEDATE,'YYYY-MM-DD') AS RESERVEDATE, ru.RESERVETIME, ru.USER_EMAIL, ru.STATUS, ru.PHONE, ru.SYMPTOM, ru.PET_NAME
+	FROM PETINFO p JOIN
+			(SELECT NAME,SEQ,RESERVETYPE,RESERVEDATE,RESERVETIME,USER_EMAIL,STATUS,PHONE,PET_NAME, SYMPTOM
+				FROM RESERVATION r JOIN USERINFO u 
+				ON r.USER_EMAIL = u.EMAIL 
+				WHERE r.HOSPITAL_SEQ =#{hospital_seq}
+				AND r.SEQ = #{seq}) ru
+	ON p.NAME = ru.PET_NAME
 	</select>
 
 
@@ -172,21 +175,28 @@ SELECT r1.SEQ, r1.USER_EMAIL, (SELECT CODENAME FROM TYPECODE t  WHERE CODEID =r1
 	</update>
 	
 	<!-- 예약 반려 -->
-	<update id="rejectReserve" parameterType="java.util.Map">
+	<update id="rejectStatusReserve" parameterType="java.util.Map">
 		UPDATE RESERVATION
-        SET STATUS='R', COMMNET =#{commnet}
+        SET STATUS='R'
         WHERE SEQ = #{seq} 
 	</update>
+	
+	<update id="rejectCommnetReserve" parameterType="java.util.Map">
+		UPDATE RESERVATION
+        SET COMMNET =#{commnet}
+        WHERE SEQ = #{seq} 
+	</update>
+	
 	
 	<!-- 예약 완료 -->
 	<update id="acceptReserve" parameterType="java.util.Map">
 	UPDATE RESERVATION 
         SET STATUS = 'A'
-        WHERE SEQ=#{seq} AND PAYNUM IS NOT NULL AND STATUS='S'
+        WHERE SEQ=#{seq}
 	
 	</update>
 	
-	<!--  사용자 예약  취소  -->
+	<!-- 예약  취소  -->
 	<update id="cancelReserve" parameterType="java.util.Map">
 	UPDATE RESERVATION 
         SET STATUS = 'C'
@@ -206,9 +216,9 @@ SELECT r1.SEQ, r1.USER_EMAIL, (SELECT CODENAME FROM TYPECODE t  WHERE CODEID =r1
    </select>
    
    <select id="checkReservation" parameterType="java.util.Map" resultType="java.lang.Integer">
-   SELECT COUNT(*)
+   SELECT COUNT(*)	
  	FROM RESERVATION r 
  	WHERE HOSPITAL_SEQ =#{hospital_seq}
- 	AND RESERVEDATE =#{reservedate} AND RESERVETIME = #{reservetime}
+ 	AND RESERVEDATE =#{reservedate} AND RESERVETIME = #{reservetime} AND STATUS='A'
    </select>
 </mapper>

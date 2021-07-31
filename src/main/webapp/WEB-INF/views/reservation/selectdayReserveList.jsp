@@ -85,7 +85,7 @@
 							<option value="REV003">예방접종</option>
 							<option value="REV004">건강검진</option>
 						 </select>
-					  </div>
+					  </div>	
 					  <div class="form-group">
 						 <label>반려 동물:</label>
 						 <select class="form-select" aria-label="Default select example" name=pet_name>
@@ -95,6 +95,10 @@
 							</c:forEach>
 						 </select>
 					  </div>
+					  	<div class="form-group">
+						 <label for="phone">증상:</label>
+						 <input type="text" class="form-control" id="phone" name="symptom" >
+					  </div>	
 					  <div class="form-group">
 						 <label for="reservedate">예약 일자:</label>
 						 <input type="text" class="form-control" id="reservedate" name="reservedate" value="${reservedate}" readonly>
@@ -119,7 +123,7 @@
 					  <div class="form-group">
 						 <label for="phone">전화번호:</label>
 						 <input type="text" class="form-control" id="phone" name="phone" value="010-1234-0000" readonly="readonly">
-					  </div>
+					  </div>	  
 	    </form>
 				</div>
 			 </div>
@@ -130,7 +134,7 @@
 		  </div>
 	   </div>
 	</div>
-	<script>
+<script>
 	window.onload = function(){
 		var doc = document.getElementsByClassName("card-text time");
 		
@@ -152,5 +156,5 @@
 			}
 		}
 	}
-	</script>
+</script>
 <%@ include file="/footer.jsp"%>

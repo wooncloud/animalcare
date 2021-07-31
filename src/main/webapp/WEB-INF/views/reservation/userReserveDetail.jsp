@@ -13,6 +13,7 @@
          </div>
           <div class="col-3">
             <h6 class="card-subtitle mb-2 text-muted">예약일자</h6>
+            <input type="hidden" name="reservedate" id="reservedate" value="${reserveDto.reservedate}">
          </div>
           <div class="col-3">
             <p class="card-text">${reserveDto.reservedate}</p>
@@ -85,36 +86,20 @@
 </div>
 
 <c:if test="${reserveDto.status == 'S' or reserveDto.status =='A' }">
-   <button name="cancelBtn" class="btn btn-primary" onclick="userCancelReservation('${reserveDto.seq}','${reserveDto.status}','${reserveDto.reservedate}');">취소</button>
+   <button name="cancelBtn" class="btn btn-primary" onclick="userCancelReservation('${reserveDto.seq}','${reserveDto.status}');">취소</button>
 </c:if>
-
 <button class="btn btn-primary" onclick="javascript:history.back(-1);">목록</button>
-
 <script type="text/javascript">
-
-// window.onload= function('${reserveDto.reservedate}'){
-
-// 	console.log(reservedate);
+window.onload = function(){
 	
-// 	var date = new Date();
-// 	var day = date.getDate();
-// 	var year = date.getFullYear();
-// 	var month = (1+date.getMonth());
-// 	month = (month >= 10) ? month : '0' + month;
-// 	day = (day >= 10) ? day : '0' + day; 
-		
-// 	var today = year+"-"+month+"-"+day;//날짜
-// 	console.log(today);
-// 	console.log(date);
+	var reserve = document.getElementById("reservedate").value;
+	var date = new Date();
+	var reservedate = new Date(reserve);
 
-// 	var cBtn = document.getElementsByName("cancelBtn")[0];
-	
-	
-// 	if(today > reservedate){
-// 		alert("취소 기간이 아닙니다");
-// // 		cBtn.style.display="none";
-// 	}
-// }
+	if(date > reservedate){
+		document.getElementsByTagName("button")[0].style.display="none";
+	}
+}
 
 </script>
 <%@include file="/footer.jsp" %>

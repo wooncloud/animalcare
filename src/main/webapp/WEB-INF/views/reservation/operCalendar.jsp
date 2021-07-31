@@ -11,7 +11,6 @@
   <script src="${path}/calendarjs/tui-calendar.js"></script>
   <script src="${path}/calendarjs/calendars.js"></script>
   <script src="${path}/calendarjs/schedules.js"></script>
-
  <!-- calendar -->
  <link rel="stylesheet" type="text/css" href="https://uicdn.toast.com/tui.time-picker/latest/tui-time-picker.css">
  <link rel="stylesheet" type="text/css" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css">
@@ -19,6 +18,7 @@
  <link rel="stylesheet" type="text/css" href="${path}/calendarcss/default.css">
  <link rel="stylesheet" type="text/css" href="${path}/calendarcss/icons.css">
   <div class="code-html">
+  ${sessionScope.member}
     <div id="menu"  style="height: 700px;">
       <span id="renderRange" class="render-range" style="padding-left:250px;"></span>
           <span id="menu-navi">
