@@ -13,14 +13,17 @@
 		<result property="tel" column="TEL"/>
 		<result property="emergency" column="EMERGENCY"/>
 		<result property="delflag" column="DELFLAG"/>
-<!-- 		<collection property="" resultMap="UserDto"/> -->
+		<collection property="userdto" resultMap="UserDto"/>
 		<collection property="pettypedto" resultMap="PetTypeDto"/>
 		<collection property="operatordto" resultMap="OperatorDto"/>
+		<collection property="reservationdto" resultMap="ReservationDto"/>
+		<collection property="petdto" resultMap="PetDto"/>
 	</resultMap>
 	
-<!-- 	<resultMap type="com.pet.care.dto.UserDto" id="UserDto"> -->
-<!-- 		<result/> -->
-<!-- 	</resultMap> -->
+	<resultMap type="com.pet.care.dto.UserDto" id="UserDto">
+		<result property="email" column="EMAIL"/>
+		<result property="name" column="UNAME"/>
+	</resultMap>
 	
 	<resultMap type="com.pet.care.dto.PetTypeDto" id="PetTypeDto">
 		<result property="seq" column="SEQ"/>
@@ -31,6 +34,19 @@
 	
 	<resultMap type="com.pet.care.dto.OperatorDto" id="OperatorDto">
 		<result property="phone" column="PHONE"/>
+		<result property="email" column="EMAIL"/>
+	</resultMap>
+	
+	<resultMap type="com.pet.care.dto.ReservationDto" id="ReservationDto">
+		<result property="hospital_seq " column="HOSPITAL_SEQ "/>
+		<result property="pet_name" column="PET_NAME"/>
+		<result property="user_email " column="USER_EMAIL "/>
+		<result property="symptom" column="SYMPTOM"/>
+	</resultMap>
+	
+	<resultMap type="com.pet.care.dto.PetDto" id="PetDto">
+		<result property="id" column="ID"/>
+		<result property="name" column="NAME"/>
 		<result property="email" column="EMAIL"/>
 	</resultMap>
 
@@ -138,7 +154,7 @@
 	<select id="detailHospitalOper" resultMap="HospitalJoinDto">
 		SELECT h.SEQ, h.OPERATOR_EMAIL , h.NAME , h.ADDRESS1 ,
                 h.ADDRESS2 , o.PHONE , LISTAGG(p.PETTYPE,',') PETTYPE ,
-                h.CONTENT , h.EMERGENCY , h.OPENTIME , h.TEL
+                h.CONTENT , h.EMERGENCY , h.OPENTIME , h.TEL , h.DELFLAG 
         FROM HOSPITALINFO h 
                 JOIN PETTYPE p 
                 ON h.SEQ = p.HOSPITAL_SEQ
@@ -147,7 +163,7 @@
         WHERE o.EMAIL = #{email}
                 AND h.DELFLAG = 'N'
         GROUP BY h.SEQ, h.OPERATOR_EMAIL , h.NAME , h.ADDRESS1 , o.PHONE , 
-                        h.ADDRESS2 , h.CONTENT , h.EMERGENCY , h.OPENTIME , h.TEL
+                        h.ADDRESS2 , h.CONTENT , h.EMERGENCY , h.OPENTIME , h.TEL ,  h.DELFLAG 
 	</select>
 <!-- 	병원 상세정보 조회  (사용자)  -->
 	<select id="detailHospital" resultMap="HospitalJoinDto">
@@ -196,5 +212,17 @@
 			WHERE SEQ =#{seq}
 	</update>
 	
+<!-- 진료내역 추가전 페이지에 기본 입력되어 있는 데이터 -->
+	<select id="insertBasicData" parameterType="java.lang.Integer" resultMap="HospitalJoinDto">
+		SELECT r.PET_NAME , u.NAME UNAME , r.SYMPTOM ,h.NAME , p.ID , h.SEQ 
+			FROM HOSPITALINFO h			
+				JOIN RESERVATION r
+				ON h.SEQ = r.HOSPITAL_SEQ 
+				JOIN USERINFO u 
+				ON u.EMAIL = r.USER_EMAIL 
+				JOIN PETINFO p 
+				ON p.NAME = r.PET_NAME 
+		WHERE r.SEQ = #{SEQ}
+	</select>		
 	
 </mapper>

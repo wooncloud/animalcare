@@ -50,4 +50,7 @@ public interface IHospitalInfoService {
 	//병원 정보 삭제  
 	public boolean deleteHospital(int seq);
 	
+	//진료내역 추가전 페이지에 기본 입력되어 있는 데이터
+	public HospitalJoinDto insertsBasicData(int seq);
+	
 }

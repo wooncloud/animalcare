@@ -21,8 +21,8 @@ public class NoteServiceImpl implements INoteService {
 	}
 
 	@Override
-	public List<NoteDto> selNoteList(Map<String, Object> map) {
-		return iNoteDao.selNoteList(map);
+	public List<NoteDto> selDateList(Map<String, Object> map) {
+		return iNoteDao.selDateList(map);
 	}
 
 	@Override

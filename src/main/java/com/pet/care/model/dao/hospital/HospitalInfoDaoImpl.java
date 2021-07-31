@@ -99,6 +99,12 @@ public class HospitalInfoDaoImpl implements IHospitalInfoDao {
 	public int deleteHospital(int seq) {
 		return sqlSession.update(NS + "deleteHospital", seq);
 	}
+	
+	//진료내역 추가전 페이지에 기본 입력되어 있는 데이터
+	@Override
+	public HospitalJoinDto insertsBasicData(int seq) {	 
+		return sqlSession.selectOne(NS+"insertBasicData", seq);
+	}
 
 
 }

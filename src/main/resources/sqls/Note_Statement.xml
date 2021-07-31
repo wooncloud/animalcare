@@ -37,8 +37,8 @@
         LEFT OUTER JOIN PETINFO p ON h.PET_ID = p.ID 
     WHERE p.USER_EMAIL =#{email}
     AND h.PET_ID = (SELECT p.ID FROM PETINFO p WHERE p.NAME=#{name})
-        AND h.REGDATE >TO_DATE(#{seldate},'MM-DD')
-    AND h.REGDATE <TO_DATE({seldate},'MM-DD')+1
+        AND h.REGDATE >TO_DATE(#{seldate},'YYYY-MM-DD')
+    AND h.REGDATE <TO_DATE(#{seldate},'YYYY-MM-DD')+1
 ]]>
 </select>
 

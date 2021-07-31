@@ -111,4 +111,11 @@ public class HospitalInfoServiceImpl implements IHospitalInfoService {
 		return dao.deleteHospital(seq) > 0 ? true : false;
 	}
 	
+	//진료내역 추가전 페이지에 기본 입력되어 있는 데이터
+	@Override
+	public HospitalJoinDto insertsBasicData(int seq) {
+		logger.info("[insertsBasicData - {}] : 진료내역 상세정보 조회", seq);
+		return dao.insertsBasicData(seq);
+	}
+	
 }
