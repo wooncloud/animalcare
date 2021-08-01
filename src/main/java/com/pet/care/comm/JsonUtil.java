@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import com.pet.care.dto.CodeDto;
 import com.pet.care.dto.HospitalScheduleDto;
@@ -11,6 +13,26 @@ import com.pet.care.dto.ReservationDto;
 
 public class JsonUtil {
 
+	/**
+	 * 문자열을 JSON 객체로 변환해 줍니다.<br>
+	 * org.json.simple을 이용한 메서드 입니다.
+	 * 
+	 * @param str : 변환하고자 하는 json 형식의 문자열
+	 * @return org.json.simple.JSONObject 형식의 Json 객체
+	 */
+	public static JSONObject stringToJson(String str) {
+		JSONParser parser = new JSONParser();
+		JSONObject jsonObj = null;
+
+		try {
+			jsonObj = (JSONObject) parser.parse(str);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
+		return jsonObj;
+	}
+	
 	/**
 	 * 공통코드 리스트를 JsonArray로 변환하는 메서드입니다.
 	 * 

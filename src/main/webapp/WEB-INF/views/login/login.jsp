@@ -7,6 +7,11 @@
 		top: calc( 50vh - 300px );
 		box-shadow: 0px 5px 10px 0px #ccc;
 	}
+
+	.oauth-img{
+		height: 48px;
+		border-radius: 10px;
+	}
 </style>
 <script type="text/javascript" src="${path}/js/login.js"></script>
 <div class="card login-div">
@@ -22,6 +27,23 @@
 			<div class="form-floating my-3">
 				<input type="password" class="form-control" id="password" name="password" placeholder="password">
 				<label for="password">비밀번호</label>
+			</div>
+			<div class="d-flex justify-content-center my-4">
+				<div class="mx-2">
+					<a href="${naver}">
+						<img class="oauth-img" src="${path}/img/oauth/naver_login.png" alt="naver login">
+					</a>
+				</div>
+				<div class="mx-2">
+					<a href="${kakao}">
+						<img class="oauth-img" src="${path}/img/oauth/kakao_login.png" alt="kakao login">
+					</a>
+				</div>
+				<div class="mx-2">
+					<a href="${google}">
+						<img class="oauth-img" src="${path}/img/oauth/google_login.png" alt="google login">
+					</a>
+				</div>
 			</div>
 		</div>
 		<div class="card-footer">

@@ -1,7 +1,6 @@
-package com.pet.care;
+package com.pet.care.comm;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -15,49 +14,22 @@ import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-import javax.servlet.http.HttpSession;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
-import com.pet.care.comm.Util;
 
-@Controller
-public class TestController {
+public class OAuthUtil {
 
-	@Autowired
-	private JavaMailSender mailSender;
+	// NAVER ----------------------------------------------------------------------------------------
 	
-	@RequestMapping(value = "/test/sms.do", method = RequestMethod.GET)
-	public String smsPage() {
-		return "test/SMS";
-	}
-	
-	@RequestMapping(value = "/test/email.do", method = RequestMethod.GET)
-	public String emailPage() {
-		Util.EmailSend(mailSender, "dntjdgh02@naver.com", "테스트입니다.", "대단하네요!");
-		
-		return "test/SMS";
-	}
-
-	@RequestMapping(value = "/test/sendSMS.do", method = RequestMethod.POST)
-	@ResponseBody
-	public String sendSMS(String phoneNumber) {
-		return Util.sendSMS(phoneNumber);
-	}
-
-	@RequestMapping(value = "/test/oauth.do", method = RequestMethod.GET)
-	public String oauthPage(Model model, HttpSession session) {
+	/**
+	 * NAVER Oauth 초기화
+	 * @param model
+	 */
+	public static void initNaverOauth(Model model) {
 		Properties prop = new Util().readProperties("properties/oauth_naver.properties");
-
+		
 		SecureRandom random = new SecureRandom();
 		String state = new BigInteger(130, random).toString();
 		String redirectURI = "";
@@ -73,27 +45,18 @@ public class TestController {
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
-
+		
 		model.addAttribute("naver", naverApiURL);
-		session.setAttribute("state", state);
-		
-		// ----------------------------------------- Google
-		prop = new Util().readProperties("properties/oauth_google.properties");
-		
-		String googleApiURL = "https://accounts.google.com/o/oauth2/v2/auth?";
-		googleApiURL += "client_id=" + prop.getProperty("id");
-		googleApiURL += "&redirect_uri=http://localhost:8099/PetCare/user/google/callback.do";
-		googleApiURL += "&response_type=code";
-		googleApiURL += "&scope=+email%20profile%20openid";
-		googleApiURL += "&access_type=offline";
-		
-		model.addAttribute("google", googleApiURL);
-
-		return "test/OAuth";
+		model.addAttribute("state", state);
 	}
+	
+	/**
+	 * 네이버 OAuth 콜백
+	 * @return
+	 */
+	public static String naverOAuthCallback(Map<String, String> param) {
+		String result = "";
 
-	@RequestMapping(value = "/user/naver/callback.do", method = RequestMethod.GET)
-	public String oauthNaverCallBack(@RequestParam Map<String, String> param, Model model) {
 		Properties prop = new Util().readProperties("properties/oauth_naver.properties");
 
 		String clientId = prop.getProperty("id");
@@ -146,16 +109,17 @@ public class TestController {
 				JSONParser parser = new JSONParser();
 				JSONObject jsonObj = (JSONObject) parser.parse(res.toString());
 				
-				getNaverUserInfoOAuth((String) jsonObj.get("access_token"));
+				result = OAuthUtil.getNaverUserInfoOAuth((String) jsonObj.get("access_token"));
 			}
 		} catch (Exception e) {
 			System.out.println(e);
+			result = "{\"message\":\"error\"}";
 		}
 
-		return "/";
+		return result;
 	}
 
-	private void getNaverUserInfoOAuth(String accessToken) {
+	public static String getNaverUserInfoOAuth(String accessToken) {
 		String header = "Bearer " + accessToken;
 
 		String apiURL = "https://openapi.naver.com/v1/nid/me";
@@ -166,6 +130,8 @@ public class TestController {
 
 		System.out.println("----------------------");
 		System.out.println(responseBody);
+
+		return responseBody;
 	}
 
 	private static String get(String apiUrl, Map<String, String> requestHeaders) {
@@ -188,7 +154,7 @@ public class TestController {
 			con.disconnect();
 		}
 	}
-
+	
 	private static HttpURLConnection connect(String apiUrl) {
 		try {
 			URL url = new URL(apiUrl);
@@ -217,38 +183,27 @@ public class TestController {
 		}
 	}
 	
-	@RequestMapping(value = "/user/google/callback.do", method = RequestMethod.GET)
-	public String oauthGoogleCallBack(@RequestParam(value = "code") String authCode, Model model) {
+	// NAVER END ----------------------------------------------------------------------------------------
+
+
+	// GOOGLE ----------------------------------------------------------------------------------------
+
+	public static void initGoogleOauth(Model model) {
+		Properties prop = new Util().readProperties("properties/oauth_google.properties");
 		
-		return "/";
+		String googleApiURL = "https://accounts.google.com/o/oauth2/v2/auth?";
+		googleApiURL += "client_id=" + prop.getProperty("id");
+		googleApiURL += "&redirect_uri=" + prop.getProperty("url");
+		googleApiURL += "&response_type=code";
+		googleApiURL += "&scope=+email%20profile%20openid";
+		googleApiURL += "&access_type=offline";
+		
+		model.addAttribute("google", googleApiURL);
 	}
-	
-	 private static final String SAVE_PATH = "C:\\Users\\CHO\\workspace_Spring\\PetCare\\src\\main\\webapp\\img\\";//원하는 파일 경로 지정
-	 
-	 @RequestMapping(value ="/test/upload.do", method = RequestMethod.POST)
-	 public String upload(
-		 @RequestParam(value="file1", required = false) MultipartFile mf) {       
-	 
-		 String originalFileName = mf.getOriginalFilename();
-		 long fileSize = mf.getSize();
-		 String saveFile = SAVE_PATH + System.currentTimeMillis() + originalFileName;
-	 
-	            
-		 	try {
-		 		mf.transferTo(new File(saveFile));
-	 
-		 		} catch (IllegalStateException e) {
-		 			// TODO Auto-generated catch block
-		 			e.printStackTrace();
-		 		} catch (IOException e) {
-		 			// TODO Auto-generated catch block
-		 			e.printStackTrace();
-		 		}
-		 	return "/";
-	 }
-	    
-	 @RequestMapping(value = "/test/user/login.do", method = RequestMethod.GET)
-	 public String login() {
-		 return "";
-	 }
+
+
+
+
+
+	// GOOGLE END ----------------------------------------------------------------------------------------
 }

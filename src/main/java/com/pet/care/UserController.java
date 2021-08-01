@@ -1,23 +1,34 @@
 package com.pet.care;
 
+import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.RestTemplate;
 
+import com.pet.care.comm.JsonUtil;
+import com.pet.care.comm.OAuthUtil;
 import com.pet.care.comm.Util;
 import com.pet.care.dto.MemberDto;
 import com.pet.care.dto.OperatorDto;
@@ -37,9 +48,14 @@ public class UserController {
 
 	// 로그인 화면
 	@RequestMapping(value = "/loginForm.do", method = RequestMethod.GET)
-	public String loginForm() {
+	public String loginForm(Model model, HttpSession session) {
+		// naver oAuth Init
+		OAuthUtil.initNaverOauth(model);
+		OAuthUtil.initGoogleOauth(model);
+		
 		return "login/login";
 	}
+	
 
 	// 로그인
 	@RequestMapping(value = "/login.do", method = RequestMethod.POST)
@@ -48,10 +64,15 @@ public class UserController {
 
 		MemberDto member = userService.userLogin(param);
 
+		return loginProcess(member, session);
+	}
+
+	private String loginProcess(MemberDto member, HttpSession session) {
 		// 로그인 실패
 		if (member == null) {
 			return "redirect:./loginForm.do?type=empty";
 		} else {
+			System.out.println(member);
 			session.setAttribute("member", member);
 
 			// 관리자
@@ -74,6 +95,56 @@ public class UserController {
 				return "redirect:/home.do";
 			}
 		}
+	}
+	
+	// Naver oAuth Callback
+	@RequestMapping(value = "/naver_callback.do", method = RequestMethod.GET)
+	public String oauthNaverCallBack(@RequestParam Map<String, String> param, HttpSession session) {
+		MemberDto member = null;
+
+		String res = OAuthUtil.naverOAuthCallback(param);
+		JSONObject oauthJson = JsonUtil.stringToJson(res);
+
+		if(oauthJson.get("message").equals("success")){
+			JSONObject response = (JSONObject) oauthJson.get("response");
+			String email = (String) response.get("email");
+			member = userService.emailSecurity(email);
+		}
+		else{
+			return "redirect:./loginForm.do?type=empty";
+		}
+
+		return loginProcess(member, session);
+	}
+
+	// Google oAuth Callback
+	@RequestMapping(value = "/google_callback.do", method = RequestMethod.GET)
+	public String oauthGoogleCallBack(@RequestParam Map<String, String> param, HttpSession session) {
+		Properties prop = new Util().readProperties("properties/oauth_google.properties");
+
+		String code = param.get("code");
+		HttpHeaders headers = new HttpHeaders();
+		RestTemplate restTemplate = new RestTemplate(); 
+		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+		
+		MultiValueMap<String, String> parameters = new LinkedMultiValueMap<>();
+		parameters.add("code", code);
+		parameters.add("client_id", prop.getProperty("id"));
+		parameters.add("client_secret", prop.getProperty("secret"));
+		parameters.add("redirect_uri", prop.getProperty("url"));
+		parameters.add("grant_type", "authorization_code");
+		
+		HttpEntity<MultiValueMap<String,String>> rest_request = new HttpEntity<>(parameters,headers);
+		
+		URI uri = URI.create("https://www.googleapis.com/oauth2/v4/token");
+		
+		ResponseEntity<Map> rest_reponse;
+		rest_reponse = RestTemplate.postForEntity(uri, rest_request, String.class);
+		String bodys = rest_reponse.getBody();
+		System.out.println(bodys);
+		
+		return "redirect:/home.do";
+		// return loginProcess(member, session);
 	}
 
 	// 로그아웃
