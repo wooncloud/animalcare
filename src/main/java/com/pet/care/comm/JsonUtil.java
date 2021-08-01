@@ -1,6 +1,10 @@
 package com.pet.care.comm;
 
+import java.io.UnsupportedEncodingException;
+import java.util.Base64;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -10,6 +14,10 @@ import org.json.simple.parser.ParseException;
 import com.pet.care.dto.CodeDto;
 import com.pet.care.dto.HospitalScheduleDto;
 import com.pet.care.dto.ReservationDto;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
 
 public class JsonUtil {
 
@@ -62,6 +70,8 @@ public class JsonUtil {
 	 * @param HospitalScheduleList : 월간 병원일정 리스트
 	 * @param reservationList : 월간 예약 리스트
 	 * @return 월간 병원일정 및 예약 리스트를 Json으로 병합한 데이터
+	 * 
+	 * @author WOO SEONG HO
 	 */
 	@SuppressWarnings("unchecked")
 	public static JSONArray CalenderJson(List<HospitalScheduleDto> HospitalScheduleList, List<ReservationDto> reservationList) {
@@ -102,4 +112,59 @@ public class JsonUtil {
 		
 		return ja;
 	}
+	
+	/**
+	 * jwt 토큰을 decode해 줍니다.
+	 * @param jwt
+	 * @return decode된 header, payload
+	 * 
+	 * @author WOO SEONG HO
+	 */
+	public static Map<String, String> decodeJWT(String jwt) {
+		String[] chunks = jwt.split("\\.");
+    	Base64.Decoder decoder = Base64.getDecoder();
+
+    	String header = new String(decoder.decode(chunks[0]));
+    	String payload = new String(decoder.decode(chunks[1]));
+    	
+    	Map<String, String> result = new HashMap<String, String>();
+    	result.put("header", header);
+    	result.put("payload", payload);
+    	
+    	return result;
+	}
+	
+	
+	/**
+	 * jwt 토큰 검증 
+	 * @param jwt 토큰
+	 * @return claimMap
+	 * @throws UnsupportedEncodingException
+	 * 
+	 * @author WOO SEONG HO
+	 */
+    public static Map<String, Object> verifyJWT(String jwt, String key) {
+    	Map<String, Object> claimMap = null;
+    	
+        try {
+            Claims claims = Jwts.parser()
+                    .setSigningKey(key.getBytes("UTF-8")) // Set Key
+                    .parseClaimsJws(jwt) // 파싱 및 검증, 실패 시 에러
+                    .getBody();
+
+            claimMap = claims;
+
+            //Date expiration = claims.get("exp", Date.class);
+            //String data = claims.get("data", String.class);
+            
+        } catch (ExpiredJwtException e) {
+        	// 토큰이 만료되었을 경우
+            e.printStackTrace();
+        } catch (Exception e) {
+        	// 그외 에러났을 경우
+            e.printStackTrace();
+        }
+        
+        return claimMap;
+    } 
 }

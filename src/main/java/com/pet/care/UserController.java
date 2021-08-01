@@ -13,20 +13,15 @@ import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.pet.care.comm.JsonUtil;
 import com.pet.care.comm.OAuthUtil;
 import com.pet.care.comm.Util;
@@ -52,6 +47,7 @@ public class UserController {
 		// naver oAuth Init
 		OAuthUtil.initNaverOauth(model);
 		OAuthUtil.initGoogleOauth(model);
+		OAuthUtil.initKakaoOauth(model);
 		
 		return "login/login";
 	}
@@ -116,35 +112,43 @@ public class UserController {
 
 		return loginProcess(member, session);
 	}
+	
+	// Naver oAuth Callback
+	@RequestMapping(value = "/kakao_callback.do", method = RequestMethod.GET)
+	public String oauthKakaoCallBack(@RequestParam Map<String, String> param, HttpSession session) {
+		MemberDto member = null;
+		
+		if(param.get("code") != null) {
+			String code = param.get("code");
+			String access_Token = OAuthUtil.kakaoOAuthCallback(code);
+			String email = OAuthUtil.getKakaoUserEmail(access_Token);
+			
+			if(email == null) {
+				return "redirect:./loginForm.do?type=empty";				
+			} else {
+				member = userService.emailSecurity(email);
+				return loginProcess(member, session);
+			}
+			
+		} else {
+			return "redirect:./loginForm.do?type=empty";			
+		}
+	}
 
 	// Google oAuth Callback
 	@RequestMapping(value = "/google_callback.do", method = RequestMethod.GET)
 	public String oauthGoogleCallBack(@RequestParam Map<String, String> param, HttpSession session) {
 		Properties prop = new Util().readProperties("properties/oauth_google.properties");
 
-		String code = param.get("code");
-		HttpHeaders headers = new HttpHeaders();
-		RestTemplate restTemplate = new RestTemplate(); 
-		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-		
-		MultiValueMap<String, String> parameters = new LinkedMultiValueMap<>();
-		parameters.add("code", code);
-		parameters.add("client_id", prop.getProperty("id"));
-		parameters.add("client_secret", prop.getProperty("secret"));
-		parameters.add("redirect_uri", prop.getProperty("url"));
-		parameters.add("grant_type", "authorization_code");
-		
-		HttpEntity<MultiValueMap<String,String>> rest_request = new HttpEntity<>(parameters,headers);
-		
-		URI uri = URI.create("https://www.googleapis.com/oauth2/v4/token");
-		
-		ResponseEntity<Map> rest_reponse;
-		rest_reponse = RestTemplate.postForEntity(uri, rest_request, String.class);
-		String bodys = rest_reponse.getBody();
-		System.out.println(bodys);
-		
-		return "redirect:/home.do";
-		// return loginProcess(member, session);
+		try {
+			String email = OAuthUtil.googleOAuthCallback(param, prop);
+			MemberDto member = userService.emailSecurity(email);
+			
+			return loginProcess(member, session);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+			return "redirect:./loginForm.do?type=empty";
+		}
 	}
 
 	// 로그아웃
