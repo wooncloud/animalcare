@@ -19,7 +19,6 @@
  <link rel="stylesheet" type="text/css" href="${path}/calendarcss/tui-calendar.css">
  <link rel="stylesheet" type="text/css" href="${path}/calendarcss/default.css">
  <link rel="stylesheet" type="text/css" href="${path}/calendarcss/icons.css">
-${searchInfo}
   <div class="code-html">
     <div id="menu" style="height: 700px;">
       <span id="renderRange" class="render-range" style="padding-left:250px;"></span>

@@ -52,7 +52,7 @@ public class JsonUtil {
 			JSONObject j = new JSONObject();
 			j.put("id", String.valueOf(r.getSeq()));
 			j.put("calendarId", "예약완료");
-			j.put("title", r.getReservetype()); // 제목 어떻게 할지 정해야 함.
+			j.put("title", r.getReservetype()+"/"+r.getReservetime().substring(0,2)+":"+r.getReservetime().substring(2,4)); // 제목 어떻게 할지 정해야 함.
 			j.put("start",r.getReservedate()+"T"+ r.getReservetime().substring(0,2)+":"+r.getReservetime().substring(2,4)+":00");
 //			SimpleDateFormat rReserve = new SimpleDateFormat("YYYY-MM-DD HH:mm:ss");
 //			String reserve = rReserve.format(r.getReservedate()+r.getReservetime());

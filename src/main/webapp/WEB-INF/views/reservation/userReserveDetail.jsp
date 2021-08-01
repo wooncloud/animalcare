@@ -10,6 +10,7 @@
          </div>
           <div class="col-3">
             <p class="card-text">${reserveDto.reservetype}</p>
+            <input type="hidden" name="reservetype" id="reservetype" value="${reserveDto.reservetype}">
          </div>
           <div class="col-3">
             <h6 class="card-subtitle mb-2 text-muted">예약일자</h6>
@@ -87,18 +88,22 @@
 
 <c:if test="${reserveDto.status == 'S' or reserveDto.status =='A' }">
    <button name="cancelBtn" class="btn btn-primary" onclick="userCancelReservation('${reserveDto.seq}','${reserveDto.status}');">취소</button>
+   <button class="btn btn-primary" onclick="javascript:history.back(-1);">목록</button>
 </c:if>
+<c:if test="${reserveDto.status == 'R'or reserveDto.status == 'C'}">
 <button class="btn btn-primary" onclick="javascript:history.back(-1);">목록</button>
+</c:if>
 <script type="text/javascript">
 window.onload = function(){
 	
 	var reserve = document.getElementById("reservedate").value;
+	var reservetype = document.getElementById("reservetype").value;
 	var date = new Date();
 	var reservedate = new Date(reserve);
 
 	if(date > reservedate){
 		document.getElementsByTagName("button")[0].style.display="none";
-	}
+	} 
 }
 
 </script>

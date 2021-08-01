@@ -461,7 +461,6 @@ function deleteSchedule(){
 	
 	
 }
-}
 
 //병원 진료기록 리스트 페이지 이동
 function medicalListPage(){

@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@include file="/header.jsp" %>
-${hospitalReserveDetail}
 <script type="text/javascript" src="${path}/js/mycalendar.js" ></script>
 <div class="card">
    <div class="card-body">
@@ -45,18 +44,18 @@ ${hospitalReserveDetail}
             <h6 class="card-subtitle mb-2 text-muted">예약 상태</h6>
          </div>
           <div class="col-3">
-        				<c:if test="${hospitalReserveDetail.status eq 'S'}">
-							<p class="card-text">대기</p>
-						</c:if>
-						<c:if test="${hospitalReserveDetail.status eq 'A'}">
-							<p class="card-text">확정</p>
-						</c:if>
-						<c:if test="${hospitalReserveDetail.status eq 'C'}">
-							<p class="card-text">취소</p>
-						</c:if>
-						<c:if test="${hospitalReserveDetail.status eq 'R'}">
-							<p class="card-text">반려</p>
-						</c:if>
+        	<c:if test="${hospitalReserveDetail.status eq 'S'}">
+				<p class="card-text">대기</p>
+			</c:if>
+			<c:if test="${hospitalReserveDetail.status eq 'A'}">
+				<p class="card-text">확정</p>
+			</c:if>
+			<c:if test="${hospitalReserveDetail.status eq 'C'}">
+				<p class="card-text">취소</p>
+			</c:if>
+			<c:if test="${hospitalReserveDetail.status eq 'R'}">
+				<p class="card-text">반려</p>
+			</c:if>
          </div>
       </div>
       <div class="row my-2">
@@ -186,32 +185,26 @@ ${hospitalReserveDetail}
 <script type="text/javascript">
 
 
-// window.onload = function(){
+window.onload = function(){
 	
-// 	var getdate = `${hospitalReserveDetail.reservedate}`
-// 	var reservedate = new Date(getdate);
-// 	console.log(reservedate);
+	var getdate = `${hospitalReserveDetail.reservedate}`
+	var reservetype = `${hospitalReserveDetail.reservetype}`
+	var reservedate = new Date(getdate);
+	console.log(reservedate);
 	
-// 	var date = new Date();
-// 	console.log(date);
+	var date = new Date();
+	console.log(date);
+
 	
-// 	document.getElementsByName("confirm")
-// 	document.getElementsByName("reject")
-// 	document.getElementsByName("modify")
-	
-// 	console.log(document.getElementsByName("confirm"));
-// 	console.log(document.getElementsByName("reject"));
-// 	console.log(document.getElementsByName("modify"));
-	
-	
-// 	if(reservedate < date){
+	if(reservedate < date && reservetype =='A'){
 		
-// 		document.getElementsByName("confirm")[0].style.display="none";
-// 		document.getElementsByName("reject")[0].style.display="none";
-// 		document.getElementsByName("modify")[0].style.display="none";
-// 		document.getElementsByName("modify")[1].style.display="none";
-// 	}
-// }
+		document.getElementsByName("confirm")[0].style.display="none";
+		document.getElementsByName("reject")[0].style.display="none";
+		document.getElementsByName("modify")[0].style.display="none";
+		document.getElementsByName("modify")[1].style.display="none";
+		document.getElementsByName("cancel")[0].style.display="none";
+	}
+}
 
 </script>
 <%@ include file="/footer.jsp" %>

@@ -3,21 +3,30 @@
 <%@ include file="/header.jsp"%>
 <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
 <script type="text/javascript" src="${path}/js/mycalendar.js" ></script>
+<style type="text/css">
+a{
+ 	text-decoration: none;
+ 	color: black;
+}
+</style>
 <h3>${reservedate} 예약 현황</h3>
 <div class="card my-1">
 	<div class="card-body">
 		<div class="row">
-			<div class="col-2">
+			<div class="col-1">
 				<h5 class="card-title">NO</h5>
 			</div>
 			<div class="col-3">
 				<h5 class="card-title">예약 시간</h5>
 			</div>
 			<div class="col-3">
-				<h5 class="card-title">예약종류</h5>
+				<h5 class="card-title">예약자</h5>
 			</div>
-			<div class="col-4">
-				<h5 class="card-title">예약 여부</h5>
+			<div class="col-3">
+				<h5 class="card-title">예약 종류</h5>
+			</div>
+			<div class="col-2">
+				<h5 class="card-title">예약 상태</h5>
 			</div>
 		</div>
 	</div>
@@ -37,27 +46,31 @@
 		<div class="card my-1">
 			<div class="card-body">
 				<div class="row">
-					<div class="col-2">
+					<div class="col-1">
 						<p class="card-text">${vs.count}</p>
 					</div>
 					<div class="col-3 ">
 						<p class="card-text time">${today.reservetime}</p>
 					</div>
-					<c:if test="${sessionScope.member.usertype eq 'ROLE_OPER'}">
-					<div class="col-3" >
-						<p class="card-text"><a href="./hospitalReserveDetail.do?seq=${today.seq}">${today.reservetype}</a></p>
+					<div class="col-3 ">
+						<p class="card-text time"><a href="./hospitalReserveDetail.do?seq=${today.seq}">${today.name}</a></p>
 					</div>
-					</c:if>
-					<c:if test="${sessionScope.member.usertype eq 'ROLE_USER'}">
 					<div class="col-3" >
 						<p class="card-text">${today.reservetype}</p>
 					</div>
-					</c:if>
-					<div class="col-3">
-						<p class="card-text">예약 완료</p>
-					</div>
-					<div class="col-1">
-						<p class="card-text"></p>
+					<div class="col-2">
+								<c:if test="${today.status eq 'S'}">
+									<p class="card-text">대기</p>
+								</c:if>
+								<c:if test="${today.status eq 'A'}">
+									<p class="card-text">확정</p>
+								</c:if>
+								<c:if test="${today.status eq 'C'}">
+									<p class="card-text">취소</p>
+								</c:if>
+								<c:if test="${today.status eq 'R'}">
+									<p class="card-text">반려</p>
+								</c:if>
 					</div>
 				</div>
 			</div>

@@ -30,6 +30,7 @@ import com.pet.care.comm.CalendarDate;
 import com.pet.care.comm.JsonUtil;
 import com.pet.care.comm.PageUtil;
 import com.pet.care.comm.Util;
+import com.pet.care.dto.HospitalJoinDto;
 import com.pet.care.dto.HospitalScheduleDto;
 import com.pet.care.dto.MemberDto;
 import com.pet.care.dto.PageDto;
@@ -60,14 +61,20 @@ public class ReservationController {
 		String usertype = mDto.getUsertype();
 		String user_email = mDto.getEmail();
 		
+		//사용자
 		map.put("user_email", user_email);
-		model.addAttribute("searchInfo",map);//사용자가 검색한 후 이동할때 받아옴
+		model.addAttribute("searchInfo",map);
 		List<String>petLists = rService.getUserPet(map);
-
-	      //반려 동물 목록
+	    //반려 동물 목록
 	    model.addAttribute("userPet",petLists);
-		
-		
+	    
+	    
+	    //병원 관계자
+	    int hospital_seq = hService.findSeq(user_email);
+	    model.addAttribute("hospital_seq",hospital_seq);
+//	    HospitalJoinDto hDto = hiService.detailHospital(hospital_seq);
+//	    model.addAttribute("hospital_info",hDto);
+	    
 		if(usertype.equals("ROLE_USER")) {			
 			return "reservation/userCalendar";
 		}
@@ -379,7 +386,7 @@ public class ReservationController {
 			 return "redirect:/reservation/hospitalReserveDetail.do";
 		 }
 		
-		return "reservation/index";
+		return "redirect:/error/error.do";
 	}
 	
 	/*
@@ -390,19 +397,20 @@ public class ReservationController {
 		logger.info("ReservationController selectdayReserveList 선택일 예약 목록 조회 {}", map );
 		
 	      String reservedate = (String)map.get("reservedate");
-	      MemberDto mDto =  (MemberDto)session.getAttribute("member");
-	      String user_email = mDto.getEmail();
+	      String hospital_seq = (String)map.get("hospital_seq");
+//	      MemberDto mDto =  (MemberDto)session.getAttribute("member");
+//	      String user_email = mDto.getEmail();
 	      
 	      
 	      Map<String, Object>rMap = new HashMap<String, Object>();
-	      rMap.put("hospital_seq",3);
+	      rMap.put("hospital_seq",hospital_seq);
 	      rMap.put("reservedate",reservedate);
-	      map.put("user_email",user_email);
+//	      map.put("user_email",user_email);
 	      
-	      List<String>petLists = rService.getUserPet(map);
+//	      List<String>petLists = rService.getUserPet(map);
 
 	      //반려 동물 목록
-	      model.addAttribute("userPet",petLists);
+//	      model.addAttribute("userPet",petLists);
 	      
 	      List<ReservationDto> lists = rService.selectdayReserveList(rMap);
 	      
@@ -481,7 +489,7 @@ public class ReservationController {
 //			Util.sendReservation(rDto);
 			return "redirect:/reservation/hospitalReserveDetail.do?seq="+seq;
 		}else {
-			return "redirect:/reservation/index";
+			return "redirect:/error/error.do";
 		}
 	}
 	
@@ -525,7 +533,7 @@ public class ReservationController {
 			
 		}else {
 			
-			return "reservation/index";
+			return "redirect:/error/error.do";
 		}		
 	}
 

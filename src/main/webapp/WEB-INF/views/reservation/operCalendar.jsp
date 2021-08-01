@@ -11,15 +11,15 @@
   <script src="${path}/calendarjs/tui-calendar.js"></script>
   <script src="${path}/calendarjs/calendars.js"></script>
   <script src="${path}/calendarjs/schedules.js"></script>
+  <script src="${path}/js/mycalendar.js"></script>
  <!-- calendar -->
  <link rel="stylesheet" type="text/css" href="https://uicdn.toast.com/tui.time-picker/latest/tui-time-picker.css">
  <link rel="stylesheet" type="text/css" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css">
  <link rel="stylesheet" type="text/css" href="${path}/calendarcss/tui-calendar.css">
  <link rel="stylesheet" type="text/css" href="${path}/calendarcss/default.css">
  <link rel="stylesheet" type="text/css" href="${path}/calendarcss/icons.css">
-  <div class="code-html">
-  ${sessionScope.member}
-    <div id="menu"  style="height: 700px;">
+ <div class="code-html">
+    <div id="menu" style="height: 700px;">
       <span id="renderRange" class="render-range" style="padding-left:250px;"></span>
           <span id="menu-navi">
         <button type="button" class="btn btn-default btn-sm move-today" data-action="move-today">Today</button>
@@ -32,9 +32,9 @@
       </span>
     </div>
     <div id="calendar" style="width: 800px; top:200px; margin: 0 auto;">
+    <input type="hidden" name="hospital_seq" id="hospital_seq" value="${hospital_seq}">
     </div>
 </div>	
-<input type="hidden" value="3" name="hospital_seq">
 <script type="text/javascript" class="code-js">
 var cal = new tui.Calendar('#calendar', {
     defaultView: 'month', // monthly view option
@@ -66,7 +66,8 @@ var cal = new tui.Calendar('#calendar', {
 	    'beforeCreateSchedule': function(e) {
 	        console.log('beforeCreateSchedule', e);
 	        console.log(e.start);
-
+	
+	        var hospital_seq = document.getElementById("hospital_seq").value;
 	        //선택날짜
 	        var d = e.start;
 	  		var date = new Date(d);
@@ -78,7 +79,7 @@ var cal = new tui.Calendar('#calendar', {
 	  		var selday = year+""+month+""+day;
 	  		console.log(selday);
 	  		
-		 	location.href="./selectdayReserveList.do?reservedate="+selday;
+		 	location.href="./selectdayReserveList.do?reservedate="+selday+"&hospital_seq="+hospital_seq;
 
 	    }
 	});
