@@ -1,9 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@include file="/header.jsp" %>
-${sessionScope.member}
-${lists}
+  <script src="${path}/js/answerboard.js"></script>
 <h1>문의 게시판</h1>
+<select id="searchOption" name="searchOption" id="searchOption">
+	<option value="name">이름</option>
+	<option value="title">제목</option>
+</select>
+<form >
+<input type="text" id="answerboard_name" name="answerboard_name">
+<input type="submit" id="searchMyList" name="searchMyList" onclick="searchList()" value="검색해볼래?">
+</form>
 <div class="card my-1">
    <div class="card-body">
       <div class="row">
@@ -18,6 +25,9 @@ ${lists}
           </div>
           <div class="col-2">
              <h5 class="card-title"> 등록일자</h5>
+          </div>
+             <div class="col-2">
+             <h5 class="card-title"> 처리</h5>
           </div>
       </div>
    </div>
@@ -35,10 +45,10 @@ ${lists}
 				<c:if test="${sessionScope.member.usertype eq 'ROLE_USER'}">
 				<div class="col-2">
 				<c:if test="${sessionScope.member.name eq list.answerboard_name}"><!-- 어드민과 회원의 상세 조회 -->
-						<a href="./selUserDetail.do?seq=${list.seq}"> ${list.answerboard_name}</a>
+						<a href="./selUserDetail.do?seq=${list.seq}">${list.answerboard_name}</a>
 				</c:if>
 				<c:if test="${sessionScope.member.usertype eq 'ROLE_ADMIN' || list.password != null}"><!-- 어드민과 비회원 상세 조회 -->
-						<p class="card-text"> ${list.answerboard_name}</p>
+						<p class="card-text">${list.answerboard_name}</p>
 				</c:if>
 				</div>
 				</c:if>
@@ -46,7 +56,7 @@ ${lists}
 				<c:if test="${sessionScope.member.usertype eq 'ROLE_ADMIN'}">
 				<div class="col-2">
 				<c:if test="${ list.password eq null}"><!-- 어드민과 회원의 상세 조회 -->
-						<a href="./selUserDetail.do?seq=${list.seq}"> ${list.answerboard_name}</a>
+						<a href="./selUserDetail.do?seq=${list.seq}">${list.answerboard_name}</a>
 				</c:if>
 				<c:if test="${list.password != null}"><!-- 어드민과 비회원 상세 조회 -->
 						<a href="./selNonUserDetail.do?seq=${list.seq}">${list.answerboard_name}</a>
@@ -60,13 +70,20 @@ ${lists}
 					<p class="card-text">${list.answerboard_name}</p>
 				</c:if>
 				<c:if test="${list.password != null}"><!-- 어드민과 비회원 상세 조회 -->
-						<a href="javascript:checkNonUser(${list.seq});">${list.answerboard_name}${list.seq}</a>
+						<a href="javascript:checkNonUser(${list.seq});">${list.answerboard_name}</a>
 				</c:if>
 				</div>
 				</c:if>
-	
 				<div class="col-2">
 					<p class="card-text">${list.regdate}</p>
+				</div>
+				<div class="col-2">
+				<c:if test="${list.replystatus eq 'Y'}">
+					<p class="card-text">답변 완료</p>
+				</c:if>
+				<c:if test="${list.replystatus eq 'N'}">
+					<p class="card-text">미답변</p>
+				</c:if>		
 				</div>
 			</div>
 		</div>
@@ -95,7 +112,7 @@ ${lists}
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" onclick="checkInfo()">확인</button>
-					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="resetInfo()">닫기</button>
 				</div>
 			</div>
 		</div>

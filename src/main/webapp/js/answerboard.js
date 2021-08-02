@@ -45,6 +45,22 @@ function modifyBoardChk(form){
 	}
 }
 
+function insertReplyChk(form){
+	
+	let insertContent = replyBoard.editor.getHTML();
+		document.getElementById("reply").value = insertContent;
+		
+	document.getElementById("replyBtn").style.display="none";
+	
+	if(form.reply.value==""){
+		Swal.fire("알림", "답변을 입력하세요.", "warning");
+		form.reply.focus();
+		return false;
+	}
+		
+
+}
+
 let insertBoard = {
 	editor: null,
 	init: function () {
@@ -82,26 +98,58 @@ let modifyBoardContent = {
 }
 
 
-function insertReply(){
+function clickReply(){
 	
-	var btn = document.getElementById("insertBtn");
 	
-	btn.style.display='none';
+	var replyBtn = document.getElementById("replyBtn");
+	replyBtn.style.display='none';
 	
-	var reply = document.getElementById("reply");
+	var form = document.getElementById("replyForm");
+	form.style.display='inline';
 	
-	 var div1 = document.createElement("div");
-	 var div2 = document.createElement("div");
-	 var div3 = document.createElement("div");
-	 var div4 = document.createElement("div");
-	 var div5 = document.createElement("div");
-	div1.setAttribute("class", "card my-1");
-	div2.setAttribute("class","card-body");
-	div3.setAttribute("class","row")
-	reply.append(div);
+	var insterBtn = document.getElementById("insertBtn");
+	insterBtn.style.display='inline';
 	
 }
 
+function resetInfo(){
+	
+	document.getElementById("email").value = '';
+	document.getElementById("password").value = '';
+	
+}
 
+let replyBoard = {
+	editor: null,
+	init: function () {
 
+		// editor
+		this.editor = new toastui.Editor({
+			el: document.querySelector('#editor'),
+			previewStyle: 'vertical',
+			initialEditType: "wysiwyg",
+			height: '500px',
+			previewHighlight: true,
+			language: 'ko',
+			initialValue: ""
+		});
 
+	}
+}
+
+function searchList(){
+	var opt = document.getElementById("searchOption");
+	console.log(opt);
+	var frm = document.forms[0];
+	
+	if(opt == "title"){
+		frm.action="./searchTitle.do";
+		frm.method="post";
+		frm.submit();
+	}else{
+		frm.action="./searchName.do";
+		frm.method="post";
+		frm.submit();		
+	}
+	
+}

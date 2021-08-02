@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.pet.care.dto.AnswerBoardDto;
+import com.pet.care.dto.ReservationDto;
 import com.pet.care.model.dao.answerboard.IAnswerBoardDao;
 
 @Service
@@ -84,11 +85,17 @@ public class AnswerBoardServiceImpl implements IAnswerBoardService {
 		logger.info("AnswerBoardServiceImpl selNonUserDetail {} ", map);
 		return aDao.selNonUserDetail(map);
 	}
+	
+//	@Override
+//	public boolean insertReply(ReservationDto dto) {
+//		logger.info("AnswerBoardServiceImpl insertReply {} ", dto);
+//		return aDao.insertReply(dto);
+//	}
 
 	@Override
-	public boolean insertReply(AnswerBoardDto dto) {
-		logger.info("AnswerBoardServiceImpl insertReply {} ", dto);
-		return aDao.insertReply(dto);
+	public boolean insertReply(Map<String, Object> map) {
+		logger.info("AnswerBoardServiceImpl insertReply {} ", map);
+		return aDao.insertReply(map);
 	}
 
 	@Override
@@ -96,5 +103,19 @@ public class AnswerBoardServiceImpl implements IAnswerBoardService {
 		logger.info("AnswerBoardServiceImpl checkNonUser {} ", map);
 		return aDao.checkNonUser(map);
 	}
+
+	@Override
+	public List<AnswerBoardDto> searchName(Map<String, Object> map) {
+		logger.info("AnswerBoardServiceImpl searchName {} ", map);
+		return null;
+	}
+
+	@Override
+	public List<AnswerBoardDto> searchTitle(Map<String, Object> map) {
+		logger.info("AnswerBoardServiceImpl searchTitle {} ", map);
+		return null;
+	}
+	
+	
 
 }

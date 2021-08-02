@@ -40,10 +40,20 @@ public interface IAnswerBoardDao {
 	//비회원 작성글 상세 조회
 	public AnswerBoardDto selNonUserDetail(Map<String, Object>map);
 	
-	//관리자 답글 작성
-	public boolean insertReply(AnswerBoardDto dto);
+//	//관리자 답글 작성
+//	public boolean insertReply(AnswerBoardDto dto);
 	
-	//비회원 조회
+	//관리자 답글 작성
+	public boolean insertReply(Map<String, Object> map);
+	
+	//비회원 여부 확인
 	public boolean checkNonUser(Map<String, Object>map);
+	
+	//이름 조회
+	public List<AnswerBoardDto> searchName(Map<String, Object>map);
+	
+	//제목 조회
+	public List<AnswerBoardDto> searchTitle(Map<String, Object>map);
+	
 	
 }

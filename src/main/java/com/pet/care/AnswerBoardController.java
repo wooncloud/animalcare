@@ -45,6 +45,7 @@ public class AnswerBoardController {
 		
  		String password = dto.getPassword();
  		System.out.println("passssssssssssword"+password);
+ 		String email = dto.getEmail();
    		int seq =dto.getSeq();
    		System.out.println("seqqqqqqqqqqqqq"+seq);
  		
@@ -204,7 +205,7 @@ public class AnswerBoardController {
 
 	
 	//로그인 회원 상세 조회
-		@RequestMapping(value="/selUserDetail.do", method = RequestMethod.GET)
+	@RequestMapping(value="/selUserDetail.do", method = RequestMethod.GET)
 		public String selUserDetail(@RequestParam Map<String,Object>map, Model model) {
 			logger.info("AnswerBoardController selUserDetail {} ", map);
 		
@@ -216,8 +217,8 @@ public class AnswerBoardController {
 		}
 		
 	//비회원 글 상세 조회 체크
-		@RequestMapping(value="/checkInfo.do", method = RequestMethod.GET)
-		@ResponseBody
+	@RequestMapping(value="/checkInfo.do", method = RequestMethod.GET)
+	@ResponseBody
 		public String checkInfo(@RequestParam Map<String,Object>map) {
 				logger.info("AnswerBoardController checkInfo {} ", map);
 				
@@ -225,9 +226,9 @@ public class AnswerBoardController {
 					
 				return String.valueOf(isc);
 			}
-		
-		@RequestMapping(value = "/selNonUserDetail.do", method = RequestMethod.GET)
-		public String selNonUserDetail(@RequestParam Map<String, Object>map, Model model){
+	//비회원 글 상세 조회	
+	@RequestMapping(value = "/selNonUserDetail.do", method = RequestMethod.GET)
+	public String selNonUserDetail(@RequestParam Map<String, Object>map, Model model){
 			logger.info("AnswerBoardController selNonUserDetail {} ", map);
 			
 			AnswerBoardDto dto = aService.selNonUserDetail(map);
@@ -237,14 +238,45 @@ public class AnswerBoardController {
 			return "answerboard/boardDetail"; 
 		}
 		
-		@RequestMapping(value = "/insertReply.do", method = RequestMethod.GET)
-		public String insertReply(AnswerBoardDto dto) {
+	@RequestMapping(value = "/insertReply.do", method = RequestMethod.POST)
+	public String insertReply(@RequestParam Map<String,Object>map, Model model) {
+		logger.info("AnswerBoardController insertReply {} ", map);
+			boolean isc = aService.insertReply(map);
 			
-			boolean isc = aService.insertReply(dto);
+			String seq = (String)map.get("seq");
+			String password = (String)map.get("password");
+			if(isc) {
+				if(password == null) {
+					return "redirect:/answerboard/selUserDetail.do?seq="+seq;					
+				}else if(password != null) {
+					return "redirect:/answerboard/selNonUserDetail.do?seq="+seq;
+				}
+			}
 			
-			return "";
+			return "redirect:/error/error.do";
 		}
+	
+	//게시판 제목 검색
+	@RequestMapping(value="/searchTitle.do", method = RequestMethod.POST)
+	public String searchTitle(@RequestParam Map<String,Object>map, Model model) {
+		
+		List<AnswerBoardDto> lists = aService.searchTitle(map);
+		model.addAttribute("lists",lists);
+		return "";
+	}
+	
+	
+	//게시판 이름 검색
+	@RequestMapping(value="/searchName.do", method = RequestMethod.POST)
+	public String searchName(@RequestParam Map<String,Object>map, Model model) {
+		
+		List<AnswerBoardDto> lists = aService.searchName(map);
+		model.addAttribute("lists",lists);
+		return "answerboard/boardList";
+	}
 
 }
+	
+
 
 
