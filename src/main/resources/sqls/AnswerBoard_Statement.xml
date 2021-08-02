@@ -3,27 +3,37 @@
 <mapper namespace="com.pet.care.model.dao.answerboard.AnswerBoardDaoImpl">
 
 	<insert id="insertUserBoard" parameterType="AnswerBoardDto">
-	INSERT INTO ANSWERBOARD (SEQ, EMAIL, PASSWORD, TITLE, CONTENT, REGDATE, PARENT_SEQ, DELFLAG)
-	  VALUES (ANSWERBOARD_SEQ.NEXTVAL,#{email},'',#{title},#{content},SYSDATE,ANSWERBOARD_SEQ.CURRVAL,'N')
+	
+	<selectKey keyProperty="seq"  resultType="java.lang.Integer" order="BEFORE">
+		SELECT ANSWERBOARD_SEQ.NEXTVAL AS SEQ FROM DUAL
+	</selectKey>
+	
+	INSERT INTO ANSWERBOARD (SEQ, EMAIL, PASSWORD, TITLE, CONTENT, REGDATE, PARENT_SEQ, DELFLAG, ANSWERBOARD_NAME, REPLY, REPLYSTATUS)
+	  VALUES (#{seq},#{email},'',#{title},#{content},SYSDATE,ANSWERBOARD_SEQ.CURRVAL,'N', #{name}, #{reply},'N')
 	</insert>
 
 	<insert id="insertNonUserBoard" parameterType="AnswerBoardDto">
-	INSERT INTO ANSWERBOARD (SEQ, EMAIL, PASSWORD, TITLE, CONTENT, REGDATE, PARENT_SEQ, DELFLAG)
-        VALUES (ANSWERBOARD_SEQ.NEXTVAL,#{email},#{password},#{title},#{content},SYSDATE,ANSWERBOARD_SEQ.CURRVAL,'N')
+	
+	<selectKey keyProperty="seq"  resultType="java.lang.Integer" order="BEFORE">
+		SELECT ANSWERBOARD_SEQ.NEXTVAL AS SEQ FROM DUAL
+	</selectKey>
+	
+	INSERT INTO ANSWERBOARD (SEQ, EMAIL, PASSWORD, TITLE, CONTENT, REGDATE, PARENT_SEQ, DELFLAG, ANSWERBOARD_NAME, REPLY, REPLYSTATUS)
+        VALUES (#{seq},#{email},#{password},#{title},#{content},SYSDATE,ANSWERBOARD_SEQ.CURRVAL,'N', #{name}, #{reply},'N')
 	
 	</insert>
 	
 	<update id="modifyUserBoard" parameterType="java.util.Map">
 	UPDATE ANSWERBOARD
-		SET TITLE=#{title}, CONTENT=#{content}, DELFLAG='N'
+		SET CONTENT=#{content}, DELFLAG='N'
 		WHERE SEQ=#{seq}
 	
 	</update>
 	
 	<update id="modifyNonUserBoard" parameterType="java.util.Map">
 	UPDATE ANSWERBOARD
-		SET TITLE=#{title}, CONTENT=#{content}, DELFLAG='N'
-		WHERE SEQ=#{seq} AND EMAIL=#{email} AND PASSWORD =#{password}
+		SET CONTENT=#{content}, DELFLAG='N'
+		WHERE SEQ=#{seq} 
 	</update>
 	
 	<delete id="deleteUserBoard" parameterType="java.util.Map">
@@ -40,49 +50,72 @@
 	</delete>
 	
 	<select id="selUserBoard" parameterType="java.util.Map" resultType="AnswerBoardDto">
-	SELECT a.SEQ, u.NAME , a.TITLE, a.REGDATE, u.EMAIL
+	SELECT a.SEQ, a.ANSWERBOARD_NAME , a.TITLE, a.REGDATE, u.EMAIL
 	FROM USERINFO u JOIN
-			(SELECT SEQ,TITLE, CONTENT, REGDATE, EMAIL
+			(SELECT SEQ,TITLE, CONTENT, REGDATE, EMAIL, ANSWERBOARD_NAME
 		        FROM ANSWERBOARD
 		        WHERE EMAIL=#{email} AND DELFLAG ='N') a
 		        ON u.EMAIL = a.EMAIL
 	</select>
 	
 	<select id="selNonUserBoard" parameterType="java.util.Map" resultType="AnswerBoardDto">
-	SELECT SEQ,TITLE, CONTENT, REGDATE
+	SELECT SEQ,TITLE, CONTENT, REGDATE, ANSWERBOARD_NAME
         FROM ANSWERBOARD
-        WHERE EMAIL=#{email} AND PASSWORD =#{password} AND DELFLAG ='N'
+        WHERE EMAIL=#{email} AND DELFLAG ='N'
 	</select>
 	
 	<select id="selAllBoard" resultType="AnswerBoardDto">
-SELECT a.SEQ, u.NAME , a.TITLE, a.REGDATE
-	FROM USERINFO u JOIN
-			(SELECT SEQ, EMAIL, PASSWORD, TITLE, CONTENT, REGDATE, PARENT_SEQ, DELFLAG
+SELECT a.SEQ, a.TITLE, a.REGDATE, a.EMAIL, a.PASSWORD , a.ANSWERBOARD_NAME, a.REPLYSTATUS
+	FROM USERINFO u RIGHT JOIN
+			(SELECT SEQ, EMAIL, PASSWORD, TITLE, CONTENT, REGDATE, PARENT_SEQ, DELFLAG, ANSWERBOARD_NAME, REPLYSTATUS
 			        FROM ANSWERBOARD 
 			        WHERE DELFLAG ='N') a
 			        ON u.EMAIL = a.EMAIL 
-			        ORDER BY PARENT_SEQ,SEQ
+			        ORDER BY REGDATE DESC, PARENT_SEQ,SEQ
 	</select>
 	
 	<select id="selUserDetail" parameterType="java.util.Map" resultType="AnswerBoardDto">
-	SELECT a.SEQ, u.NAME , a.TITLE, a.REGDATE, u.PHONE , a.CONTENT, u.EMAIL
+	
+	SELECT a.SEQ, a.ANSWERBOARD_NAME , a.TITLE, a.REGDATE, u.PHONE , a.CONTENT, u.EMAIL ,a.REPLY, a.REPLYSTATUS
 		FROM USERINFO u JOIN
-			(SELECT SEQ, TITLE,CONTENT,REGDATE, EMAIL
+			(SELECT SEQ, TITLE,CONTENT,REGDATE, EMAIL, ANSWERBOARD_NAME, REPLY, REPLYSTATUS
 	        FROM ANSWERBOARD
 	        WHERE SEQ=#{seq} AND DELFLAG ='N') a
 	        ON u.EMAIL = a.EMAIL
-
 	</select>
 	
 	<select id="selNonUserDetail" parameterType="java.util.Map" resultType="AnswerBoardDto">
-	SELECT TITLE,CONTENT,REGDATE 
+	SELECT TITLE,CONTENT,REGDATE , ANSWERBOARD_NAME , PASSWORD, EMAIL, SEQ, REPLY, REPLYSTATUS
         FROM ANSWERBOARD a
-        WHERE SEQ=#{seq} AND EMAIL =#{email} AND PASSWORD =#{password} AND DELFLAG ='N' 
+        WHERE SEQ=#{seq} AND  DELFLAG ='N' 
 	</select>
 	
-	<insert id="insertReply" parameterType="AnswerBoardDto">
-	INSERT INTO ANSWERBOARD (SEQ, EMAIL ,TITLE, CONTENT, REGDATE, PARENT_SEQ, DELFLAG)
-        VALUES (ANSWERBOARD_SEQ.NEXTVAL,#{email} ,#{title},#{content},SYSDATE,(SELECT PARENT_SEQ FROM ANSWERBOARD a WHERE SEQ=#{seq}),'N')
-	</insert>
+	<update id="insertReply" parameterType="java.util.Map">
+	UPDATE ANSWERBOARD 
+	  	SET REPLY = #{reply}, REPLYSTATUS ='Y'
+	  	WHERE SEQ=#{seq} AND DELFLAG = 'N'
+	</update>
+<!-- 	<insert id="insertReply" parameterType="AnswerBoardDto"> -->
+<!-- 	INSERT INTO ANSWERBOARD (SEQ, EMAIL ,TITLE, CONTENT, REGDATE, PARENT_SEQ, DELFLAG) -->
+<!--         VALUES (ANSWERBOARD_SEQ.NEXTVAL,#{email} ,#{title},#{content},SYSDATE,(SELECT PARENT_SEQ FROM ANSWERBOARD a WHERE SEQ=#{seq}),'N') -->
+<!-- 	</insert> -->
 	
+	<select id="checkNonUser" parameterType="java.util.Map" resultType="java.lang.Integer">
+	 SELECT COUNT(*)
+		 	FROM ANSWERBOARD a 
+		 	WHERE EMAIL=#{email} AND PASSWORD= #{password} AND SEQ=#{seq}
+	</select>
+	
+	<select id="searchTitle" parameterType="java.util.Map">
+	SELECT TITLE,ANSWERBOARD_NAME ,REGDATE, SEQ
+  		FROM ANSWERBOARD a 
+  		WHERE TITLE LIKE '%'||#{title}||'%'
+	
+	</select>
+	
+	<select id="searchName" parameterType="java.util.Map">
+	SELECT TITLE,ANSWERBOARD_NAME ,REGDATE, SEQ
+  		FROM ANSWERBOARD a 
+  		WHERE ANSWERBOARD_NAME LIKE '%'||#{anserboard_name}||'%'
+	</select>
 </mapper>

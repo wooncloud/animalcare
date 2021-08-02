@@ -1,6 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@include file="/header.jsp" %>
 
+<style>
+.iamcard{
+ padding: 0;
+}
+</style>
+
 <div>각종 테스트 페이지</div>
 <div class="row">
 	<div class="col-6">
@@ -48,5 +54,32 @@
       <input type="password" class="form-control" id="inputPassword">
     </div>
   </div>
+  
+  <div class="container">
+  그리드 테스트
+  <div class="row">
+    <div class="iamcard col-2">
+      <div class="card">
+  <div class="card-body">
+   카트1
+  </div>
+</div>
+    </div>
+    <div class="iamcard col">
+     <div class="card">
+  <div class="card-body">
+  카드2
+  </div>
+</div>
+    </div>
+    <div class="iamcard col-2">
+    <div class="card">
+  <div class=" card-body">
+  카드3
+  </div>
+</div>
+    </div>
+  </div>
+</div>
 
 <%@include file="/footer.jsp" %>

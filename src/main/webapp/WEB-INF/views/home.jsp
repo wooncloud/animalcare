@@ -2,12 +2,14 @@
 <%@ include file="/header.jsp" %>
 	
 	<a class="btn btn-secondary" href="./payment/payList.do">결제내역</a>
-	<a class="btn btn-secondary" href="./survey/adminSurveyList.do">설문리스트</a>
+	<a class="btn btn-secondary" href="./survey/adminSurveyList.do">관리자설문리스트</a>
+	<a class="btn btn-secondary" href="./survey/userSurveyList.do">사용자설문리스트</a>
 	<a class="btn btn-secondary" href="./reservation/moveCalendar.do">달력</a>
 	<a class="btn btn-secondary" href="./reservation/userReserveList.do">사용자 예약목록</a>
 	<a class="btn btn-secondary" href="./reservation/hospitalStandReserveList.do">병원 예약목록</a>
 	<a class="btn btn-secondary" href="./reservation/insertReservation.do">신청</a>
 	<a class="btn btn-secondary" href="./answerboard/selAllBoard.do">문의</a>
+	<a class="btn btn-secondary" href="./pet/petList.do">내 애완동물보기</a>
 	${sessionScope.member}
 	<c:choose>
 		<c:when test="${sessionScope.member.usertype eq 'ROLE_USER'}">

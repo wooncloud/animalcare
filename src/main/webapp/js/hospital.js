@@ -6,8 +6,30 @@
 function chkBox(chk) {
 	var chkValue = chk.value;
 	console.log(chkValue);
+	
+	let inputBox = document.getElementById(chkValue);
+	console.log(inputBox);
+	if(chk.checked){
+		inputBox.setAttribute("name","hiddenLoc");
+		inputBox.setAttribute("value",chkValue);		
+	}else{
+		inputBox.removeAttribute("name");	
+		inputBox.removeAttribute("value");	
+	}
+	
 }
 
+//병원 찾기 페이지 선택 찾기 
+//function forSearch(){
+//	location.href = "./searchHospital.do";
+	
+//	let url = "./searchHospital.do?";
+//	let enURI =  encodeURI(url);
+//	let enComponentURI = encodeURIComponent(url);
+//	
+//	location.href = url+"emergency=Y";
+//	
+//}
 
 // 셀렉트 박스에서 진료항목 온체인지로 항목 선택 및 선택 취소
 function selectType() {
@@ -76,6 +98,27 @@ let detailHospital = {
 	}
 }
 
+// 다른 라디오버튼 선택시 자동 선택 해제(선택안함 값을 null하려고 만듬 )
+function radioMaster(){
+ let have =	document.getElementById('have');
+ let none =	document.getElementById('none');
+ let noChoice =	document.getElementById('noChoice');
+ if(have.onclick = function(){
+	 noChoice.checked = false;
+ });
+ if(none.onclick = function(){
+	 noChoice.checked = false;
+ });
+ if(noChoice.onclick = function(){
+	 have.checked = false;
+	 none.checked = false;
+ }); 
+}
+
+//병원 찾기 페이지 찾기 선택 취소 
+function beforeSearch(){
+	location.href = "./searchHospitalPage.do";
+}
 
 //병원 삭제 버튼
 function deleteHospital(seq) {

@@ -1,12 +1,15 @@
 package com.pet.care;
 
+import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +21,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.pet.care.comm.JsonUtil;
+import com.pet.care.comm.OAuthUtil;
 import com.pet.care.comm.Util;
 import com.pet.care.dto.MemberDto;
 import com.pet.care.dto.OperatorDto;
@@ -37,9 +43,15 @@ public class UserController {
 
 	// 로그인 화면
 	@RequestMapping(value = "/loginForm.do", method = RequestMethod.GET)
-	public String loginForm() {
+	public String loginForm(Model model, HttpSession session) {
+		// naver oAuth Init
+		OAuthUtil.initNaverOauth(model);
+		OAuthUtil.initGoogleOauth(model);
+		OAuthUtil.initKakaoOauth(model);
+		
 		return "login/login";
 	}
+	
 
 	// 로그인
 	@RequestMapping(value = "/login.do", method = RequestMethod.POST)
@@ -48,10 +60,15 @@ public class UserController {
 
 		MemberDto member = userService.userLogin(param);
 
+		return loginProcess(member, session);
+	}
+
+	private String loginProcess(MemberDto member, HttpSession session) {
 		// 로그인 실패
 		if (member == null) {
 			return "redirect:./loginForm.do?type=empty";
 		} else {
+			System.out.println(member);
 			session.setAttribute("member", member);
 
 			// 관리자
@@ -73,6 +90,64 @@ public class UserController {
 			else {
 				return "redirect:/home.do";
 			}
+		}
+	}
+	
+	// Naver oAuth Callback
+	@RequestMapping(value = "/naver_callback.do", method = RequestMethod.GET)
+	public String oauthNaverCallBack(@RequestParam Map<String, String> param, HttpSession session) {
+		MemberDto member = null;
+
+		String res = OAuthUtil.naverOAuthCallback(param);
+		JSONObject oauthJson = JsonUtil.stringToJson(res);
+
+		if(oauthJson.get("message").equals("success")){
+			JSONObject response = (JSONObject) oauthJson.get("response");
+			String email = (String) response.get("email");
+			member = userService.emailSecurity(email);
+		}
+		else{
+			return "redirect:./loginForm.do?type=empty";
+		}
+
+		return loginProcess(member, session);
+	}
+	
+	// Naver oAuth Callback
+	@RequestMapping(value = "/kakao_callback.do", method = RequestMethod.GET)
+	public String oauthKakaoCallBack(@RequestParam Map<String, String> param, HttpSession session) {
+		MemberDto member = null;
+		
+		if(param.get("code") != null) {
+			String code = param.get("code");
+			String access_Token = OAuthUtil.kakaoOAuthCallback(code);
+			String email = OAuthUtil.getKakaoUserEmail(access_Token);
+			
+			if(email == null) {
+				return "redirect:./loginForm.do?type=empty";				
+			} else {
+				member = userService.emailSecurity(email);
+				return loginProcess(member, session);
+			}
+			
+		} else {
+			return "redirect:./loginForm.do?type=empty";			
+		}
+	}
+
+	// Google oAuth Callback
+	@RequestMapping(value = "/google_callback.do", method = RequestMethod.GET)
+	public String oauthGoogleCallBack(@RequestParam Map<String, String> param, HttpSession session) {
+		Properties prop = new Util().readProperties("properties/oauth_google.properties");
+
+		try {
+			String email = OAuthUtil.googleOAuthCallback(param, prop);
+			MemberDto member = userService.emailSecurity(email);
+			
+			return loginProcess(member, session);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+			return "redirect:./loginForm.do?type=empty";
 		}
 	}
 

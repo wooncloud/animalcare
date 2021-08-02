@@ -1,7 +1,5 @@
 package com.pet.care.dto;
 
-import java.util.Date;
-
 public class SurveyDto {
 
 	private int seq;
