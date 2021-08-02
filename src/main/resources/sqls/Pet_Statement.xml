@@ -7,6 +7,7 @@
 		FROM PETINFO p LEFT JOIN TYPECODE t 
 			ON p."TYPE" = t.CODEID 
 		WHERE USER_EMAIL =#{user_email}
+		AND p.DELFLAG='N'
 	</select>
 	
 	<!-- 애완동물등록 -->
@@ -26,23 +27,30 @@
 			SET NAME=#{name}, BIRTH=#{birth}, WEIGHT=#{weight}, 
 			        GENDER=#{gender}, "TYPE"=#{type}, TYPEINFO=#{typeinfo}, 
 			        NOTIFICATION=#{notification}, PROFILE=#{profile}
-			WHERE ID=#{id}
+			WHERE USER_EMAIL =#{user_email}
+			AND NAME =#{name}
 	</update>
 
 	<!-- 애완동물 삭제 -->
-	<update id="deletePet" parameterType="java.lang.String">
+	<update id="deletePet" parameterType="java.util.Map">
 		UPDATE PETINFO
 			SET DELFLAG='Y'
-			WHERE ID=#{id}
+			WHERE USER_EMAIL =#{user_email}
+			AND NAME =#{name}
 	</update>
 
 	<!-- 애완동물 상세조회 -->
-	<select id="detailPet" parameterType="java.lang.String" resultType="PetDto">
+	<select id="detailPet" parameterType="java.util.Map" resultType="PetDto">
 		SELECT ID, NAME, BIRTH, WEIGHT, 
-	        GENDER, "TYPE", TYPEINFO, NOTIFICATION, 
-	        PROFILE 
-		FROM PETINFO p 
-	    WHERE ID =#{id}
+			GENDER, t.CODENAME AS "TYPE" , TYPEINFO, NOTIFICATION, 
+			PROFILE 
+		FROM PETINFO p LEFT JOIN TYPECODE t 
+			ON p."TYPE" = t.CODEID 
+	    WHERE USER_EMAIL =#{user_email}
+	    	AND NAME=#{name}
 	</select>
+
+	<!-- 동물별 진료내역조회 -->
+	<select id="recodeList" parameterType="java.lang.String" resultType=""></select>
 
 </mapper>

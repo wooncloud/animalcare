@@ -1,6 +1,6 @@
 package com.pet.care.dto;
 
-import java.util.Date;
+import java.sql.Date;
 
 public class PetDto {
 
@@ -8,7 +8,7 @@ public class PetDto {
 	private String user_email;
 	private String name;
 	private Date birth;
-	private int weight;
+	private float weight;
 	private String gender;
 	private String type;
 	private String typeinfo;
@@ -16,13 +16,13 @@ public class PetDto {
 	private String notification;
 	private String profile;
 	private String delflag;
-	
+
 	public PetDto() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public PetDto(String id, String user_email, String name, Date birth, int weight, String gender, String type,
+	public PetDto(String id, String user_email, String name, Date birth, float weight, String gender, String type,
 			String typeinfo, String aniregistnum, String notification, String profile, String delflag) {
 		super();
 		this.id = id;
@@ -75,15 +75,18 @@ public class PetDto {
 		return birth;
 	}
 
+	public void setBirth(String birth) {
+		this.birth = Date.valueOf(birth);
+	}
 	public void setBirth(Date birth) {
 		this.birth = birth;
 	}
 
-	public int getWeight() {
+	public float getWeight() {
 		return weight;
 	}
 
-	public void setWeight(int weight) {
+	public void setWeight(float weight) {
 		this.weight = weight;
 	}
 
@@ -142,6 +145,5 @@ public class PetDto {
 	public void setDelflag(String delflag) {
 		this.delflag = delflag;
 	}
-	
-	
+
 }
