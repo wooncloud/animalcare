@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.pet.care.dto.HospitalJoinDto;
 import com.pet.care.dto.MedicalRecodeDto;
 import com.pet.care.dto.MedicalRecodeJoinDto;
 import com.pet.care.model.dao.hospital.IMedicalRecodeDao;
@@ -33,7 +34,7 @@ public class MedicalRecodeServiceImpl implements IMedicalRecodeService {
 		return dao.recodeList(map);
 	}
 
-	// 병원 질료내역 전채 글 갯수(페이징 쿼리)
+	// 병원 진료내역 전채 글 갯수(페이징 쿼리)
 	@Override
 	public int recodeCount(Map<String, Object> map) {
 		logger.info("[recodeCount - {}] : 병원 질료내역 전채 글 갯수(페이징 쿼리)", map);

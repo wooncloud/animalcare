@@ -7,6 +7,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.pet.care.dto.HospitalJoinDto;
 import com.pet.care.dto.MedicalRecodeDto;
 import com.pet.care.dto.MedicalRecodeJoinDto;
 
@@ -17,7 +18,7 @@ public class MedicalRecodeDaoImpl implements IMedicalRecodeDao {
 	
 	@Autowired
 	private SqlSessionTemplate sqlSession;
-
+	
 	// 진료내역 추가
 	@Override
 	public boolean insertRecode(MedicalRecodeDto dto) {
@@ -31,7 +32,7 @@ public class MedicalRecodeDaoImpl implements IMedicalRecodeDao {
 		return sqlSession.selectList(NS+"recodeList", map);
 	}
 
-	// 병원 질료내역 전채 글 갯수(페이징 쿼리)
+	// 병원 진료내역 전채 글 갯수(페이징 쿼리)
 	@Override
 	public int recodeCount(Map<String, Object> map) {
 		return sqlSession.selectOne(NS+"recodeCount", map);

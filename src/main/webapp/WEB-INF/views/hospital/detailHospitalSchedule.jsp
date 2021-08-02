@@ -5,11 +5,14 @@
 <script type="text/javascript" src="${path}/js/hospital.js" ></script>
 
 <div class="container">
-	<form action="./insertSchedule.do" method="post" onsubmit="return insertScheduleChk(this)">
+
 	<br><br>
 
 		<div class="row fs-3 my-2">
 			<div class="col">병원 일정 상세보기</div>
+			<div class="col d-grid gap-2 d-md-flex justify-content-md-end">	
+				<input type="button" class="btn btn-outline-primary" value="이전페이지" onclick="history.back()">
+			</div>
 		</div>
 		<div>
 			<div class="card">
@@ -60,12 +63,12 @@
 		<br>
 		
 		<div class="d-grid gap-2 d-md-flex justify-content-md-center">
-				<input type="button" class="btn btn-outline-primary btn-lg" value="수정하기" onclick="modifySchedulePage('')"/>				 	
-    	 		<input type="button" class="btn btn-outline-secondary btn-lg" value="삭제하기" onclick="deleteSchedule('')"/>		
-			</div>
+			<input type="button" class="btn btn-outline-primary btn-lg" value="수정하기" onclick="modifySchedulePage('')"/>				 	
+    	 	<input type="button" class="btn btn-outline-secondary btn-lg" value="삭제하기" onclick="deleteSchedule('')"/>		
+		</div>
 
 	<br><br>
-	</form>
+
 </div>
 
 

@@ -51,8 +51,8 @@ public class ReservationDaoImpl implements IReservationDao {
 	}
 
 	@Override
-	public boolean rejectReserve(Map<String, Object> map) {
-		int cnt = session.update(NS+"rejectReserve", map);
+	public boolean rejectCommnetReserve(Map<String, Object> map) {
+		int cnt = session.update(NS+"rejectCommnetReserve", map);
 		return (cnt>0)?true:false;
 	}
 
@@ -113,8 +113,23 @@ public class ReservationDaoImpl implements IReservationDao {
 	public List<ReservationDto> hospitalCalendarList(Map<String, Object> map) {
 		return session.selectList(NS+"hospitalCalendarList", map);
 	}
-	
-	
-	
+
+	@Override
+	public boolean checkReservation(Map<String, Object> map) {
+		int cnt  = session.selectOne(NS+"checkReservation", map);
+		return (cnt>0)?true:false;
+	}
+
+	@Override
+	public ReservationDto userAcceptDetail(Map<String, Object> map) {
+		return session.selectOne(NS+"userAcceptDetail",map);
+	}
+
+	@Override
+	public boolean rejectStatusReserve(Map<String, Object> map) {
+		int cnt = session.update(NS+"rejectStatusReserve",map);
+		return (cnt>0)?true:false;
+	}
+
 	
 }

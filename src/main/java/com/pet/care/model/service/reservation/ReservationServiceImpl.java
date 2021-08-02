@@ -45,7 +45,7 @@ public class ReservationServiceImpl implements IReservationService {
 
 	@Override
 	public List<ReservationDto> hospitalReserveList(Map<String, Object> map) {
-		logger.info(" ReservationServiceImpl userRejectDetail {}", map);
+		logger.info(" ReservationServiceImpl hospitalReserveList {}", map);
 		return rDao.hospitalReserveList(map);
 	}
 
@@ -56,9 +56,9 @@ public class ReservationServiceImpl implements IReservationService {
 	}
 
 	@Override
-	public boolean rejectReserve(Map<String, Object> map) {
-		logger.info(" ReservationServiceImpl rejectReserve {}", map);
-		return rDao.rejectReserve(map);
+	public boolean rejectCommnetReserve(Map<String, Object> map) {
+		logger.info(" ReservationServiceImpl rejectCommnetReserve {}", map);
+		return rDao.rejectCommnetReserve(map);
 	}
 
 	@Override
@@ -126,4 +126,25 @@ public class ReservationServiceImpl implements IReservationService {
 		logger.info(" ReservationServiceImpl hospitalCalendarList {}", map);
 		return rDao.hospitalCalendarList(map);
 	}
+
+	@Override
+	public boolean checkReservation(Map<String, Object> map) {
+		logger.info(" ReservationServiceImpl checkReservation {}", map);
+		return rDao.checkReservation(map);
+	}
+
+	@Override
+	public ReservationDto userAcceptDetail(Map<String, Object> map) {
+		logger.info(" ReservationServiceImpl userAcceptDetail {}", map);
+		return rDao.userAcceptDetail(map);
+	}
+
+	@Override
+	public boolean rejectStatusReserve(Map<String, Object> map) {
+		logger.info(" ReservationServiceImpl rejectStatusReserve {}", map);
+		return rDao.rejectStatusReserve(map);
+	}	
+	
+	
+	
 }

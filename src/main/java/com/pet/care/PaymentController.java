@@ -118,6 +118,8 @@ public class PaymentController {
 		logger.info("PaymentController : operCancelPayRefund 병원관계자 결제 취소 (환불 O) - {}", map);
 		
 		String imp_uid = iService.sendPayNum(map);
+		String seq = (String)map.get("seq");
+		String status = (String)map.get("status");
 
 		//환불API
 		PaymentRefund re = new PaymentRefund();
@@ -126,15 +128,23 @@ public class PaymentController {
 		
 		boolean isc = iService.operCancelPayRefund(map);
 		
-		String seq = (String)map.get("seq");
 		model.addAttribute("seq", seq);
-		// 이게 맞음 20210724 3:54 pm
-		if(isc) {
+		model.addAttribute("status", status);
+		// 이게 맞음 20210730 3:54 am
+		if(isc==true) {
 			System.out.println("=========================병원관계자 환불 성공");
-			return "redirect:/reservation/cancelReserve.do";
+			if(status.equals("S")) {
+				return "redirect:/reservation/rejectStatusReserve.do";
+			}else if(status.equals("A")){
+				return "redirect:/reservation/cancelReserve.do";
+			}else {
+				return "redirect:/error/error.do";
+			}
+			
 		}else {
 			return "redirect:/error/error.do";
 		}
+		
 	}
 	
 	

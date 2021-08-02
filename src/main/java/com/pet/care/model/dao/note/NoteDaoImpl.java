@@ -22,8 +22,8 @@ public class NoteDaoImpl implements INoteDao {
 	}
 	
 	@Override
-	public List<NoteDto> selNoteList(Map<String, Object> map) {
-		return sqlsession.selectList(NS+"selNoteList", map);
+	public List<NoteDto> selDateList(Map<String, Object> map) {
+		return sqlsession.selectList(NS+"selDateList", map);
 	}
 
 	@Override

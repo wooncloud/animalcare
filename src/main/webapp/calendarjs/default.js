@@ -3,9 +3,8 @@ function init() {
   cal.setCalendars(CalendarList);
 
   setRenderRangeText();
-  setSchedules();
+//  setSchedules();
   setEventListener();
-
 
 }
 
@@ -120,6 +119,25 @@ function onClickNavi(e) {
   setSchedules();
 }
 
+//function setSchedules() {
+//		cal.clear();
+//			$.ajax({
+//				type:"get",
+//				url:"./calendar.do?hospital_seq=3",
+//				dataType:"json",
+//				async:true,
+//				success:function(msg){
+//					let data = JSON.parse(msg.result);
+//					console.log(data);
+//					cal.createSchedules(data);
+//					
+//				},
+//				error:function(){
+//					alert("잘못된 요청입니다.")
+//				}
+//			});
+//		}
+
 function setRenderRangeText() {
   var renderRange = document.getElementById('renderRange');
   var options = cal.getOptions();
@@ -136,102 +154,6 @@ function setRenderRangeText() {
     html.push(moment(cal.getDateRangeEnd().getTime()).format('MM.DD'));
   }
   renderRange.innerHTML = html.join('');
-}
-
-function setSchedules() {
-  cal.clear();
-
-	$.ajax({
-		type:"get",
-		url:"./calendar.do?hospital_seq=3",
-		dataType:"json",
-		async:true,
-		success:function(msg){
-			console.log(msg);
-			$.each(msg,function(key,value){
-				console.log(key);
-				console.log(value);
-				var list = value;
-				$.each(list,function(k,v){
-					console.log(cal);
-//					console.log(k);
-//					console.log(v);
-//					console.log(v.id);
-//					console.log(v.calendarId);
-//					console.log(v.start);
-//					console.log(v.category);
-//					console.log(v.color);
-//					console.log(v.bgColor);
-//					console.log(v.dragBgColor);
-//					console.log(v.borderColor);
-				cal.createSchedules({
-						id: v.id,
-						calendarId: v.calendarId, // 
-						title: v.title,
-						category: v.category, // 
-						start: 	v.start,
-						color: v.color, 
-						bgColor: v.bgcolor,
-						dragBgColor: v.dragBgColor,
-						borderColor: v.borderColor
-					});
-				})
-			})
-		},
-		error:function(){
-			alert("잘못된 요청")
-		}
-	});
-	
-	cal.createSchedules([
-			{
-				id: '3',
-				calendarId: 'CDC', // 
-				title: '예약',
-				category: 'time', // 
-				start: '2021-07-14 07:00:00',
-				end: '2021-07-14 09:00:00',
-				color: '#black', // 일정 색상을 직접 지정할 수 있음
-				bgColor: '#ccc',
-				dragBgColor: '#ccc',
-				borderColor: '#ccc'
-			},
-				{
-				id: '4',
-				calendarId: 'CDC', // 
-				title: '예약',
-				category: 'time', // 
-				start: '2021-07-14 09:00:00',
-				end: '2021-07-14 11:00:00',
-				color: '#black', // 일정 색상을 직접 지정할 수 있음
-				bgColor: '#ccc',
-				dragBgColor: '#ccc',
-				borderColor: '#ccc'
-			},	{
-				id: '5',
-				calendarId: 'CDC', // 
-				title: '예약가능',
-				category: 'time', // 
-				start: '2021-07-14 11:00:00',
-				end: '2021-07-14 13:00:00',
-				color: '#black', // 일정 색상을 직접 지정할 수 있음
-				bgColor: '#ccc',
-				dragBgColor: '#ccc',
-				borderColor: '#ccc'
-			},	
-			{
-				id: '6',
-				calendarId: 'CDC', // 
-				title: '예약불가',
-				category: 'time', // 
-				start: '2021-07-14 15:00:00',
-				end: '2021-07-14 17:00:00',
-				color: '#black', // 일정 색상을 직접 지정할 수 있음
-				bgColor: '#ccc',
-				dragBgColor: '#03bd9e',
-				borderColor: '#03bd9e'
-			}
-		]);
 }
 
 
@@ -260,22 +182,22 @@ function setEventListener() {
   window.addEventListener('resize', resizeThrottled);
 }
 
-cal.on({
-  'clickTimezonesCollapseBtn': function(timezonesCollapsed) {
-    if (timezonesCollapsed) {
-      cal.setTheme({
-        'week.daygridLeft.width': '77px',
-        'week.timegridLeft.width': '77px'
-      });
-    } else {
-      cal.setTheme({
-        'week.daygridLeft.width': '60px',
-        'week.timegridLeft.width': '60px'
-      });
-    }
-
-    return true;
-  }
-});
+//cal.on({
+//  'clickTimezonesCollapseBtn': function(timezonesCollapsed) {
+//    if (timezonesCollapsed) {
+//      cal.setTheme({
+//        'week.daygridLeft.width': '77px',
+//        'week.timegridLeft.width': '77px'
+//      });
+//    } else {
+//      cal.setTheme({
+//        'week.daygridLeft.width': '60px',
+//        'week.timegridLeft.width': '60px'
+//      });
+//    }
+//
+//    return true;
+//  }
+//});
 
 init();

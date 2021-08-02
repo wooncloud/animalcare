@@ -28,8 +28,11 @@ public interface IReservationService {
 	//병원 관계자 예약 신청 완료 처리//
 	public boolean acceptReserve(Map<String, Object>map);
 	
-	//병원 관계자 예약 신청 반려 처리//
-	public boolean rejectReserve(Map<String, Object>map);
+	//병원 관계자 예약 반려 코멘트 업데이트
+	public boolean rejectCommnetReserve(Map<String, Object>map);
+	
+	//병원 관계자 예약 반려 상태 업데이트
+	public boolean rejectStatusReserve(Map<String, Object>map);
 	
 	//사용자 대기 예약 취소
 	public boolean cancelReserve(Map<String, Object>map);
@@ -60,4 +63,10 @@ public interface IReservationService {
 	
 	//병원 예약 리스트 달력
 	public List<ReservationDto> hospitalCalendarList(Map<String, Object>map);
+	
+	//예약 중복 검사
+	public boolean checkReservation(Map<String, Object>map);
+	
+	//예약 확정 상세 보기
+	public ReservationDto userAcceptDetail(Map<String, Object>map);
 }

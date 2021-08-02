@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="/header.jsp" %>
+<script type="text/javascript" src="${path}/js/mycalendar.js" ></script>
 <style type="text/css">
 a{
  	text-decoration: none;
@@ -11,16 +12,13 @@ a{
 <div class="card my-1">
    <div class="card-body">
       <div class="row">
-          <div class="col-1">
-            <h5 class="card-title"> NO</h5>
-          </div>
           <div class="col-2">
             <h5 class="card-title"> 예약 종류</h5>
           </div>
           <div class="col-2">
             <h5 class="card-title"> 반려 동물</h5>
           </div>
-          <div class="col-2">
+          <div class="col-3">
              <h5 class="card-title"> 병원명</h5>
           </div>
           <div class="col-2"> 
@@ -47,9 +45,6 @@ a{
 	<div class="card my-1">
 		<div class="card-body">
 			<div class="row">
-				<div class="col-1">
-					<p class="card-text">${vs.count}</p>
-				</div>
 				<div class="col-2">
 					<p class="card-text">${list.reservetype}</p>
 				</div>
@@ -57,13 +52,13 @@ a{
 					<p class="card-text">
 					<a href="./userReserveDetail.do?seq=${list.seq}">${list.pet_name}</a></p>
 				</div>
-				<div class="col-2">
+				<div class="col-3">
 					<p class="card-text">${list.name}</p>
 				</div>
 				<div class="col-2">
 					<p class="card-text">${list.reservedate}</p>
 				</div>
-				<div class="col-1">
+				<div class="col-2">
 						<c:if test="${list.status eq 'S'}">
 							<p class="card-text">대기</p>
 						</c:if>

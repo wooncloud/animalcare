@@ -6,20 +6,22 @@
 <script type="text/javascript" src="${path}/js/hospital.js" ></script>
 
 <div class="container">
-
 <br><br>
 	<c:if test="${sessionScope.member.usertype eq 'ROLE_OPER'}">
 	<div class="my-2">
-	- 나중에 캘린더에 버튼 뜯어붙이면 됨<br>
-		<input type="button" class="btn btn-outline-primary" value="병원 일정등록" onclick="insertSchedulePage()">
-		<input type="button" class="btn btn-outline-primary" value="병원 일정 상세정보 조회" onclick="detailSchedulePage()">
+	- 다른곳에 뜯어붙일 친구들<br>
+		<input type="button" class="btn btn-outline-primary" value="일정등록(병원)" onclick="insertSchedulePage()">
+		<input type="button" class="btn btn-outline-primary" value="일정 상세정보 조회(병원)" onclick="detailSchedulePage()">
+		
+		<input type="button" class="btn btn-outline-primary" value="진료기록 조회(병원)" onclick="medicalListPage()">
+		<input type="button" class="btn btn-outline-primary" value="진료기록 추가(병원)" onclick="insertRecodePage()">
+		<input type="button" class="btn btn-outline-primary" value=" 테스트" onclick="aa()">
 	</div>
 	</c:if>
-	
 	<div class="row fs-3 my-2">
 		<div class="col">병원 상세 정보</div>
 		<div class="col d-grid gap-2 d-md-flex justify-content-md-end">	
-			<input type="button" class="btn btn-outline-primary" value="이전페이지" onclick="history.back()">
+			<input type="button" class="btn btn-outline-primary" value="이전페이지" onclick="location.href = './searchHospitalPage.do';">
 		</div>
 	</div>
 	<div>
@@ -116,8 +118,8 @@
 		<c:when test="${(sessionScope.member eq null) or (sessionScope.member.usertype eq 'ROLE_USER')}">	
 	 		<div>아래 버튼 클릭시 hiddenScope == ROLE_USER 이면 이동 아닐시 alert 작동(작업 완료시 삭제)</div>
 			<div class="d-grid gap-2 d-md-flex justify-content-md-center">
-				<button type="button" class="btn btn-outline-primary btn-lg" onclick="a()">문의하기</button>				 	
-     			<button type="button" class="btn btn-outline-primary btn-lg">예약하기</button>		 
+				<button type="button" class="btn btn-outline-primary btn-lg" onclick="a()">문의하기</button>				 			 
+     			<button type="button" class="btn btn-outline-primary btn-lg" onclick="location.href='../reservation/moveCalendar.do?hospital_seq=${dto.seq}&hospital_name=${dto.name}'">예약하기</button>		 
      			<button type="button" class="btn btn-outline-primary btn-lg">관심병원 등록</button>		 
      			<button type="button" class="btn btn-outline-secondary btn-lg">신고하기</button>		  		
 			</div>

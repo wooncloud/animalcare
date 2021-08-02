@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.pet.care.dto.SurveyDto;
+import com.pet.care.dto.SurveyResultDto;
 
 @Repository
 public class SurveyDaoImpl implements ISurveyDao {
@@ -42,15 +43,100 @@ public class SurveyDaoImpl implements ISurveyDao {
 	
 	@Override
 	public SurveyDto surveyDetail(Map<String, Object> map) {
-		logger.info("SurveyDaoImpl : surveyDetail 설문 폼 상세 - {}",map);
-		return sqlSession.selectOne(NS+"surveyDetail",map);
+		logger.info("SurveyDaoImpl : surveyDetail 설문 폼 상세 - {}", map);
+		return sqlSession.selectOne(NS+"surveyDetail", map);
 	}
 
 	@Override
 	public int delflagForm(Map<String, String[]> map) {
-		logger.info("SurveyDaoImpl : delflagForm 설문 폼 삭제 - {}",map);
-		return sqlSession.update(NS+"delflagForm",map);
+		logger.info("SurveyDaoImpl : delflagForm 설문 폼 삭제 - {}", map);
+		return sqlSession.update(NS+"delflagForm", map);
 	}
 
+	@Override
+	public boolean compareStartDate(Map<String, Object> map) {
+		logger.info("SurveyDaoImpl : compareStartDate 설문 시작일 설정 - {}", map);
+		int n = sqlSession.selectOne(NS+"compareStartDate", map);
+		return (n>0)?true:false;
+	}
+
+	@Override
+	public boolean compareEndDate(Map<String, Object> map) {
+		logger.info("SurveyDaoImpl : compareEndDate 설문 마감일 설정 - {}", map);
+		int n = sqlSession.selectOne(NS+"compareEndDate", map);
+		return (n>0)?true:false;
+	}
+
+	@Override
+	public boolean userSurveySubmit(Map<String, Object> map) {
+		logger.info("SurveyDaoImpl : userSurveySubmit (사용자) 설문 폼 제출 - {}", map);
+		int n = sqlSession.insert(NS+"userSurveySubmit", map);
+		return (n>0)?true:false;
+	}
+
+	@Override
+	public int checkEmptyResponser(Map<String, Object> map) {
+		logger.info("SurveyDaoImpl : checkEmptyResponser 설문 답변 유무 확인 - {}", map);
+		return sqlSession.selectOne(NS+"checkEmptyResponser", map);
+	}
+
+	@Override
+	public boolean insertFirstResponser(Map<String, Object> map) {
+		logger.info("SurveyDaoImpl : insertFirstResponser 설문 답변 비어 있을 때 작성자 등록 - {}", map);
+		int n = sqlSession.insert(NS+"insertFirstResponser", map);
+		return (n>0)?true:false;
+	}
+
+	@Override
+	public boolean updateResponsers(Map<String, Object> map) {
+		logger.info("SurveyDaoImpl : updateResponsers 설문 답변 비어 있지 않을 때 작성자 추가 등록 - {}", map);
+		int isc = sqlSession.update(NS+"updateResponsers", map);
+		return (isc>0)?true:false;
+	}
+
+	@Override
+	public int checkSameResponser(Map<String, Object> map) {
+		logger.info("SurveyDaoImpl : checkSameResponser 설문 답변 작성자 중복 확인 - {}", map);
+		return sqlSession.selectOne(NS+"checkSameResponser", map);
+	}
+	
+	@Override
+	public List<SurveyDto> ongoingSurvey(Map<String, Object> map) {
+		logger.info("SurveyDaoImpl : ongoingSurvey (사용자) 진행중인 설문 폼 리스트", map);
+		return sqlSession.selectList(NS+"ongoingSurvey", map);
+	}
+
+	@Override
+	public List<SurveyDto> outOfDateSurvey(Map<String, Object> map) {
+		logger.info("SurveyDaoImpl : outOfDateSurvey (사용자) 날짜 지난 설문 폼 리스트", map);
+		return sqlSession.selectList(NS+"outOfDateSurvey", map);
+	}
+
+	//아마 필요 없음ㅠ
+	@Override
+	public List<SurveyDto> ongoingDateCheck() {
+		logger.info("SurveyDaoImpl : ongoingDateCheck (사용자) 진행중인 설문 날짜 체크");
+		return sqlSession.selectList(NS+"ongoingDateCheck");
+	}
+	//이아이도 아마 필요 없음ㅠ
+	@Override
+	public List<SurveyDto> outOfDateCheck() {
+		logger.info("SurveyDaoImpl : outOfDateCheck (사용자) 진행중인 설문 날짜 체크");
+		return sqlSession.selectList(NS+"outOfDateCheck");
+	}
+
+	@Override
+	public List<SurveyDto> surveyResultList() {
+		logger.info("SurveyDaoImpl : surveyResultList 설문 결과 리스트");
+		return sqlSession.selectList(NS+"surveyResultList");
+	}
+
+	@Override
+	public List<SurveyResultDto> surveyResultDetail(Map<String, Object> map) {
+		logger.info("SurveyDaoImpl : surveyResultList 설문 결과 리스트 상세 - {}", map);
+		return sqlSession.selectList(NS+"surveyResultDetail", map);
+	}
+	
+		
 
 }

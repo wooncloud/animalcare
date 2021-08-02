@@ -1,6 +1,7 @@
 package com.pet.care.model.dao.pet;
 
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +33,13 @@ public class PetDaoImpl implements IPetDao {
 	}
 
 	@Override
-	public boolean deletePet(String id) {
-		return sqlsession.update(NS+"deletePet", id)>0?true:false;
+	public boolean deletePet(Map<String, Object> map) {
+		return sqlsession.update(NS+"deletePet", map)>0?true:false;
+	}
+
+	@Override
+	public PetDto detailPet(Map<String, Object> map) {
+		return sqlsession.selectOne(NS+"detailPet", map);
 	}
 
 }

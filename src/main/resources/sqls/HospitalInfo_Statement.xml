@@ -13,29 +13,46 @@
 		<result property="tel" column="TEL"/>
 		<result property="emergency" column="EMERGENCY"/>
 		<result property="delflag" column="DELFLAG"/>
-<!-- 		<collection property="" resultMap="UserDto"/> -->
+		<collection property="userdto" resultMap="UserDto"/>
 		<collection property="pettypedto" resultMap="PetTypeDto"/>
 		<collection property="operatordto" resultMap="OperatorDto"/>
+		<collection property="reservationdto" resultMap="ReservationDto"/>
+		<collection property="petdto" resultMap="PetDto"/>
 	</resultMap>
 	
-<!-- 	<resultMap type="com.pet.care.dto.UserDto" id="UserDto"> -->
-<!-- 		<result/> -->
-<!-- 	</resultMap> -->
+	<resultMap type="com.pet.care.dto.UserDto" id="UserDto">
+		<result property="email" column="EMAIL"/>
+		<result property="name" column="UNAME"/>
+	</resultMap>
 	
 	<resultMap type="com.pet.care.dto.PetTypeDto" id="PetTypeDto">
 		<result property="seq" column="SEQ"/>
 		<result property="hospital_seq" column="HOSPITAL_SEQ"/>
 		<result property="pettype" column="PETTYPE"/>
 		<result property="delflag" column="DELFLAG"/>
+		<result property="pettype" column="PETTYPE"/>
 	</resultMap>
 	
 	<resultMap type="com.pet.care.dto.OperatorDto" id="OperatorDto">
 		<result property="phone" column="PHONE"/>
 		<result property="email" column="EMAIL"/>
 	</resultMap>
+	
+	<resultMap type="com.pet.care.dto.ReservationDto" id="ReservationDto">
+		<result property="hospital_seq " column="HOSPITAL_SEQ "/>
+		<result property="pet_name" column="PET_NAME"/>
+		<result property="user_email " column="USER_EMAIL "/>
+		<result property="symptom" column="SYMPTOM"/>
+	</resultMap>
+	
+	<resultMap type="com.pet.care.dto.PetDto" id="PetDto">
+		<result property="id" column="ID"/>
+		<result property="name" column="NAME"/>
+		<result property="email" column="EMAIL"/>	
+	</resultMap>
 
 <!-- 	회원 병원 리스트 조회  -->
-	<select id="hospitalList" parameterType="java.util.Map" resultType="HospitalJoinDto">
+	<select id="hospitalList" parameterType="java.util.Map" resultType="HospitalInfoDto">
 		SELECT SEQ , HOSPITAL_SEQ , NAME , CONTENT ,
                 ADDRESS1 , ADDRESS2 , OPENTIME , TEL
         	FROM (                
@@ -77,24 +94,37 @@
 
 <!-- 	병원 검색  (다이나믹쿼리 해야함 하면 괄호 삭제)-->
 	<select id="searchHospital" parameterType="java.util.Map" resultType="HospitalJoinDto">
-		 SELECT HOSPITAL_SEQ , NAME , CONTENT ,
-  				ADDRESS1 , ADDRESS2 , OPENTIME , TEL
+		 SELECT SEQ , HOSPITAL_SEQ , NAME , ADDRESS1 ,
+  				 ADDRESS2 , OPENTIME , TEL
 		FROM (                
-				SELECT p.HOSPITAL_SEQ , h.NAME , h.CONTENT ,
-            			h.ADDRESS1 , h.ADDRESS2 , h.OPENTIME , h.TEL,
+				SELECT h.SEQ , p.HOSPITAL_SEQ , h.NAME , h.ADDRESS1 ,
+            			 h.ADDRESS2 , h.OPENTIME , h.TEL,
          				ROW_NUMBER() OVER(ORDER BY p.HOSPITAL_SEQ DESC) AS RN
    				FROM HOSPITALINFO h 
             			JOIN PETTYPE p 
           				ON h.SEQ = p.HOSPITAL_SEQ 
     			WHERE h.DELFLAG = 'N'
-    					AND SUBSTR(h.ADDRESS1 , 0, INSTR(h.ADDRESS1, ' ', 1, 2)) = '서울 강남구 ' 
-    					AND p.PETTYPE = 'PET002'
-     					AND h.EMERGENCY = 'N' 	
-        GROUP BY p.HOSPITAL_SEQ , h.NAME , h.CONTENT ,
-                         h.ADDRESS1 , h.ADDRESS2 , h.OPENTIME , h.TEL
+<!--     					<if test="address1 != null">   					 -->
+<!--     					AND SUBSTR(h.ADDRESS1 , 0, INSTR(h.ADDRESS1, ' ', 1, 2)) in -->
+<!--     						<foreach collection="address1" item="address1" open="(" separator="," close=")"> -->
+<!-- 								#{address1}+" " -->
+<!--     						</foreach> -->
+<!--     					LIKE '%'||#{address1}||'%'   -->
+<!--     					</if> -->
+    					<if test="pettype != null">
+    					AND p.PETTYPE in
+    						<foreach collection="pettype" item="pettype" open="(" separator="," close=")">
+								#{pettype}
+    						</foreach>
+    					</if>
+    					<if test="emergency != noChoice">
+     					AND h.EMERGENCY = #{emergency}	
+    					</if>     					
+        GROUP BY h.SEQ , p.HOSPITAL_SEQ , h.NAME , h.ADDRESS1 ,
+                          h.ADDRESS2 , h.OPENTIME , h.TEL
                         )
      	WHERE RN BETWEEN #{first} AND #{last}
-     	ORDER BY HOSPITAL_SEQ DESC 
+     	ORDER BY HOSPITAL_SEQ DESC
 	</select>
 
 <!-- 	검색된 병원 전채 갯수 (페이징 쿼리)(다이나믹쿼리 해야함 하면 괄호삭제)  -->
@@ -138,7 +168,7 @@
 	<select id="detailHospitalOper" resultMap="HospitalJoinDto">
 		SELECT h.SEQ, h.OPERATOR_EMAIL , h.NAME , h.ADDRESS1 ,
                 h.ADDRESS2 , o.PHONE , LISTAGG(p.PETTYPE,',') PETTYPE ,
-                h.CONTENT , h.EMERGENCY , h.OPENTIME , h.TEL
+                h.CONTENT , h.EMERGENCY , h.OPENTIME , h.TEL , h.DELFLAG 
         FROM HOSPITALINFO h 
                 JOIN PETTYPE p 
                 ON h.SEQ = p.HOSPITAL_SEQ
@@ -147,7 +177,7 @@
         WHERE o.EMAIL = #{email}
                 AND h.DELFLAG = 'N'
         GROUP BY h.SEQ, h.OPERATOR_EMAIL , h.NAME , h.ADDRESS1 , o.PHONE , 
-                        h.ADDRESS2 , h.CONTENT , h.EMERGENCY , h.OPENTIME , h.TEL
+                        h.ADDRESS2 , h.CONTENT , h.EMERGENCY , h.OPENTIME , h.TEL ,  h.DELFLAG 
 	</select>
 <!-- 	병원 상세정보 조회  (사용자)  -->
 	<select id="detailHospital" resultMap="HospitalJoinDto">
@@ -196,5 +226,17 @@
 			WHERE SEQ =#{seq}
 	</update>
 	
+<!-- 진료내역 추가전 페이지에 기본 입력되어 있는 데이터 -->
+	<select id="insertBasicData" parameterType="java.lang.Integer" resultMap="HospitalJoinDto">
+		SELECT r.PET_NAME , u.NAME UNAME , r.SYMPTOM ,h.NAME , p.ID , h.SEQ 
+			FROM HOSPITALINFO h			
+				JOIN RESERVATION r
+				ON h.SEQ = r.HOSPITAL_SEQ 
+				JOIN USERINFO u 
+				ON u.EMAIL = r.USER_EMAIL 
+				JOIN PETINFO p 
+				ON p.NAME = r.PET_NAME 
+		WHERE r.SEQ = #{SEQ}
+	</select>		
 	
 </mapper>

@@ -6,8 +6,30 @@
 function chkBox(chk) {
 	var chkValue = chk.value;
 	console.log(chkValue);
+	
+	let inputBox = document.getElementById(chkValue);
+	console.log(inputBox);
+	if(chk.checked){
+		inputBox.setAttribute("name","hiddenLoc");
+		inputBox.setAttribute("value",chkValue);		
+	}else{
+		inputBox.removeAttribute("name");	
+		inputBox.removeAttribute("value");	
+	}
+	
 }
 
+//병원 찾기 페이지 선택 찾기 
+//function forSearch(){
+//	location.href = "./searchHospital.do";
+	
+//	let url = "./searchHospital.do?";
+//	let enURI =  encodeURI(url);
+//	let enComponentURI = encodeURIComponent(url);
+//	
+//	location.href = url+"emergency=Y";
+//	
+//}
 
 // 셀렉트 박스에서 진료항목 온체인지로 항목 선택 및 선택 취소
 function selectType() {
@@ -76,6 +98,27 @@ let detailHospital = {
 	}
 }
 
+// 다른 라디오버튼 선택시 자동 선택 해제(선택안함 값을 null하려고 만듬 )
+function radioMaster(){
+ let have =	document.getElementById('have');
+ let none =	document.getElementById('none');
+ let noChoice =	document.getElementById('noChoice');
+ if(have.onclick = function(){
+	 noChoice.checked = false;
+ });
+ if(none.onclick = function(){
+	 noChoice.checked = false;
+ });
+ if(noChoice.onclick = function(){
+	 have.checked = false;
+	 none.checked = false;
+ }); 
+}
+
+//병원 찾기 페이지 찾기 선택 취소 
+function beforeSearch(){
+	location.href = "./searchHospitalPage.do";
+}
 
 //병원 삭제 버튼
 function deleteHospital(seq) {
@@ -462,3 +505,106 @@ function deleteSchedule(){
 	
 }
 
+//병원 진료기록 리스트 페이지 이동
+function medicalListPage(){
+	location.href = "./recodeList.do";
+}
+
+//병원 진료기록 입력 페이지 이동
+function insertRecodePage(){
+	location.href = "./insertRecodePage.do";
+}
+
+//병원 진료기록 수정 에디터 설정
+//진료내용
+let modifyTreatmentContents = {
+		editor: null,
+		init: function (modifyTreatmentContent) {
+			
+			// editor
+			this.editor = new toastui.Editor({
+				el: document.querySelector('#treatmentEditor'),
+				previewStyle: 'vertical',
+				initialEditType: "wysiwyg",
+				height: '300px',
+				previewHighlight: true,
+				language: 'ko',
+				initialValue: modifyTreatmentContent
+			});			
+		}
+}
+//처방내용
+let modifyPrescriptionContents = {
+		editor: null,
+		init: function (modifyPrescriptionContent) {
+			
+			// editor
+			this.editor = new toastui.Editor({
+				el: document.querySelector('#prescriptionEditor'),
+				previewStyle: 'vertical',
+				initialEditType: "wysiwyg",
+				height: '300px',
+				previewHighlight: true,
+				language: 'ko',
+				initialValue: modifyPrescriptionContent
+			});			
+		}
+}
+
+//병원 진료기록 수정 에디터 내용 DB전송하려고 담아줌
+function modifyRecodeChk(){
+	
+	//진료내용
+	let modifyTreatmentContent = modifyTreatmentContents.editor.getHTML();
+	document.getElementById("modifyTreatmentContent").value = modifyTreatmentContent;
+	//처방내용
+	let modifyPrescriptionContent = modifyPrescriptionContents.editor.getHTML();
+	document.getElementById("modifyPrescriptionContent").value = modifyPrescriptionContent;
+}
+
+//병원 진료기록 입력 에디터 설정
+//진료내용
+let insertTreatmentContents = {
+		editor: null,
+		init: function () {
+			
+			// editor
+			this.editor = new toastui.Editor({
+				el: document.querySelector('#treatmentEditor'),
+				previewStyle: 'vertical',
+				initialEditType: "wysiwyg",
+				height: '300px',
+				previewHighlight: true,
+				language: 'ko',
+				initialValue: ""
+			});			
+		}
+}
+//처방내용
+let insertPrescriptionContents = {
+		editor: null,
+		init: function () {
+			
+			// editor
+			this.editor = new toastui.Editor({
+				el: document.querySelector('#prescriptionEditor'),
+				previewStyle: 'vertical',
+				initialEditType: "wysiwyg",
+				height: '300px',
+				previewHighlight: true,
+				language: 'ko',
+				initialValue: ""
+			});			
+		}
+}
+
+//병원 진료기록 입력 에디터 내용 DB전송하려고 담아줌
+function insertRecodeChk(){
+	
+	//진료내용
+	let insertTreatmentContent = insertTreatmentContents.editor.getHTML();
+	document.getElementById("insertTreatmentContent").value = insertTreatmentContent;
+	//처방내용
+	let insertPrescriptionContent = insertPrescriptionContents.editor.getHTML();
+	document.getElementById("insertPrescriptionContent").value = insertPrescriptionContent;
+}

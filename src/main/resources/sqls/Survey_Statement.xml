@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.pet.care.model.dao.survey.ISurveyDao">
+
 <select id="adminSurveyList" resultType="SurveyDto">
 SELECT SEQ, TITLE, TO_CHAR(REGDATE,'yyyy-mm-dd') AS REGDATE, TO_CHAR(STARTDATE,'yyyy-mm-dd') AS STARTDATE, TO_CHAR(ENDDATE,'yyyy-mm-dd') AS ENDDATE, SURVEYFLAG, DELFLAG
 	FROM SURVEY
@@ -37,6 +38,113 @@ SELECT SEQ, TITLE, TO_CHAR(REGDATE,'yyyy-mm-dd') AS REGDATE, TO_CHAR(STARTDATE,'
 			#{seq}
 		</foreach>
 </update>
+
+<select id="compareStartDate" parameterType="java.util.Map" resultType="java.lang.Integer">
+	<![CDATA[SELECT COUNT(*)
+			FROM SURVEY s 
+			WHERE SEQ=#{seq} AND (TO_CHAR(SYSDATE,'yyyy-mm-dd') < TO_DATE(#{startdate},'yyyy-mm-dd'))]]>
+</select>
+
+<select id="compareEndDate" parameterType="java.util.Map" resultType="java.lang.Integer">
+	<![CDATA[SELECT COUNT(*)
+			FROM SURVEY s 
+			WHERE SEQ=#{seq} AND (TO_DATE(#{startdate},'yyyy-mm-dd') < TO_DATE(#{enddate},'yyyy-mm-dd'))]]>
+</select>
+
+<insert id="userSurveySubmit" parameterType="java.util.Map">
+	INSERT INTO SURVEYRESULT
+		(SEQ, SURVEY_SEQ, HOSPITAL_SEQ, TITLE, ANSWER, REGDATE)
+		VALUES(SURVEYRESULT_SEQ.NEXTVAL, #{survey_seq}, '3', #{title}, #{answer}, SYSDATE)
+</insert>
+
+<!-- 설문답변이 비었는지 확인 -->
+<select id="checkEmptyResponser" parameterType="java.util.Map" resultType="java.lang.Integer">
+SELECT COUNT(*)
+	FROM SURVEYRESPONSER s
+	WHERE SURVEY_SEQ = #{survey_seq}
+</select>
+
+<!-- 비어있으면 설문 작성자 -->
+<insert id="insertFirstResponser" parameterType="java.util.Map">
+INSERT INTO SURVEYRESPONSER
+	(SEQ, SURVEY_SEQ, RESPONSER)
+	VALUES(SURVEYRESPONSER_SEQ.NEXTVAL, #{survey_seq}, #{responser}||',')
+</insert>
+
+<!-- 비어있지 않으면 작성자 추가 -->
+<update id="updateResponsers" parameterType="java.util.Map">
+UPDATE SURVEYRESPONSER
+	SET RESPONSER=RESPONSER||#{responser}||',' 
+	WHERE SURVEY_SEQ = #{survey_seq}
+</update>
+
+<!-- 중복확인 -->
+<select id="checkSameResponser" parameterType="java.util.Map" resultType="java.lang.Integer">
+SELECT COUNT(INSTR(RESPONSER,#{responser},1)) 
+	FROM SURVEYRESPONSER s 
+	WHERE SURVEY_SEQ = #{survey_seq}
+</select>
+
+<select id="ongoingSurvey" resultType="SurveyDto" parameterType="java.util.Map">
+SELECT SEQ, QUESTION, TITLE, HOSPITAL_SEQ, TO_CHAR(STARTDATE ,'yyyy-mm-dd') AS STARTDATE , TO_CHAR(ENDDATE,'yyyy-mm-dd') AS ENDDATE, SURVEYFLAG
+	FROM SURVEY s 
+	WHERE DELFLAG = 'N' AND SURVEYFLAG='Y' AND (TO_CHAR(SYSDATE,'yyyy-mm-dd') BETWEEN TO_CHAR(STARTDATE ,'yyyy-mm-dd') AND TO_CHAR(ENDDATE,'yyyy-mm-dd'))
+INTERSECT 
+SELECT  s3.SEQ, s3.QUESTION, s3.TITLE, s3.HOSPITAL_SEQ, TO_CHAR(s3.STARTDATE ,'yyyy-mm-dd') AS STARTDATE , TO_CHAR(s3.ENDDATE,'yyyy-mm-dd') AS ENDDATE, s3.SURVEYFLAG
+	FROM SURVEY s3 LEFT OUTER JOIN
+			(SELECT INSTR(RESPONSER,#{responser}||',' ,1), RESPONSER , SURVEY_SEQ ,SEQ
+			   FROM SURVEYRESPONSER s 
+			   WHERE INSTR(RESPONSER,#{responser}||',' ,1) = 0) s2
+	ON s3.SEQ  = s2.SURVEY_SEQ
+	WHERE s3.DELFLAG = 'N' AND s3.SURVEYFLAG='Y' AND s2.RESPONSER IS NULL
+</select>
+
+
+<!-- 응답일이 지난 설문 리스트 -->
+<select id="outOfDateSurvey" resultType="SurveyDto" parameterType="java.util.Map">
+<![CDATA[SELECT  s3.SEQ, s3.QUESTION, s3.TITLE, s3.HOSPITAL_SEQ, TO_CHAR(s3.STARTDATE ,'yyyy-mm-dd') AS STARTDATE , TO_CHAR(s3.ENDDATE,'yyyy-mm-dd') AS ENDDATE, s3.SURVEYFLAG
+	FROM SURVEY s3 JOIN
+			(SELECT INSTR(RESPONSER,#{responser}||',',1), RESPONSER , SURVEY_SEQ ,SEQ
+			   FROM SURVEYRESPONSER s 
+			   WHERE INSTR(RESPONSER,#{responser}||',',1) != 0) s2
+	ON s3.SEQ  = s2.SURVEY_SEQ
+	WHERE s3.DELFLAG = 'N' AND s3.SURVEYFLAG='Y'
+UNION 
+SELECT SEQ, QUESTION, TITLE, HOSPITAL_SEQ, TO_CHAR(STARTDATE ,'yyyy-mm-dd') AS STARTDATE , TO_CHAR(ENDDATE,'yyyy-mm-dd') AS ENDDATE, SURVEYFLAG
+	FROM SURVEY s 
+	WHERE DELFLAG = 'N' AND SURVEYFLAG='Y' AND (TO_CHAR(ENDDATE,'yyyy-mm-dd') < TO_CHAR(SYSDATE,'yyyy-mm-dd'))]]>
+</select>
+
+<!-- 아마필요없음 -->
+<select id="ongoingDateCheck" resultType="SurveyDto">
+<![CDATA[SELECT SEQ, QUESTION, TITLE, HOSPITAL_SEQ, TO_CHAR(STARTDATE ,'yyyy-mm-dd') AS STARTDATE , TO_CHAR(ENDDATE,'yyyy-mm-dd') AS ENDDATE, SURVEYFLAG
+		FROM SURVEY s 
+		WHERE DELFLAG = 'N' AND SURVEYFLAG='Y' AND (TO_CHAR(SYSDATE,'yyyy-mm-dd') BETWEEN TO_CHAR(STARTDATE ,'yyyy-mm-dd') AND TO_CHAR(ENDDATE,'yyyy-mm-dd'))]]>
+</select>
+<select id="outOfDateCheck" resultType="SurveyDto">
+<![CDATA[SELECT SEQ, QUESTION, TITLE, HOSPITAL_SEQ, TO_CHAR(STARTDATE ,'yyyy-mm-dd') AS STARTDATE , TO_CHAR(ENDDATE,'yyyy-mm-dd') AS ENDDATE, SURVEYFLAG
+		FROM SURVEY s 
+		WHERE DELFLAG = 'N' AND SURVEYFLAG='Y' AND (TO_CHAR(ENDDATE,'yyyy-mm-dd') <= TO_CHAR(SYSDATE,'yyyy-mm-dd'))]]>
+</select>
+
+<!-- 결과뿌리릴 설문리스트-->
+<select id="surveyResultList" resultType="SurveyDto">
+<![CDATA[SELECT SEQ, QUESTION, TITLE, HOSPITAL_SEQ, TO_CHAR(STARTDATE ,'yyyy-mm-dd') AS STARTDATE , TO_CHAR(ENDDATE,'yyyy-mm-dd') AS ENDDATE, SURVEYFLAG
+	FROM SURVEY s 
+	WHERE DELFLAG = 'N' AND SURVEYFLAG='Y' AND (TO_CHAR(ENDDATE,'yyyy-mm-dd') <= TO_CHAR(SYSDATE,'yyyy-mm-dd'))]]>
+</select>
+
+<select id="surveyResultDetail" parameterType="java.util.Map" resultType="SurveyResultDto">
+	SELECT SURVEY_SEQ, TITLE, ANSWER
+	FROM SURVEYRESULT s
+	WHERE SURVEY_SEQ =#{survey_seq}
+</select>
+
+
+
+
+
+
 
 
 </mapper>

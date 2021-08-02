@@ -19,6 +19,7 @@
     --light-text-color: #979A9A;
     --dark-color: #2E4053;
 }
+
 .body-height {
     height: 100vh;
 }
@@ -108,7 +109,7 @@
 .btn-light {
     background-color: var(--light-color);
     border-color: var(--light-color);
-    color:  var(--light-text-color);
+    color: var(--light-text-color);
 }
 
 .btn-dark {
@@ -129,4 +130,36 @@ footer {
     background-color: var(--theme-color5);
     border-top: 1px solid var(--theme-color3) !important;
     color: var(--theme-color3);
+}
+
+/* common width */
+
+.mw-sm {
+    max-width: 540px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.mw-md {
+    max-width: 720px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.mw-lg {
+    max-width: 960px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.mw-xl {
+    max-width: 1140px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.mw-xxl {
+    max-width: 1320px;
+    margin-left: auto;
+    margin-right: auto;
 }
