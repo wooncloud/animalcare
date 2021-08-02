@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@include file="/header.jsp" %>
-${reserveDto}
+<script type="text/javascript" src="${path}/js/mycalendar.js" ></script>
 <div class="card">
    <div class="card-body">
       <h5 class="card-title my-3">예약 상세 내역</h5>
@@ -10,9 +10,11 @@ ${reserveDto}
          </div>
           <div class="col-3">
             <p class="card-text">${reserveDto.reservetype}</p>
+            <input type="hidden" name="reservetype" id="reservetype" value="${reserveDto.reservetype}">
          </div>
           <div class="col-3">
             <h6 class="card-subtitle mb-2 text-muted">예약일자</h6>
+            <input type="hidden" name="reservedate" id="reservedate" value="${reserveDto.reservedate}">
          </div>
           <div class="col-3">
             <p class="card-text">${reserveDto.reservedate}</p>
@@ -85,71 +87,24 @@ ${reserveDto}
 </div>
 
 <c:if test="${reserveDto.status == 'S' or reserveDto.status =='A' }">
-   <button name="cancelBtn" class="btn btn-primary" onclick="cancelReservation('${reserveDto.seq}','${reserveDto.status}','${reserveDto.reservedate}');">취소</button>
+   <button name="cancelBtn" class="btn btn-primary" onclick="userCancelReservation('${reserveDto.seq}','${reserveDto.status}');">취소</button>
+   <button class="btn btn-primary" onclick="javascript:history.back(-1);">목록</button>
 </c:if>
-
+<c:if test="${reserveDto.status == 'R'or reserveDto.status == 'C'}">
 <button class="btn btn-primary" onclick="javascript:history.back(-1);">목록</button>
-
+</c:if>
 <script type="text/javascript">
-
-// window.onload= function('${reserveDto.reservedate}'){
-
-// 	console.log(reservedate);
+window.onload = function(){
 	
-// 	var date = new Date();
-// 	var day = date.getDate();
-// 	var year = date.getFullYear();
-// 	var month = (1+date.getMonth());
-// 	month = (month >= 10) ? month : '0' + month;
-// 	day = (day >= 10) ? day : '0' + day; 
-		
-// 	var today = year+"-"+month+"-"+day;//날짜
-// 	console.log(today);
-// 	console.log(date);
-
-// 	var cBtn = document.getElementsByName("cancelBtn")[0];
-	
-	
-// 	if(today > reservedate){
-// 		alert("취소 기간이 아닙니다");
-// // 		cBtn.style.display="none";
-// 	}
-// }
-function cancelReservation(seq,status,reservedate){
-	
-	
-	
-	
-	console.log(reservedate);
-	
+	var reserve = document.getElementById("reservedate").value;
+	var reservetype = document.getElementById("reservetype").value;
 	var date = new Date();
-	var day = date.getDate();
-	var year = date.getFullYear();
-	var month = (1+date.getMonth());
-	month = (month >= 10) ? month : '0' + month;
-	day = (day >= 10) ? day : '0' + day; 
-		
-	var today = year+"-"+month+"-"+day;//날짜
-	console.log(today);
-	console.log(date);
+	var reservedate = new Date(reserve);
 
-	var cBtn = document.getElementsByName("cancelBtn")[0];
-	
-	
-	if(today > reservedate){
-		alert("취소 기간이 아닙니다");
-// 		cBtn.style.display="none";
-	} else{
-		var frm = confirm("취소 하시겠습니까?");
-		console.log(seq,status);
-	if(frm){
-		
-		location.href="./cancelStandReservation.do?seq="+seq+"&status="+status;
-		
-	}
+	if(date > reservedate){
+		document.getElementsByTagName("button")[0].style.display="none";
+	} 
 }
 
-	
-}
 </script>
 <%@include file="/footer.jsp" %>

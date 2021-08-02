@@ -29,7 +29,7 @@
 	
 <!-- 병원 월별 일정조회-->
 	<select id="monthSchedule" parameterType="java.util.Map" resultType="HospitalScheduleDto">
-		SELECT SEQ , HOSPITAL_SEQ , CONTENT ,
+		SELECT SEQ , HOSPITAL_SEQ , CONTENT , TITLE,
                 SCHEDULE , "CHECK" , DELFLAG 
      		FROM HOSPITALSCHEDULE h 
      		WHERE HOSPITAL_SEQ = #{hospital_seq}

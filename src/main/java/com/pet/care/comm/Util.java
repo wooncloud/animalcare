@@ -16,6 +16,8 @@ import org.json.simple.JSONObject;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 
+import com.pet.care.dto.ReservationDto;
+
 import net.nurigo.java_sdk.api.Message;
 import net.nurigo.java_sdk.exceptions.CoolsmsException;
 
@@ -179,6 +181,42 @@ public class Util {
 		String numStr = randomNum(6);
 		
 		String text = "[PET CARE] 전화번호 인증번호는 '" + numStr + "' 입니다.";
+		String api_key = prop.getProperty("key");
+		String api_secret = prop.getProperty("secret");
+
+		// coolsms 객체 생성
+		Message coolsms = new Message(api_key, api_secret);
+
+		// 4 params(to, from, type, text) are mandatory. must be filled
+		HashMap<String, String> params = new HashMap<String, String>();
+		params.put("to", phoneNumber);
+		params.put("from", prop.getProperty("from"));
+		params.put("type", "SMS");
+		params.put("text", text);
+		params.put("app_version", prop.getProperty("app_version")); // application name and version
+
+		try {
+			JSONObject obj = (JSONObject) coolsms.send(params);
+			System.out.println(obj.toString());
+		} catch (CoolsmsException e) {
+			System.out.println(e.getMessage());
+			System.out.println(e.getCode());
+		}
+		
+		return numStr;
+	}
+	
+	
+	public static String sendReservation(ReservationDto dto) {
+		return smsReservation(dto);
+	}
+	
+	private static String smsReservation(ReservationDto dto) {
+		Util util = new Util();
+		Properties prop = util.readProperties("properties/sms.properties");
+		String numStr = randomNum(6);
+		String phoneNumber = dto.getPhone().replace("-", "");
+		String text = "[PET CARE] "+dto.getName()+"님"+dto.getReservedate()+""+dto.getReservetype()+"예약이 완료되었습니다.";
 		String api_key = prop.getProperty("key");
 		String api_secret = prop.getProperty("secret");
 

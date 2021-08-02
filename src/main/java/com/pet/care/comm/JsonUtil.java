@@ -1,5 +1,9 @@
 package com.pet.care.comm;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.List;
+import java.util.Locale;
 import java.io.UnsupportedEncodingException;
 import java.util.Base64;
 import java.util.HashMap;
@@ -79,13 +83,16 @@ public class JsonUtil {
 		//병원 스케줄 하고 예약 리스트하고 집어넣으면 JSON으로 뽑아
 		for (ReservationDto r : reservationList) {
 			JSONObject j = new JSONObject();
-			j.put("id", r.getSeq());
-			j.put("calendarId", "예약");
-			j.put("title", r.getReservetype()); // 제목 어떻게 할지 정해야 함.
-			j.put("start", r.getReservetime());
-			
+			j.put("id", String.valueOf(r.getSeq()));
+			j.put("calendarId", "예약완료");
+			j.put("title", r.getReservetype()+"/"+r.getReservetime().substring(0,2)+":"+r.getReservetime().substring(2,4)); // 제목 어떻게 할지 정해야 함.
+			j.put("start",r.getReservedate()+"T"+ r.getReservetime().substring(0,2)+":"+r.getReservetime().substring(2,4)+":00");
+//			SimpleDateFormat rReserve = new SimpleDateFormat("YYYY-MM-DD HH:mm:ss");
+//			String reserve = rReserve.format(r.getReservedate()+r.getReservetime());
+//			j.put("start", reserve);
+			j.put("end", r.getReservedate()+"T"+ r.getReservetime().substring(4,6)+":"+r.getReservetime().substring(6,8)+":00");
 			// 예약 상태에 따른 다른 색깔
-			j.put("category", "task");
+			j.put("category", "time");
 			j.put("color", "#ffffff");
 			j.put("bgColor", "#28B463");
 			j.put("dragBgColor", "#28B463");
@@ -96,12 +103,14 @@ public class JsonUtil {
 		
 		for (HospitalScheduleDto s : HospitalScheduleList) {
 			JSONObject j = new JSONObject();
-			j.put("id", s.getSeq());
+			j.put("id", String.valueOf(s.getSeq()));
 			j.put("calendarId", "병원일정");
-			j.put("name", s.getTitle());
-			j.put("start", s.getSchedule());
-			
-			j.put("category", "task");
+			j.put("title", s.getTitle());
+//			SimpleDateFormat sSchedule = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+//			String schedule = sSchedule.format(s.getSchedule());
+//			System.out.println("스케줄"+schedule);
+//			j.put("start", schedule);
+			j.put("category", "time");
 			j.put("color", "#ffffff");
 			j.put("bgColor", "#A569BD");
 			j.put("dragBgColor", "#A569BD");
