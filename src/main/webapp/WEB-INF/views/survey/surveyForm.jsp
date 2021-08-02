@@ -26,7 +26,7 @@
 			</div>
 			<div class="modal-body">
 				<form action="./updateDateForm.do" method="post">
-					<input type="date" name="startdate"> ~ <input type="date" name="enddate">
+					<input type="date" name="startdate" onchange="compareStartDate()"> ~ <input type="date" name="enddate" onchange="compareEndDate()">
 				</form>
 			</div>
 			<div class="modal-footer">
@@ -155,23 +155,69 @@
 		 count =0;
 	}
 	
+	//수정필요!! updateDateForm()안에 updateDateForm()가 또있음
 	function updateDateForm(){
 		var frm2 = document.forms[1];
 		var startdate = document.getElementsByName("startdate").value;
 		var enddate = document.getElementsByName("enddate").value;
 		
-		if(typeof startdate != "undefined" && typeof enddate != "undefined"){
+		if(typeof startdate != "" && typeof enddate != ""){
 			updateDateForm();
-			console.log("확ㅇ닌ㄴㄴㄴㄴㄴ")
-		}else if(startdate==''){
- 			alert("설문 배포 시작 날짜를 입력해주세요");
-		}else if(enddate==''){
-			alert("설문 배포 끝 날짜를 입력해주세요");
+			console.log("날짜 업데이트 완료");
+			frm2.submit();
+		}else if(startdate==""){
+ 			alert("설문 시작일을 선택해주세요");
+		}else if(enddate==""){
+			alert("설문 마감일을 선택해주세요");
 		}else{
 			alert("날짜를 입력하거나 취소버튼을 누르세요");
 		}
 		
-		frm2.submit();
+	}
+	
+	function compareStartDate(){
+		var seq = document.getElementsByName("seq")[0].value;
+		var startdate = document.getElementsByName("startdate")[0].value;
+		console.log(startdate+"startdate");
+		console.log(seq+"seq");
+		
+		$.ajax({
+			url:"./compareStartDate.do?startdate="+startdate+"&seq="+seq,
+			type:"GET",
+// 			data: "startdate="+startdate+"&seq="+seq,
+			success:function(msg){
+				if(msg=="false"){
+					alert("현재 날짜보다 이후로 ");
+				}
+				console.log(msg);
+			},
+			error:function(){
+				alert("에러 발생")
+			}
+		})
+	}
+	
+	function compareEndDate(){
+		var seq = document.getElementsByName("seq")[0].value;
+		var startdate = document.getElementsByName("startdate")[0].value;
+		var enddate = document.getElementsByName("enddate")[0].value;
+		console.log(enddate+"enddate");
+		console.log(seq+"seq");
+		$.ajax({
+			url:"./compareEndDate.do?startdate="+startdate+"&enddate="+enddate+"&seq="+seq,
+			type:"GET",
+// 			data: "enddate="+enddate+"&seq="+seq,
+			success:function(msg){
+				if(msg=="false"){
+					alert("시작일 보다 이후로 ");
+				}
+				console.log(msg);
+			},
+			error:function(){
+				alert("wkfahtehalsdf")
+			}
+		})
+		
 	}
 	
 </script>

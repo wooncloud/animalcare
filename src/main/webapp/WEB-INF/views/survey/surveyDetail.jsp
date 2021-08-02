@@ -6,30 +6,41 @@
 	<div class="card-body">
 		설문 제목<br>
 		<input type="text" class="form-control" name="title" value="${detail.title}" disabled="disabled">
+		
 		<div id="formQuestion">
 		</div>
-		
-		<div class="row my-2 text-center">
-		    <div class="col-3">
-				<h6 class="card-subtitle mb-2 text-muted">응답 기간</h6>
+
+		<c:if test="${detail.startdate != null}">
+			<div class="row my-2 text-center">
+			    <div class="col-3">
+					<h6 class="card-subtitle mb-2 text-muted">응답 기간</h6>
+				</div>
+			    <div class="col-3">
+					<input type="text" class="form-control" name="startdate" value="${detail.startdate}" disabled="disabled">
+				</div>
+			    <div class="col-3">
+					<h6 class="card-subtitle mb-2 text-muted"> ~ </h6>
+				</div>
+			    <div class="col-3">
+					<input type="text" class="form-control" name="enddate" value="${detail.enddate}" disabled="disabled">
+				</div>
 			</div>
-		    <div class="col-3">
-				<input type="text" class="form-control" name="startdate" value="${detail.startdate}" disabled="disabled">
-			</div>
-		    <div class="col-3">
-				<h6 class="card-subtitle mb-2 text-muted"> ~ </h6>
-			</div>
-		    <div class="col-3">
-				<input type="text" class="form-control" name="enddate" value="${detail.enddate}" disabled="disabled">
-			</div>
-		</div>
-		
+		</c:if>
     </div>
 </div>
-<c:if test="${detail.surveyflag eq 'N'}">
-	<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#dateModal">배포</button>
+
+<c:if test="${sessionScope.member.usertype eq 'ROLE_USER'}">
+	<button type="button" class="btn btn-success" id="" onclick="submitForm()">제출</button>
 </c:if>
+	
+<c:if test="${sessionScope.member.usertype eq 'ROLE_ADMIN'}">
+	<c:if test="${detail.surveyflag eq 'N'}">
+		<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#dateModal">응답기간 설정</button>
+	</c:if>
+</c:if>
+
 <button class="btn btn-primary" onclick="javascript:history.back(-1);">목록</button>
+
 
 <div class="modal fade" id="dateModal" tabindex="-1" aria-hidden="true">
 	<div class="modal-dialog">
@@ -106,14 +117,103 @@ window.onload = function(){
 
 }
 
-function updateDateForm(){
 	var seq = ${detail.seq};
+function updateDateForm(){
 	var frm = document.forms[0];
 	
 	var emt = document.createElement("div");
 	emt.innerHTML = "<input type='hidden' name='seq' value='"+seq+"'>";
 	frm.append(emt);
 	frm.submit();
+}
+
+
+var answer = [];
+
+//사용자
+function submitForm(){
+	var list = ${detail.question}
+	
+	var title = document.getElementsByName("title")[0];
+	
+	var choiceAnswer = document.getElementsByName("choiceAnswer");
+	var essayAnswer = document.getElementsByName("essayAnswer");
+	
+	var choiceAnswerVal;
+	var essayAnswerVal;
+	var count =0 ;
+	
+	for (var i=0; i<choiceAnswer.length; i++) {
+        if (choiceAnswer[i].checked == true) {
+        	choiceAnswerVal = choiceAnswer[i].value;
+        	console.log(choiceAnswerVal);
+        } else if(choiceAnswer[i].checked == false){
+        	count++;
+        }
+    }
+	
+	//유효값처리 수정필요
+  	if(choiceAnswer.length == count){
+  		alert("값을 선택해주세요");
+  		return false;
+  	}
+    console.log(count+"count");
+	
+	for (var i=0; i<essayAnswer.length; i++) {
+		essayAnswerVal = essayAnswer[i].value;
+       	console.log(essayAnswerVal);
+    }
+	
+	for (var i = 0; i < list.length; i++) {
+		var keys = Object.keys(list[i]);
+		var values = Object.values(list[i]);
+		
+		if(keys[2]=="choiceAnswer"){
+			answer.push({
+				"qnum" : values[0],
+				"qtitle" : values[1],
+				"choiceAnswer" : choiceAnswerVal
+			})
+		}else if(keys[2]=="essayAnswer"){
+			answer.push({
+				"qnum" : values[0],
+				"qtitle" : values[1],
+				"essayAnswer" : essayAnswerVal
+			})
+		}
+
+	}
+	
+	var sendData = {
+		"survey_seq" : seq,
+		"title" : title.value,
+		"answer" : JSON.stringify(answer)
+	}
+	console.log("answer"+JSON.stringify(answer));
+	console.log("sendData"+JSON.stringify(sendData));
+	
+	$.ajax({
+		type : "POST",
+		url : "./userSurveySubmit.do",
+		data : sendData,
+		datatype : "JSON",
+		success : function(data){
+			console.log("성공");
+			console.log(data);
+			if(data == "true"){
+				alert("제출이 완료되었습니다. 설문에 응해주셔서 감사합니다.");
+				location.href="./userSurveyList.do";//사용자 리스트로 이동
+			}else{
+				alert("이미 작성한 설문입니다. 설문 리스트로 돌아갑니다");
+				location.href="./userSurveyList.do";//에러페이지
+			}
+		},
+		error : function(msg2){
+			alert("에러가 발생했습니다. 관리자에게 문의바랍니다.");
+		}
+	})
+
+	
 }
 
 </script>
