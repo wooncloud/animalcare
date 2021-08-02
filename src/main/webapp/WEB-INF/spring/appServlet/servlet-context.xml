@@ -25,11 +25,11 @@
 	<context:component-scan base-package="com.pet.care" />
 	
 	<mvc:interceptors>
-		<mvc:interceptor>
+<!-- 		<mvc:interceptor> -->
 			<!-- mvc:mapping -->
 			<!-- mvc:exclude-mapping -->
-			<beans:bean class="com.sng.gdrs.interceptor.Interceptor"></beans:bean>
-		</mvc:interceptor>
+<!-- 			<bean class="com.pet.care.interceptor.Interceptor" /> -->
+<!-- 		</mvc:interceptor> -->
 		<bean id="webContentInterceptor" class="org.springframework.web.servlet.mvc.WebContentInterceptor">
 			<property name="cacheSeconds" value="0" />
 			<property name="useExpiresHeader" value="true" />

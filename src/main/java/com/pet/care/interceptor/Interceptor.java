@@ -2,8 +2,6 @@ package com.pet.care.interceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.ModelAndView;
@@ -15,6 +13,7 @@ public class Interceptor extends HandlerInterceptorAdapter {
 	
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+		logger.info("[ * Interceptor * ] preHandle");
 		// HttpSession session = request.getSession();
 		// Object userSession =  session.getAttribute("userInfoDto");
 		// if(userSession == null) {
@@ -24,6 +23,8 @@ public class Interceptor extends HandlerInterceptorAdapter {
 		// else {
 		// 	return true;
 		// }
+		
+		return super.preHandle(request, response, handler);
 	}
 	
 	//컨트롤러 실행 후 수행 로직
