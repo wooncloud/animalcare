@@ -78,9 +78,34 @@ public class AnswerBoardDaoImpl implements IAnswerBoardDao {
 		return session.selectOne(NS+"selNonUserDetail", map);
 	}
 
+//	@Override
+//	public boolean insertReply(AnswerBoardDto dto) {
+//		int cnt = session.insert(NS+"insertReply", dto);
+//		return (cnt>0)?true:false;
+//	}
+	
 	@Override
-	public boolean insertReply(AnswerBoardDto dto) {
-		int cnt = session.insert(NS+"insertReply", dto);
+	public boolean insertReply(Map<String, Object> map) {
+		int cnt = session.update(NS+"insertReply", map);
 		return (cnt>0)?true:false;
 	}
+
+	@Override
+	public boolean checkNonUser(Map<String, Object> map) {
+		int cnt = session.selectOne(NS+"checkNonUser", map);
+		return (cnt>0)?true:false;
+	}
+
+	@Override
+	public List<AnswerBoardDto> searchName(Map<String, Object> map) {
+		return session.selectList(NS+"searchName", map);
+	}
+
+	@Override
+	public  List<AnswerBoardDto> searchTitle(Map<String, Object> map) {
+		return session.selectList(NS+"searchName", map);
+	}
+	
+	
+	
 }
