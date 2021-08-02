@@ -16,13 +16,14 @@
 		
 		<input type="button" class="btn btn-outline-primary" value="진료기록 조회(병원)" onclick="medicalListPage()">
 		<input type="button" class="btn btn-outline-primary" value="진료기록 추가(병원)" onclick="insertRecodePage()">
+		<input type="button" class="btn btn-outline-primary" value=" 테스트" onclick="aa()">
 	</div>
 	</c:if>
 	
 	<div class="row fs-3 my-2">
 		<div class="col">병원 상세 정보</div>
 		<div class="col d-grid gap-2 d-md-flex justify-content-md-end">	
-			<input type="button" class="btn btn-outline-primary" value="이전페이지" onclick="history.back()">
+			<input type="button" class="btn btn-outline-primary" value="이전페이지" onclick="location.href = './searchHospitalPage.do';">
 		</div>
 	</div>
 	<div>

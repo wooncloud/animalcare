@@ -5,41 +5,43 @@
 <script type="text/javascript" src="${path}/js/hospital.js" ></script>
 
 <div class="container">
-
+<form action="./searchHospital.do" method="post" onsubmit="return forSearch()">
 <br><br>
 
 	
 	<div class="row fs-3 my-2">
 		<div class="col">병원 찾기</div>
 		<div class="col d-grid gap-2 d-md-flex justify-content-md-end">
-			<input type="button" class="btn btn-outline-success" value="초기화" onclick="window.location.reload();">
+			<input type="button" class="btn btn-outline-success" value="초기화" onclick="beforeSearch()">
+			
 		</div>
 	</div>
 	
-	<div>
+	<div >
 		<div class="card">
 			<div class="card-body">
 				<div class="row">
    					<div class="col-2 text-center">
      					 지역 선택
   					</div>
-  					<div class="col">
+  					<div class="col" >
   						<c:set var="i" value="0"/>
   						<c:set var="j" value="5"/>
   						<c:forEach var="loc" items="${loc}" varStatus="vs" >
   							<c:if test="${i%j==0}">
   								<div class="row">
   							</c:if>
-									<div class="col my-1">
-  										<input class="form-check-input" id="${loc.codeid}" type="checkbox" value="${loc.codename}" name="chkBox" onchange="chkBox(this)">
+									<div class="col my-1" >
+  										<input class="form-check-input" value="${loc.codeid}" name="locChkBox" type="checkbox" value="${loc.codename}" onchange="chkBox(this)">
   										<label for="${loc.codeid}">${loc.codename}</label>
+  										<input type="hidden" id="${loc.codeid}">
 									</div>
 							<c:if test="${i%j==j-1}">
   								</div>
   							</c:if>
   						<c:set var="i" value="${i+1}"/>
   						</c:forEach>
-  					</div>
+  					</div>				
   				</div>				
 			</div>
 		</div>
@@ -59,31 +61,34 @@
 					</div>
   				</div>				
  				<div class="choice-div" id="choice">
- 					
  				</div>
 			</div>
 		</div>
 		<div class="card">
 			<div class="card-body">
-				<div class="row">
+				<div class="row" onchange="radioMaster()">
    					<div class="col-2 text-center">
      					 응급실 유무
   					</div>		
 					<div class="col form-check">
-						<input class="form-check-input" type="radio" name="flexRadioDefault" id="have"> 
+						<input class="form-check-input" type="radio" name="flexRadioDefault" id="have" value="Y"> 
 						<label class="form-check-label" for="have">응급실 있음</label>
 					</div>
 					<div class="col form-check">
-						<input class="form-check-input" type="radio" name="flexRadioDefault" id="none"> 
+						<input class="form-check-input" type="radio" name="flexRadioDefault" id="none" value="N"> 
 						<label class="form-check-label" for="none">응급실 없음</label>
 					</div>
 					<div class="col form-check">
-						<input class="form-check-input" type="radio" name="flexRadioDefault" id="noMatter" checked> 
-						<label class="form-check-label" for="noMatter">상관 없음</label>
+						<input class="form-check-input" type="radio" id="noChoice" value="noChoice"> 
+						<label class="form-check-label" for="noChoice">상관 없음</label>
 					</div>
   				</div>				
 			</div>
 		</div>
+		<div class="d-grid gap-2 ">
+		<input type="submit" class="btn btn-primary btn-lg" value=" 찾기 " >
+		</div>
+	</form>		
 	</div>
 	
 	<br><br>
@@ -143,19 +148,19 @@
 		<ul class="mt-3 pagination justify-content-center">
 			<c:if test="${page.startPage > page.countPage}">
 				<li class="page-item">
-					<a class="page-link" href="./searchHospital.do?page=${page.startPage-1}" aria-label="Previous">
+					<a class="page-link" href="./searchHospitalPage.do?page=${page.startPage-1}" aria-label="Previous">
 						<span aria-hidden="true"><i class="fas fa-chevron-left"></i></span>
 					</a>
 				</li>
 			</c:if>
 			<c:forEach var="num" begin="${page.startPage}" end="${page.endPage}">
 				<li class="page-item ${num eq page.page ? 'active' : ''}">
-					<a class="page-link" href="./searchHospital.do?page=${num}">${num}</a>
+					<a class="page-link" href="./searchHospitalPage.do?page=${num}">${num}</a>
 				</li>
 			</c:forEach>
 			<c:if test="${page.endPage < page.totalPage}">
 				<li class="page-item">
-					<a class="page-link" href="./searchHospital.do?page=${page.endPage + 1}" aria-label="Next"> 
+					<a class="page-link" href="./searchHospitalPage.do?page=${page.endPage + 1}" aria-label="Next"> 
 						<span aria-hidden="true"><i class="fas fa-chevron-right"></i></span>
 					</a>
 				</li>
@@ -165,7 +170,7 @@
 	
 	
 	<br><br>
-	
+
 </div>
 
 <!-- 테스트 -->
