@@ -17,19 +17,11 @@ ${dto}
 		    <div class="col-3">
 		    	${dto.answerboard_name}
 			</div>
-<%-- 			<c:if test="${sessionScope.member eq null}"> --%>
-<!-- 					<div class="col-3"> -->
-<!-- 				<h6 class="card-subtitle mb-2 text-muted">비밀번호</h6> -->
-<!-- 			</div> -->
-<!-- 		    <div class="col-3"> -->
-<!-- 		    	<input type="password"  class="form-control" name="password" id="password" > -->
-<!-- 			</div> -->
-<%-- 			</c:if> --%>
-					<div class="row my-2">
+		<div class="row my-2">
 		    <div class="col-3">
 				<h6 class="card-subtitle mb-2 text-muted">이메일</h6>
 			</div>
-		    <div class="col-9">
+		<div class="col-9">
 		    ${dto.email}
 			</div>
 		</div>

@@ -66,29 +66,33 @@
 <input type="hidden" name="seq" id="seq" value="${dto.seq}">
 <input type="hidden" name="password" id="password" value="${dto.password}">
 </div>
-<c:if test="${dto.password != null && sessionScope.member.usertype != 'ROLE_ADMIN'}">
-	<button class="btn btn-primary" onclick="location.href='./modifyNonUserForm.do?seq=${dto.seq}'">수정</button>
-	<button class= "btn btn-secondary" onclick="deleteBoard(${dto.seq})">삭제</button>
-	<button class="btn btn-primary" onclick="javascript:history.back(-1);">목록</button>
-</c:if>
-<c:if test="${dto.password eq null && sessionScope.member.usertype != 'ROLE_ADMIN'}">
-	<button class="btn btn-primary" onclick="location.href='./modifyUserForm.do?seq=${dto.seq}' ">수정</button>
-	<button class= "btn btn-secondary" onclick="deleteBoard(${dto.seq})">삭제</button>
-	<button class="btn btn-primary" onclick="javascript:history.back(-1);">목록</button>
-</c:if>
 <c:if test="${sessionScope.member.usertype eq 'ROLE_ADMIN'}">
 <c:if test="${dto.replystatus eq 'N'}">
 	<input  type="submit"  class="btn btn-outline-primary btn-lg" id="insertBtn" onclick="insertReply()"  value="작성 완료" style="display: none;">
 </c:if>
 </c:if>
 </form>
+<c:if test="${dto.password != null && sessionScope.member.usertype != 'ROLE_ADMIN' && dto.replystatus != 'Y'}">
+	<button class="btn btn-primary" onclick="location.href='./modifyNonUserForm.do?seq=${dto.seq}'">수정</button>
+	<button class= "btn btn-secondary" onclick="deleterBoard(${dto.seq})">삭제</button>
+	<button class="btn btn-primary" onclick="javascript:history.back(-1);">목록</button>
+</c:if>
+<c:if test="${dto.password eq null && sessionScope.member.usertype != 'ROLE_ADMIN' && dto.replystatus != 'Y'}">
+	<button class="btn btn-primary" onclick="location.href='./modifyUserForm.do?seq=${dto.seq}' ">수정</button>
+	<button class= "btn btn-secondary" onclick="deleterBoard(${dto.seq})">삭제</button>
+	<button class="btn btn-primary" onclick="javascript:history.back(-1);">목록</button>
+</c:if>
+
+
 <c:if test="${dto.replystatus eq 'N' && sessionScope.member.usertype eq 'ROLE_ADMIN'}">
 	<button class="btn btn-outline-primary btn-lg"  id="replyBtn" onclick="clickReply()">답글 작성</button>
 </c:if>	
-	<script type="text/javascript">
+<script type="text/javascript">
+
 window.onload = function(){
 	replyBoard.init();
 }
+
 
 document.onkeydown = function(){
 	

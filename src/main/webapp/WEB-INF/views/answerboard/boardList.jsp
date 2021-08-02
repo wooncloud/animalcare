@@ -1,13 +1,19 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@include file="/header.jsp" %>
+<style type="text/css">
+a{
+ 	text-decoration: none;
+ 	color: black;
+}
+</style>
   <script src="${path}/js/answerboard.js"></script>
 <h1>문의 게시판</h1>
+<form method="post">
 <select id="searchOption" name="searchOption" id="searchOption">
 	<option value="name">이름</option>
 	<option value="title">제목</option>
 </select>
-<form >
 <input type="text" id="answerboard_name" name="answerboard_name">
 <input type="submit" id="searchMyList" name="searchMyList" onclick="searchList()" value="검색해볼래?">
 </form>

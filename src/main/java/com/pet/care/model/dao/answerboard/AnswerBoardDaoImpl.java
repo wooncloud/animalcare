@@ -41,15 +41,10 @@ public class AnswerBoardDaoImpl implements IAnswerBoardDao {
 		return (cnt>0)?true:false;
 	}
 
-	@Override
-	public boolean deleteUserBoard(Map<String, Object> map) {
-		int cnt = session.delete(NS+"deleteUserBoard",map);
-		return (cnt>0)?true:false;
-	}
 
 	@Override
-	public boolean deleteNonUserBoard(Map<String, Object> map) {
-		int cnt = session.delete(NS+"deleteNonUserBoard",map);
+	public boolean deleterBoard(Map<String, Object> map) {
+		int cnt = session.delete(NS+"deleterBoard",map);
 		return (cnt>0)?true:false;
 	}
 

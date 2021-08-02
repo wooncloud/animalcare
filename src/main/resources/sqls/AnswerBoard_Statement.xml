@@ -9,7 +9,7 @@
 	</selectKey>
 	
 	INSERT INTO ANSWERBOARD (SEQ, EMAIL, PASSWORD, TITLE, CONTENT, REGDATE, PARENT_SEQ, DELFLAG, ANSWERBOARD_NAME, REPLY, REPLYSTATUS)
-	  VALUES (#{seq},#{email},'',#{title},#{content},SYSDATE,ANSWERBOARD_SEQ.CURRVAL,'N', #{name}, #{reply},'N')
+	  VALUES (#{seq},#{email},'',#{title},#{content},SYSDATE,ANSWERBOARD_SEQ.CURRVAL,'N', #{name}, '','N')
 	</insert>
 
 	<insert id="insertNonUserBoard" parameterType="AnswerBoardDto">
@@ -19,7 +19,7 @@
 	</selectKey>
 	
 	INSERT INTO ANSWERBOARD (SEQ, EMAIL, PASSWORD, TITLE, CONTENT, REGDATE, PARENT_SEQ, DELFLAG, ANSWERBOARD_NAME, REPLY, REPLYSTATUS)
-        VALUES (#{seq},#{email},#{password},#{title},#{content},SYSDATE,ANSWERBOARD_SEQ.CURRVAL,'N', #{name}, #{reply},'N')
+        VALUES (#{seq},#{email},#{password},#{title},#{content},SYSDATE,ANSWERBOARD_SEQ.CURRVAL,'N', #{name}, '','N')
 	
 	</insert>
 	
@@ -36,16 +36,10 @@
 		WHERE SEQ=#{seq} 
 	</update>
 	
-	<delete id="deleteUserBoard" parameterType="java.util.Map">
-	UPDATE ANSWERBOARD 
-		 SET DELFLAG ='Y'
-		WHERE SEQ = #{seq}
-	</delete>
-	
-	<delete id="deleteNonUserBoard" parameterType="java.util.Map">
+	<delete id="deleterBoard" parameterType="java.util.Map">
 	UPDATE ANSWERBOARD
 		SET DELFLAG='Y'
-		WHERE SEQ=#{seq} AND EMAIL=#{email} AND PASSWORD =#{password}
+		WHERE SEQ=#{seq}
 	
 	</delete>
 	
@@ -95,10 +89,6 @@ SELECT a.SEQ, a.TITLE, a.REGDATE, a.EMAIL, a.PASSWORD , a.ANSWERBOARD_NAME, a.RE
 	  	SET REPLY = #{reply}, REPLYSTATUS ='Y'
 	  	WHERE SEQ=#{seq} AND DELFLAG = 'N'
 	</update>
-<!-- 	<insert id="insertReply" parameterType="AnswerBoardDto"> -->
-<!-- 	INSERT INTO ANSWERBOARD (SEQ, EMAIL ,TITLE, CONTENT, REGDATE, PARENT_SEQ, DELFLAG) -->
-<!--         VALUES (ANSWERBOARD_SEQ.NEXTVAL,#{email} ,#{title},#{content},SYSDATE,(SELECT PARENT_SEQ FROM ANSWERBOARD a WHERE SEQ=#{seq}),'N') -->
-<!-- 	</insert> -->
 	
 	<select id="checkNonUser" parameterType="java.util.Map" resultType="java.lang.Integer">
 	 SELECT COUNT(*)
@@ -106,16 +96,15 @@ SELECT a.SEQ, a.TITLE, a.REGDATE, a.EMAIL, a.PASSWORD , a.ANSWERBOARD_NAME, a.RE
 		 	WHERE EMAIL=#{email} AND PASSWORD= #{password} AND SEQ=#{seq}
 	</select>
 	
-	<select id="searchTitle" parameterType="java.util.Map">
+	<select id="searchTitle" parameterType="java.util.Map" resultType="AnswerBoardDto">
 	SELECT TITLE,ANSWERBOARD_NAME ,REGDATE, SEQ
   		FROM ANSWERBOARD a 
-  		WHERE TITLE LIKE '%'||#{title}||'%'
-	
+  		WHERE TITLE LIKE '%'||#{title}||'%' AND DELFLAG='N'
 	</select>
 	
-	<select id="searchName" parameterType="java.util.Map">
+	<select id="searchName" parameterType="java.util.Map" resultType="AnswerBoardDto">
 	SELECT TITLE,ANSWERBOARD_NAME ,REGDATE, SEQ
   		FROM ANSWERBOARD a 
-  		WHERE ANSWERBOARD_NAME LIKE '%'||#{anserboard_name}||'%'
+  		WHERE ANSWERBOARD_NAME LIKE '%'||#{answerboard_name}||'%' AND DELFLAG='N'
 	</select>
 </mapper>

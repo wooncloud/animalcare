@@ -1,4 +1,4 @@
-function deleteBoard(seq){
+function deleterBoard(seq){
 	
 	Swal.fire({
 		title: ' 글을 삭제 하시겠습니까?',
@@ -9,7 +9,7 @@ function deleteBoard(seq){
 		cancelButtonText: '취소'
 	}).then((result) => {
 		if (result.isConfirmed) {
-			location.href="./deleteUserBoard.do?seq="+seq;
+			location.href="./deleterBoard.do?seq="+seq;
 		}
 	});
 
@@ -144,11 +144,9 @@ function searchList(){
 	
 	if(opt == "title"){
 		frm.action="./searchTitle.do";
-		frm.method="post";
 		frm.submit();
 	}else{
 		frm.action="./searchName.do";
-		frm.method="post";
 		frm.submit();		
 	}
 	

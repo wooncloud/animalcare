@@ -92,6 +92,7 @@ public class AnswerBoardController {
 		public String modifyNonUserForm(@RequestParam Map<String, Object>map, Model model) {
 			logger.info("AnswerBoardController modifyNonUserForm {} ", map);
 			
+			
 			AnswerBoardDto dto = aService.selNonUserDetail(map);
 			
 			model.addAttribute("dto",dto);
@@ -126,34 +127,22 @@ public class AnswerBoardController {
 				//해당 게시글 상세로 가게 만들어줘라
 				return "redirect:/answerboard/selUserDetail.do?seq="+map.get("seq");
 			}
-			return "";
+			return "redirect:/error/error.do";
 		}
 	
 	
-	// 로그인 회원 문의 게시글 삭제
-	@RequestMapping(value="/deleteUserBoard.do", method = RequestMethod.GET)
+	//문의 게시글 삭제
+	@RequestMapping(value="/deleterBoard.do", method = RequestMethod.GET)
 	public String deleteUserBoard(@RequestParam Map<String,Object>map) {
 		logger.info("AnswerBoardController deleteUserBoard {} ", map);
-		boolean isc = aService.deleteUserBoard(map);
+		boolean isc = aService.deleterBoard(map);
 		
 		if(isc) {
-			return "redirect:/answerboard/selUserBoard.do";
+			return "redirect:/answerboard/selAllBoard.do";
 		}
-		return "answerboard/index";
+		return "redirect:/error/error.do";
 	}
 	
-	
-	//  비회원 문의 게시글 삭제
-		@RequestMapping(value="/deleteNonUserBoard.do", method = RequestMethod.GET)
-		public String deleteNonUserBoard(@RequestParam Map<String,Object>map) {
-			logger.info("AnswerBoardController deleteUserBoard {} ", map);
-			boolean isc = aService.deleteNonUserBoard(map);
-			
-			if(isc) {
-				return "redirect:/answerboard/selUserBoard.do";
-			}
-			return "answerboard/index";
-		}
 	
 	// 로그인 회원 문의 게시글 목록 조회
 	@RequestMapping(value="/selUserBoard.do", method = RequestMethod.GET)
@@ -259,17 +248,17 @@ public class AnswerBoardController {
 	//게시판 제목 검색
 	@RequestMapping(value="/searchTitle.do", method = RequestMethod.POST)
 	public String searchTitle(@RequestParam Map<String,Object>map, Model model) {
-		
+		logger.info("AnswerBoardController searchTitle {} ", map);
 		List<AnswerBoardDto> lists = aService.searchTitle(map);
 		model.addAttribute("lists",lists);
-		return "";
+		return "answerboard/boardList";
 	}
 	
 	
 	//게시판 이름 검색
 	@RequestMapping(value="/searchName.do", method = RequestMethod.POST)
 	public String searchName(@RequestParam Map<String,Object>map, Model model) {
-		
+		logger.info("AnswerBoardController searchName {} ", map);
 		List<AnswerBoardDto> lists = aService.searchName(map);
 		model.addAttribute("lists",lists);
 		return "answerboard/boardList";
