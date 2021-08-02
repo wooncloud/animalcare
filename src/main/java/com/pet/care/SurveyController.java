@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.pet.care.dto.MemberDto;
 import com.pet.care.dto.SurveyDto;
+import com.pet.care.dto.SurveyResultDto;
 import com.pet.care.model.service.survey.ISurveyService;
 
 @Controller
@@ -112,7 +113,7 @@ public class SurveyController {
 	
 	@RequestMapping(value="/userSurveySubmit.do", method = RequestMethod.POST)
 	@ResponseBody
-	public String userSurveySubmit(@RequestParam Map<String, Object> map,HttpSession session) {
+	public String userSurveySubmit(@RequestParam Map<String, Object> map, HttpSession session) {
 		logger.info("SurveyController : userSurveySubmit (사용자) 설문 폼 제출 - {}", map);
 
 		MemberDto mDto = (MemberDto)session.getAttribute("member");
@@ -124,25 +125,47 @@ public class SurveyController {
 	}
 	
 	@RequestMapping(value="/userSurveyList.do", method = RequestMethod.GET)
-	public String userSurveyList(Model model) {
+	public String userSurveyList(@RequestParam Map<String, Object> map, HttpSession session, Model model) {
 		logger.info("SurveyController : userSurveyList 설문 폼 리스트 조회");
-//		List<SurveyDto> list = iService.adminSurveyList();
-//		model.addAttribute("userSurveyList",list);
+	
+		MemberDto mDto = (MemberDto)session.getAttribute("member");
+		String responser = mDto.getEmail().split("@")[0];
+		map.put("responser", responser);
+				
+		logger.info("SurveyController : outOfDateSurvey (사용자) 날짜 지난 설문 폼 리스트{}",map);
+		List<SurveyDto> list1 = iService.outOfDateSurvey(map);
+		List<SurveyDto> list2 = iService.ongoingSurvey(map);
+		model.addAttribute("userDoSurveyList",list2);
+		model.addAttribute("userEndSurveyList",list1);
+		
 		return "/survey/userSurveyList";
 	}
 	
-//	public String insertResponser(@RequestParam Map<String, Object> map, HttpSession session) {
-//		logger.info("SurveyController : insertResponser 사용자 설문 폼 작성 {}", map);
-//		MemberDto mDto = (MemberDto)session.getAttribute("member");
-//		String responser = mDto.getEmail().split("@")[0];
-//		System.out.println("responser 확인 =============="+responser);
-//		int n = iService.checkEmptyResponser(map);
-//		if(n>0) {
-//			
-//		}
-//		
-//		
-//		
-//		return "";
-//	}
+	
+	@RequestMapping(value="/surveyResultList.do", method=RequestMethod.GET)
+	public String surveyResultList(@RequestParam Map<String, Object> map, HttpSession session, Model model) {
+		logger.info("SurveyController : outOfDateSurvey (사용자) 날짜 지난 설문 폼 리스트{}",map);
+		List<SurveyDto> surveyResultList = iService.surveyResultList();
+	
+		
+	
+		model.addAttribute("surveyResultList",surveyResultList);
+		
+		return "/survey/surveyResultList";
+	}
+	
+	@RequestMapping(value="/surveyResultDetail.do", method=RequestMethod.GET)
+	public String surveyResultDetail(@RequestParam Map<String, Object> map, HttpSession session, Model model) {
+		String seq = (String)map.get("seq");
+		map.put("survey_seq", seq);
+		List<SurveyResultDto> surveyResultDetail = iService.surveyResultDetail(map);
+		model.addAttribute("surveyResultDetail",surveyResultDetail);
+		return "/survey/surveyResultDetail";
+	}
+	
+	
+	
+	
+	
+	
 }

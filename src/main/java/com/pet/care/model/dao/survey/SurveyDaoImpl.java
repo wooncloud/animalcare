@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.pet.care.dto.SurveyDto;
+import com.pet.care.dto.SurveyResultDto;
 
 @Repository
 public class SurveyDaoImpl implements ISurveyDao {
@@ -98,5 +99,44 @@ public class SurveyDaoImpl implements ISurveyDao {
 		logger.info("SurveyDaoImpl : checkSameResponser 설문 답변 작성자 중복 확인 - {}", map);
 		return sqlSession.selectOne(NS+"checkSameResponser", map);
 	}
+	
+	@Override
+	public List<SurveyDto> ongoingSurvey(Map<String, Object> map) {
+		logger.info("SurveyDaoImpl : ongoingSurvey (사용자) 진행중인 설문 폼 리스트", map);
+		return sqlSession.selectList(NS+"ongoingSurvey", map);
+	}
+
+	@Override
+	public List<SurveyDto> outOfDateSurvey(Map<String, Object> map) {
+		logger.info("SurveyDaoImpl : outOfDateSurvey (사용자) 날짜 지난 설문 폼 리스트", map);
+		return sqlSession.selectList(NS+"outOfDateSurvey", map);
+	}
+
+	//아마 필요 없음ㅠ
+	@Override
+	public List<SurveyDto> ongoingDateCheck() {
+		logger.info("SurveyDaoImpl : ongoingDateCheck (사용자) 진행중인 설문 날짜 체크");
+		return sqlSession.selectList(NS+"ongoingDateCheck");
+	}
+	//이아이도 아마 필요 없음ㅠ
+	@Override
+	public List<SurveyDto> outOfDateCheck() {
+		logger.info("SurveyDaoImpl : outOfDateCheck (사용자) 진행중인 설문 날짜 체크");
+		return sqlSession.selectList(NS+"outOfDateCheck");
+	}
+
+	@Override
+	public List<SurveyDto> surveyResultList() {
+		logger.info("SurveyDaoImpl : surveyResultList 설문 결과 리스트");
+		return sqlSession.selectList(NS+"surveyResultList");
+	}
+
+	@Override
+	public List<SurveyResultDto> surveyResultDetail(Map<String, Object> map) {
+		logger.info("SurveyDaoImpl : surveyResultList 설문 결과 리스트 상세 - {}", map);
+		return sqlSession.selectList(NS+"surveyResultDetail", map);
+	}
+	
+		
 
 }

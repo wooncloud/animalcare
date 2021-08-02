@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.pet.care.dto.SurveyDto;
+import com.pet.care.dto.SurveyResultDto;
 import com.pet.care.model.dao.survey.ISurveyDao;
 
 @Service
@@ -91,6 +92,50 @@ public class SurveyServiceImpl implements ISurveyService {
 
 		return (isc1||isc4)|(isc2)|(isc3||isc4)?true:false;
 	}
+	
+	@Override
+	public int checkSameResponser(Map<String, Object> map) {
+		logger.info("SurveyServiceImpl : checkSameResponser 작성자 중복 확인 - {}", map);
+		return iDao.checkSameResponser(map);
+	}
+
+	@Override
+	public List<SurveyDto> ongoingSurvey(Map<String, Object> map) {
+		logger.info("SurveyServiceImpl : ongoingSurvey (사용자) 진행중인 설문 폼 리스트", map);
+		iDao.ongoingDateCheck();
+		return iDao.ongoingSurvey(map);
+	}
+
+	@Override
+	public List<SurveyDto> outOfDateSurvey(Map<String, Object> map) {
+		logger.info("SurveyServiceImpl : outOfDateSurvey (사용자) 날짜 지난 설문 폼 리스트", map);
+		return iDao.outOfDateSurvey(map);
+	}
+
+	@Override
+	public List<SurveyDto> ongoingDateCheck() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<SurveyDto> outOfDateCheck() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<SurveyDto> surveyResultList() {
+		logger.info("SurveyServiceImpl : surveyResultList 설문 결과 리스트");
+		return iDao.surveyResultList(); 
+	}
+
+	@Override
+	public List<SurveyResultDto> surveyResultDetail(Map<String, Object> map) {
+		logger.info("SurveyServiceImpl : surveyResultDetail 설문 결과 리스트 상세 - {}", map);
+		return iDao.surveyResultDetail(map);
+	}
+
 
 	
 }
