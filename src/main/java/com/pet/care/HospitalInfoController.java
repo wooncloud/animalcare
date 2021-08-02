@@ -120,9 +120,9 @@ public class HospitalInfoController {
 		}
 	}
 	
-	@RequestMapping(value = "/searchHospital.do", method = RequestMethod.GET)
-	public String searchHospital(@RequestParam Map<String, Object> param, Model model) {
-		logger.info("[searchHospital] - {} :  병원찾기 페이지로 이동", model);
+	@RequestMapping(value = "/searchHospitalPage.do", method = RequestMethod.GET)
+	public String searchHospitalPage(@RequestParam Map<String, Object> param, Model model) {
+		logger.info("[searchHospitalPage] - {} :  병원찾기 페이지로 이동", model);
 		
 		//페이징
 		PageDto page = new PageDto();
@@ -162,6 +162,64 @@ public class HospitalInfoController {
 		model.addAttribute("petlist", petlist);
 		model.addAttribute("loc", loc);
 		model.addAttribute("locJson", locJson);
+		
+		return "hospital/searchHospital";
+	}
+	
+	@RequestMapping(value = "/searchHospital.do", method = RequestMethod.POST)
+	public String searchHospital(@RequestParam Map<String, Object> param, Model model, HttpServletRequest req) {
+		logger.info("[searchHospital] - {} :  병원찾기", model);
+		
+		//페이징 
+				PageDto page = new PageDto();
+				String strIdx = (String)param.get("page");
+				if(strIdx == null) {
+					strIdx = "1";
+				}
+				
+				int idx = Integer.parseInt(strIdx);
+				int allPageCnt = 0;
+				
+				//볼수 있는 글의 총 갯수
+				allPageCnt = hiService.hospitalCount(param);
+				
+				//PageDto 셋팅
+				PageUtil.defaultPagingSetting(page, allPageCnt);
+				
+				page.setPage(idx);
+				page.setStartPage(idx);
+				page.setEndPage(page.getCountPage());
+				
+				param.put("first", page.getPage() * page.getCountList() - (page.getCountList() - 1));
+				param.put("last", page.getPage() * page.getCountList());
+				
+				//선택한 지역 확인
+				String[] address1 = req.getParameterValues("hiddenLoc");
+				param.put("address1", address1);
+				
+				//선택한 진료항목 확인  
+				String[] pettype = req.getParameterValues("hiddenValue");
+				param.put("pettype", pettype);
+				
+				// 응급실 유무 선택 확인 
+				String emergency = req.getParameter("flexRadioDefault");				
+				param.put("emergency", emergency);
+				
+				//볼수 있는 병원 리스트
+				List<HospitalJoinDto> lists = hiService.searchHospital(param);
+				
+				//진료항목 리스트
+				List<CodeDto> petlist =hiService.petTypeList();
+				
+				// 서울 25개구 리스트
+				List<CodeDto> loc = codeService.categoryCodeSelect("LOC");
+				JSONArray locJson = JsonUtil.CommonCodeJson(loc);
+				
+				model.addAttribute("lists", lists);
+				model.addAttribute("page", page);
+				model.addAttribute("petlist", petlist);
+				model.addAttribute("loc", loc);
+				model.addAttribute("locJson", locJson);
 		
 		return "hospital/searchHospital";
 	}
@@ -286,12 +344,11 @@ public class HospitalInfoController {
 				
 				// 선택한 진료항목을 배열에 담음
 				String[] hiddenValue = req.getParameterValues("hiddenValue"); 		
-//				System.out.println("길이확인중@@@@@@@@ :"+hiddenValue.length);
 				
 				// 배열에 담은 진료항목을 길이만큼 돌려서 입력
 				for (int i = 0; i < hiddenValue.length; i++) {
 					String hv = hiddenValue[i];
-//					System.out.println(hiddenValue[i]);				
+			
 					ptDto.setPettype(hv);
 
 					boolean isc3 = hiService.modifyPetType(ptDto);
