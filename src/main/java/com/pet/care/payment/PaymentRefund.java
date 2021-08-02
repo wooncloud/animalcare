@@ -27,7 +27,6 @@ public class PaymentRefund {
 			IamportResponse<Payment> payment_response = client.cancelPaymentByImpUid(cancel_data);
 			System.out.println("환불완료");
 		} catch (IamportResponseException | IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
