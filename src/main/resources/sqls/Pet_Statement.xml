@@ -50,4 +50,7 @@
 	    	AND NAME=#{name}
 	</select>
 
+	<!-- 동물별 진료내역조회 -->
+	<select id="recodeList" parameterType="java.lang.String" resultType=""></select>
+
 </mapper>
