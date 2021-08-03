@@ -61,7 +61,6 @@
 								<i class="fas fa-search"></i> 병원찾기
 							</a>
 						</li>
-		
 					</c:if>
 					<c:if test="${sessionScope.member.usertype eq 'ROLE_USER'}">
 						<li>
@@ -114,7 +113,7 @@
 					</c:if>
 					<c:if test="${sessionScope.member.usertype eq 'ROLE_ADMIN'}">
 						<li>
-							<a href="${path}/">
+							<a href="${path}/admin/adminGrant.do" class="nav-link px-4 link-dark">
 								<i class="fas fa-user"></i> 병원관계자 권한
 							</a>
 						</li>
@@ -171,7 +170,7 @@
 									</c:choose>
 								</li>
 								<li>
-									<a class="dropdown-item" href="#">
+									<a class="dropdown-item" href="${path}/answerboard/selAllBoard.do">
 										<i class="fas fa-headset"></i> 고객의 소리
 									</a>
 								</li>

@@ -10,7 +10,6 @@
 	<a class="btn btn-secondary" href="./reservation/insertReservation.do">신청</a>
 	<a class="btn btn-secondary" href="./answerboard/selAllBoard.do">문의</a>
 	<a class="btn btn-secondary" href="./pet/petList.do">내 애완동물보기</a>
-	${sessionScope.member}
 	<c:choose>
 		<c:when test="${sessionScope.member.usertype eq 'ROLE_USER'}">
 			사용자
@@ -18,8 +17,13 @@
 		<c:when test="${sessionScope.member.usertype eq 'ROLE_OPER'}">
 			병원관계자
 		</c:when>
+		<c:when test="${sessionScope.member.usertype eq 'ROLE_ADMIN'}">
+			<script type="text/javascript">
+				location.href='${path}/admin/adminConsole.do';
+			</script>
+		</c:when>
 		<c:otherwise>
-			<h1>PET CARE에 오신것을 환영합니다.</h1>
+			동물병원에 오신것을 환영합니다.
 		</c:otherwise>
 	</c:choose>
 	

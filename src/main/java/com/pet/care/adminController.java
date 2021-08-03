@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.pet.care.comm.Util;
 import com.pet.care.dto.OperatorDto;
+import com.pet.care.dto.SurveyDto;
+import com.pet.care.model.service.survey.ISurveyService;
 import com.pet.care.model.service.user.IUserService;
 
 @Controller
@@ -25,6 +27,8 @@ public class adminController {
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	@Autowired
 	private IUserService userService;
+	@Autowired
+	private ISurveyService surveyService;
 	@Autowired
 	private JavaMailSender mailSender;
 
@@ -36,8 +40,23 @@ public class adminController {
 		// 가입대기중인 병원관계자 리스트
 		List<OperatorDto> waitOpers = userService.grantWaitList();
 		model.addAttribute("operList", waitOpers);
+		
+		List<SurveyDto> list = surveyService.adminSurveyList();
+		model.addAttribute("adminSurveyList",list);
 
 		return "admin/adminConsole";
+	}
+	
+	// 병원관계자 권한
+	@RequestMapping(value = "/adminGrant.do", method = RequestMethod.GET)
+	public String adminGrant(Model model) {
+		logger.info("[adminGrant] : 병원관계자 권한");
+		
+		// 가입대기중인 병원관계자 리스트
+		List<OperatorDto> waitOpers = userService.grantWaitList();
+		model.addAttribute("operList", waitOpers);
+		
+		return "admin/adminGrant";
 	}
 
 	// 권한 부여
