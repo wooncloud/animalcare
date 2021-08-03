@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@include file="/header.jsp" %>
 <script src="https://d3js.org/d3.v5.min.js"></script> 
-<script src=".././js/billboard.js"></script> 
-<link rel="stylesheet" href=".././css/billboard.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/billboard.js/3.1.3/billboard.min.js"></script> 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/billboard.js/3.1.3/billboard.min.css">
 
 ${surveyResultList}
 

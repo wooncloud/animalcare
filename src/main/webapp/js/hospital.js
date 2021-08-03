@@ -2,7 +2,7 @@
  * 
  */
 
-//선택한 체크박스의 값 가져오기
+// 지역선택 체크박스 
 function chkBox(chk) {
 	var chkValue = chk.value;
 	console.log(chkValue);
@@ -10,9 +10,11 @@ function chkBox(chk) {
 	let inputBox = document.getElementById(chkValue);
 	console.log(inputBox);
 	if(chk.checked){
+		//체크하면 이름과 값을 활성화
 		inputBox.setAttribute("name","hiddenLoc");
-		inputBox.setAttribute("value",chkValue);		
+		inputBox.setAttribute("value","서울 "+chkValue+" ");		
 	}else{
+		//체크 해제 하면 이름과 값을 비활성화
 		inputBox.removeAttribute("name");	
 		inputBox.removeAttribute("value");	
 	}
@@ -118,6 +120,15 @@ function radioMaster(){
 //병원 찾기 페이지 찾기 선택 취소 
 function beforeSearch(){
 	location.href = "./searchHospitalPage.do";
+}
+
+//
+function nullCanNot(){
+	Swal.fire({
+		icon: 'warning',
+		title: '로그인 후 이용 가능한 서비스 입니다.',
+		confirmButtonColor: '#3399FF',
+	})
 }
 
 //병원 삭제 버튼
@@ -236,7 +247,7 @@ function goBack(){
 	Swal.fire({
 		icon: 'question',
 		title:'작업을 취소 하시겠습니까?',
-		text: '입력하던 데이터가 사라집니다.',
+		text: '입력하신 데이터가 사라집니다.',
 		confirmButtonText: '확인',	
 		showCancelButton: true,
 		cancelButtonColor: 'gray',
@@ -437,12 +448,6 @@ function insertScheduleChk(form){
 	document.getElementById("scheduleContent").value = scheduleContent;
 }
 
-// 페이지 이동시 hiddenScope == ROLE_USER 이면 이동 아닐시 alert 작동
-function a(){
-	var hs = document.getElementById('hiddenScope').value;
-	console.log(hs);
-}
-
 //병원일정 상세보기 페이지 이동
 function detailSchedulePage(){
 	location.href = "./detailSchedulePage.do";
@@ -608,3 +613,36 @@ function insertRecodeChk(){
 	let insertPrescriptionContent = insertPrescriptionContents.editor.getHTML();
 	document.getElementById("insertPrescriptionContent").value = insertPrescriptionContent;
 }
+
+// 진료상세내역 PDF 로 출력
+function createPDF() {
+	let petName = document.getElementById('petName').innerText;
+	
+	  //pdf_wrap을 canvas객체로 변환
+	  html2canvas($('#pdf_wrap')[0]).then(function(canvas) {
+		  
+		// 캔버스를 이미지로 변환
+		    var imgData = canvas.toDataURL('image/png');
+			     
+		    var imgWidth = 190; // 이미지 가로 길이(mm) / A4 기준 210mm
+		    var pageHeight = imgWidth * 1.414;  // 출력 페이지 세로 길이 계산 A4 기준
+		    var imgHeight = canvas.height * imgWidth / canvas.width;
+		    var heightLeft = imgHeight;
+		    var margin = 5; // 출력 페이지 여백설정
+		    var doc = new jsPDF('p', 'mm');
+		    var position = 0;
+		       
+		    // 첫 페이지 출력
+		    doc.addImage(imgData, 'PNG', margin, position, imgWidth, imgHeight);
+		    heightLeft -= pageHeight;
+		         
+		    // 한 페이지 이상일 경우 루프 돌면서 출력
+		    while (heightLeft >= 20) {
+		        position = heightLeft - imgHeight;
+		        doc.addPage();
+		        doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+		        heightLeft -= pageHeight;
+		    }
+	    doc.save(petName+'_진료기록.pdf'); // 진료 동물 이름 으로 pdf저장
+	  });
+};
