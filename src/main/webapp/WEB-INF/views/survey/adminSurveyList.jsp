@@ -4,75 +4,99 @@
 <%-- ${adminSurveyList} --%>
 
 <form action="./delflagForm.do" method="post" id="frm" name="frm" onsubmit="return chkbox()"><!-- document.frm 쓰면 됨 form만! []이렇게 말고 -->
-<div class="card my-1">
-	<div class="card-body">
-		<div class="row justify-content-center">
-		    <div class="col-1">
-				<h5 class="card-title">
-				  <input class="form-check-input" type="checkbox" onclick="deleteSurvey(this.checked)">
-				</h5>
-		    </div>
-		    <div class="col-1">
-				<h5 class="card-title"> NO</h5>
-		    </div>
-		    <div class="col-3">
-				<h5 class="card-title"> 설문제목</h5>
-		    </div>
-		    <div class="col-3">
-				<h5 class="card-title"> 응답기간</h5>
-		    </div>
-		    <div class="col-2">
-		    	<h5 class="card-title"> 등록일</h5>
-		    </div>
-		    <div class="col-1">
-		    	<h5 class="card-title"> 배포상태</h5>
-		    </div>
-		    <div class="col-1">
-		    	<h5 class="card-title"> 삭제여부</h5>
-		    </div>
-		</div>
-	</div>
-</div>
-
-<c:forEach var="survey" items="${adminSurveyList}" varStatus="vs">
 	<div class="card my-1">
 		<div class="card-body">
-			<div class="row">
-				<div class="col-1">
-					<p class="card-text">
-					  <input class="form-check-input" type="checkbox" value="${survey.seq}" name="chkVal">
-					</p>
+			<div class="row justify-content-center">
+			    <div class="col-1">
+					<h5 class="card-title">
+					  <input class="form-check-input" type="checkbox" onclick="deleteSurvey(this.checked)">
+					</h5>
 			    </div>
 			    <div class="col-1">
-					<p class="card-text">${fn:length(adminSurveyList)-vs.count+1}</p>
+					<h5 class="card-title"> NO</h5>
 			    </div>
 			    <div class="col-3">
-					<p class="card-text"><a href="./surveyDetail.do?seq=${survey.seq}">${survey.title}</a></p>
+					<h5 class="card-title"> 설문제목</h5>
 			    </div>
 			    <div class="col-3">
-			    	<c:if test="${survey.startdate eq null}">
-  					<p class="card-text"> - </p>
-			    	</c:if>
-			    	<c:if test="${survey.startdate != null}">
-  					<p class="card-text">${survey.startdate} ~ ${survey.enddate}</p>
-  					</c:if>
+					<h5 class="card-title"> 응답기간</h5>
 			    </div>
 			    <div class="col-2">
-			    	<p class="card-text">${survey.regdate}</p>
+			    	<h5 class="card-title"> 등록일</h5>
 			    </div>
 			    <div class="col-1">
-			    	<p class="card-text">${survey.surveyflag}</p>
+			    	<h5 class="card-title"> 배포상태</h5>
 			    </div>
 			    <div class="col-1">
-			    	<p class="card-text">${survey.delflag}</p>
+			    	<h5 class="card-title"> 삭제여부</h5>
 			    </div>
 			</div>
 		</div>
 	</div>
-</c:forEach>
-<button type="button" class="btn btn-outline-danger" onclick="javascript:location.href='./surveyForm.do';">작성</button>
-<input type="submit" class="btn btn-danger" value="삭제">
+	
+	<c:forEach var="survey" items="${adminSurveyList}" varStatus="vs">
+		<div class="card my-1">
+			<div class="card-body">
+				<div class="row">
+					<div class="col-1">
+						<p class="card-text">
+						  <input class="form-check-input" type="checkbox" value="${survey.seq}" name="chkVal">
+						</p>
+				    </div>
+				    <div class="col-1">
+						<p class="card-text">${fn:length(adminSurveyList)-vs.count+1}</p>
+				    </div>
+				    <div class="col-3">
+						<p class="card-text"><a href="./surveyDetail.do?seq=${survey.seq}">${survey.title}</a></p>
+				    </div>
+				    <div class="col-3">
+				    	<c:if test="${survey.startdate eq null}">
+	  					<p class="card-text"> - </p>
+				    	</c:if>
+				    	<c:if test="${survey.startdate != null}">
+	  					<p class="card-text">${survey.startdate} ~ ${survey.enddate}</p>
+	  					</c:if>
+				    </div>
+				    <div class="col-2">
+				    	<p class="card-text">${survey.regdate}</p>
+				    </div>
+				    <div class="col-1">
+				    	<p class="card-text">${survey.surveyflag}</p>
+				    </div>
+				    <div class="col-1">
+				    	<p class="card-text">${survey.delflag}</p>
+				    </div>
+				</div>
+			</div>
+		</div>
+	</c:forEach>
+	<button type="button" class="btn btn-outline-danger" onclick="javascript:location.href='./surveyForm.do';">작성</button>
+	<input type="submit" class="btn btn-danger" value="삭제">
 </form>
+
+<div>
+	<ul class="mt-3 pagination justify-content-center">
+		<c:if test="${page.startPage > page.countPage}">
+			<li class="page-item">
+				<a class="page-link" href="./adminSurveyList.do?page=${page.startPage-1}" aria-label="Previous">
+					<span aria-hidden="true"><i class="fas fa-chevron-left"></i></span>
+				</a>
+			</li>
+		</c:if>
+		<c:forEach var="num" begin="${page.startPage}" end="${page.endPage}">
+			<li class="page-item ${num eq page.page ? 'active' : ''}">
+				<a class="page-link" href="./adminSurveyList.do?page=${num}">${num}</a>
+			</li>
+		</c:forEach>
+		<c:if test="${page.endPage < page.totalPage}">
+			<li class="page-item">
+				<a class="page-link" href="./adminSurveyList.do?page=${page.endPage + 1}" aria-label="Next"> 
+					<span aria-hidden="true"><i class="fas fa-chevron-right"></i></span>
+				</a>
+			</li>
+		</c:if>
+	</ul>
+</div>
 
 <script type="text/javascript">
 function chkbox(){

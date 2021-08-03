@@ -22,9 +22,9 @@ public class SurveyDaoImpl implements ISurveyDao {
 	private SqlSessionTemplate sqlSession;
 	
 	@Override
-	public List<SurveyDto> adminSurveyList() {
-		logger.info("SurveyDaoImpl : adminSurveyList 설문 폼 리스트");
-		return sqlSession.selectList(NS+"adminSurveyList");
+	public List<SurveyDto> adminSurveyList(Map<String, Object> map) {
+		logger.info("SurveyDaoImpl : adminSurveyList 설문 폼 리스트 - {}", map);
+		return sqlSession.selectList(NS+"adminSurveyList", map);
 	}
 
 	@Override
@@ -126,15 +126,39 @@ public class SurveyDaoImpl implements ISurveyDao {
 	}
 
 	@Override
-	public List<SurveyDto> surveyResultList() {
-		logger.info("SurveyDaoImpl : surveyResultList 설문 결과 리스트");
-		return sqlSession.selectList(NS+"surveyResultList");
+	public List<SurveyDto> surveyResultList(Map<String, Object> map) {
+		logger.info("SurveyDaoImpl : surveyResultList 설문 결과 리스트 - {}", map);
+		return sqlSession.selectList(NS+"surveyResultList", map);
 	}
 
 	@Override
 	public List<SurveyResultDto> surveyResultDetail(Map<String, Object> map) {
 		logger.info("SurveyDaoImpl : surveyResultList 설문 결과 리스트 상세 - {}", map);
 		return sqlSession.selectList(NS+"surveyResultDetail", map);
+	}
+
+	@Override
+	public int adminSurveyListCount() {
+		logger.info("SurveyDaoImpl : adminSurveyListCount 설문 폼 리스트 (페이징)");
+		return sqlSession.selectOne(NS+"adminSurveyListCount");
+	}
+
+	@Override
+	public int ongoingSurveyCount(Map<String, Object> map) {
+		logger.info("SurveyDaoImpl : ongoingSurveyCount 진행중인 설문 폼 리스트 (페이징) - {}", map);
+		return sqlSession.selectOne(NS+"ongoingSurveyCount", map);
+	}
+
+	@Override
+	public int outOfDateSurveyCount(Map<String, Object> map) {
+		logger.info("SurveyDaoImpl : outOfDateSurveyCount 날짜 지난 설문 폼 리스트 (페이징) - {}", map);
+		return sqlSession.selectOne(NS+"outOfDateSurveyCount", map);
+	}
+
+	@Override
+	public int surveyResultListCount() {
+		logger.info("SurveyDaoImpl : surveyResultListCount 설문 결과 리스트 (페이징)");
+		return sqlSession.selectOne(NS+"surveyResultListCount");
 	}
 	
 		
