@@ -87,6 +87,14 @@ public class SurveyController {
 		return "/survey/surveyDetail";
 	}
 	
+	@RequestMapping(value="/userSurveyDetail.do", method=RequestMethod.GET)
+	public String userSurveyDetail(Model model) {
+		logger.info("SurveyController : userSurveyDetail (사용자) 설문 폼 상세 페이지");
+		SurveyDto sDto = (SurveyDto)iService.userSurveyDetail();
+		model.addAttribute("detail",sDto);
+		return "/survey/surveyDetail";
+	}
+	
 	@RequestMapping(value="/insertSurveyForm.do", method = RequestMethod.POST)
 	@ResponseBody
 	public String insertSurveyForm(@RequestParam Map<String, Object> map, Model model) {

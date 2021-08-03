@@ -17,8 +17,10 @@ public interface ISurveyDao {
 	//(관리자) 설문 폼 배포기간 설정
 	public boolean updateDateForm(Map<String, Object> map);
 	
-	//설문 폼 상세 페이지
+	//(관리자) 설문 폼 상세 페이지
 	public SurveyDto surveyDetail(Map<String, Object> map);
+	//(사용자) 설문 폼 상세 페이지
+	public SurveyDto userSurveyDetail();
 	
 	//다중삭제
 	public int delflagForm(Map<String, String[]> map);

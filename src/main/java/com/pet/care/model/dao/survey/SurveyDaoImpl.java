@@ -46,6 +46,13 @@ public class SurveyDaoImpl implements ISurveyDao {
 		logger.info("SurveyDaoImpl : surveyDetail 설문 폼 상세 - {}", map);
 		return sqlSession.selectOne(NS+"surveyDetail", map);
 	}
+	
+	@Override
+	public SurveyDto userSurveyDetail() {
+		logger.info("SurveyDaoImpl : userSurveyDetail 사용자 설문 폼 상세");
+		return sqlSession.selectOne(NS+"userSurveyDetail");
+	}
+	
 
 	@Override
 	public int delflagForm(Map<String, String[]> map) {
@@ -160,7 +167,7 @@ public class SurveyDaoImpl implements ISurveyDao {
 		logger.info("SurveyDaoImpl : surveyResultListCount 설문 결과 리스트 (페이징)");
 		return sqlSession.selectOne(NS+"surveyResultListCount");
 	}
-	
+
 		
 
 }

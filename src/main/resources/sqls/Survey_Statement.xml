@@ -25,12 +25,31 @@ FROM (
 	ORDER BY REGDATE DESC)
 </select>
 
-<!--  -->
+<!-- 관리자 설문 상세 --><!-- 문제 발생 :::::: HOSPITAL_SEQ가 관리자는 필요가 없음 그냥 '0'으로 입력되던지 해야할듯 ㅡㅡ -->
 <select id="surveyDetail" parameterType="java.util.Map" resultType="SurveyDto">
 	SELECT SEQ,TITLE, QUESTION, TO_CHAR(REGDATE,'yyyy-mm-dd') AS REGDATE, TO_CHAR(STARTDATE,'yyyy-mm-dd') AS STARTDATE, TO_CHAR(ENDDATE,'yyyy-mm-dd') AS ENDDATE, SURVEYFLAG, DELFLAG
 		FROM SURVEY
 		WHERE SEQ =#{seq}
 </select>
+
+<!-- 사용자 설문 상세 (리스트 없음) -->
+<select id="userSurveyDetail" resultType="SurveyDto">
+	SELECT SEQ, QUESTION, TITLE, HOSPITAL_SEQ, TO_CHAR(STARTDATE ,'yyyy-mm-dd') AS STARTDATE , TO_CHAR(ENDDATE,'yyyy-mm-dd') AS ENDDATE, SURVEYFLAG
+	FROM
+		(SELECT SEQ, QUESTION, TITLE, HOSPITAL_SEQ, STARTDATE , ENDDATE, SURVEYFLAG, ROW_NUMBER() OVER(ORDER BY ENDDATE DESC) RN
+			FROM SURVEY 
+			WHERE ENDDATE IS NOT NULL AND DELFLAG ='N'
+			ORDER BY ENDDATE DESC
+		)
+	WHERE RN = 1 
+</select>
+
+
+
+
+
+
+
 
 <!--  -->
 <insert id="insertSurveyForm" parameterType="java.util.Map">
@@ -49,7 +68,6 @@ FROM (
 		WHERE SEQ=#{seq}
 </update>
 
-
 <update id="delflagForm" parameterType="java.util.Map">
 	UPDATE SURVEY SET DELFLAG ='Y'
 		WHERE DELFLAG='N'
@@ -62,13 +80,13 @@ FROM (
 <select id="compareStartDate" parameterType="java.util.Map" resultType="java.lang.Integer">
 	<![CDATA[SELECT COUNT(*)
 			FROM SURVEY s 
-			WHERE SEQ=#{seq} AND (TO_CHAR(SYSDATE,'yyyy-mm-dd') < TO_DATE(#{startdate},'yyyy-mm-dd'))]]>
+			WHERE TO_DATE(#{startdate},'yyyy-mm-dd') BETWEEN STARTDATE AND ENDDATE]]>
 </select>
 
 <select id="compareEndDate" parameterType="java.util.Map" resultType="java.lang.Integer">
 	<![CDATA[SELECT COUNT(*)
 			FROM SURVEY s 
-			WHERE SEQ=#{seq} AND (TO_DATE(#{startdate},'yyyy-mm-dd') < TO_DATE(#{enddate},'yyyy-mm-dd'))]]>
+			WHERE (TO_DATE(#{enddate},'yyyy-mm-dd') BETWEEN STARTDATE AND ENDDATE) AND (TO_DATE(#{startdate},'yyyy-mm-dd') > TO_DATE(#{enddate},'yyyy-mm-dd'))]]>
 </select>
 
 <insert id="userSurveySubmit" parameterType="java.util.Map">
