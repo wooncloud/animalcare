@@ -65,12 +65,12 @@
 					</c:if>
 					<c:if test="${sessionScope.member.usertype eq 'ROLE_USER'}">
 						<li>
-							<a href="${path}/" class="nav-link px-4 link-dark">
+							<a href="${path}/pet/petList.do" class="nav-link px-4 link-dark">
 								<i class="fas fa-cat"></i> 내 애완동물
 							</a>
 						</li>
 						<li>
-							<a href="${path}/" class="nav-link px-4 link-dark">
+							<a href="${path}/healthNote/healthNoteList.do" class="nav-link px-4 link-dark">
 								<i class="fas fa-book"></i> 건강수첩
 							</a>
 						</li>
@@ -80,7 +80,7 @@
 							</a>
 						</li>
 						<li>
-							<a href="${path}/" class="nav-link px-4 link-dark">
+							<a href="${path}/pet/petMedicalRecodeList.do" class="nav-link px-4 link-dark">
 								<i class="fas fa-notes-medical"></i> 진료내역
 							</a>
 						</li>
@@ -92,7 +92,7 @@
 							</a>
 						</li>
 						<li>
-							<a href="${path}/" class="nav-link px-4 link-dark">
+							<a href="${path}/reservation/moveCalendar.do" class="nav-link px-4 link-dark">
 								<i class="far fa-calendar-alt"></i> 일정
 							</a>
 						</li>
@@ -101,14 +101,26 @@
 								<i class="fas fa-hospital"></i> 병원정보
 							</a>
 						</li>
-						<li>
+						<!-- <li>
 							<a href="${path}/" class="nav-link px-4 link-dark">
 								<i class="far fa-clipboard"></i> 문의조회
 							</a>
+						</li> -->
+						<li>
+							<a href="${path}/survey/surveyResultList.do" class="nav-link px-4 link-dark">
+								<i class="fas fa-poll"></i> 설문
+							</a>
+						</li>
+					</c:if>
+					<c:if test="${sessionScope.member.usertype eq 'ROLE_ADMIN'}">
+						<li>
+							<a href="${path}/">
+								<i class="fas fa-user"></i> 병원관계자 권한
+							</a>
 						</li>
 						<li>
-							<a href="${path}/" class="nav-link px-4 link-dark">
-								<i class="fas fa-poll"></i> 설문
+							<a href="${path}/survey/adminSurveyList.do" class="nav-link px-4 link-dark">
+								<i class="fas fa-poll"></i> 설문 형식
 							</a>
 						</li>
 					</c:if>
