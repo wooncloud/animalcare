@@ -409,15 +409,17 @@ public class HospitalInfoController {
 	}
 	
 	@RequestMapping(value = "/detailSchedulePage.do", method = RequestMethod.GET)
-	public String detailSchedulePage(Model model) {
+	public String detailSchedulePage(@RequestParam Map<String, Object> param, Model model) {
 		logger.info("[detailSchedulePage] : 병원 일정 상세보기 페이지 이동 요청 : ");
-			
+		String sequence = (String)param.get("seq");
+		int seq = Integer.parseInt(sequence); 
 		//@@@@@@@@캘린더에서 글 seq 가져올거임 병합 후 수정 필요 @@@@@@@@@@
 		//@@@@@@@@캘린더에서 글 seq 가져올거임 병합 후 수정 필요 @@@@@@@@@@
 		//@@@@@@@@캘린더에서 글 seq 가져올거임 병합 후 수정 필요 @@@@@@@@@@
 		//@@@@@@@@캘린더에서 글 seq 가져올거임 병합 후 수정 필요 @@@@@@@@@@
 		//@@@@@@@@캘린더에서 글 seq 가져올거임 병합 후 수정 필요 @@@@@@@@@@
-		HospitalScheduleDto dto = hsService.detailSchedule(61);
+		
+		HospitalScheduleDto dto = hsService.detailSchedule(seq);
 		model.addAttribute("dto", dto);
 		
 		return "hospital/detailHospitalSchedule";
@@ -431,7 +433,7 @@ public class HospitalInfoController {
 		//@@@@@@@@캘린더에서 글 seq 가져올거임 병합 후 수정 필요 @@@@@@@@@@
 		//@@@@@@@@캘린더에서 글 seq 가져올거임 병합 후 수정 필요 @@@@@@@@@@
 		//@@@@@@@@캘린더에서 글 seq 가져올거임 병합 후 수정 필요 @@@@@@@@@@
-		HospitalScheduleDto dto = hsService.detailSchedule(61);
+		HospitalScheduleDto dto = hsService.detailSchedule(81);
 		model.addAttribute("dto", dto);
 		
 		return "hospital/modifyHospitalSchedule";
@@ -451,7 +453,7 @@ public class HospitalInfoController {
 		//@@@@@@@@캘린더에서 글 seq 가져올거임 병합 후 수정 필요 @@@@@@@@@@
 		//@@@@@@@@캘린더에서 글 seq 가져올거임 병합 후 수정 필요 @@@@@@@@@@
 
-		hsDto.setSeq(61);
+		hsDto.setSeq(81);
 		hsDto.setTitle((String)param.get("scheduleName"));
 		hsDto.setSchedule(dateFormat.parse((String)param.get("scheduleDate")));
 		hsDto.setCheck((String)param.get("reservationChk"));
