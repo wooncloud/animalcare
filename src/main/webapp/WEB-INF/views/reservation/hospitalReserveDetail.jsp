@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@include file="/header.jsp" %>
 <script type="text/javascript" src="${path}/js/mycalendar.js" ></script>
+${hospitalReserveDetail}
 <div class="card">
    <div class="card-body">
       <h5 class="card-title my-3">병원관계자 예약 상세 내역</h5>
@@ -65,17 +66,24 @@
           <div class="col-3">
             <p class="card-text">${hospitalReserveDetail.user_email}</p>
          </div>
-      </div>
-      <div class="row my-2">
-          <div class="col-3">
+         <div class="col-3">
             <h6 class="card-subtitle mb-2 text-muted">연락처</h6>
          </div>
           <div class="col-3">
             <p class="card-text">${hospitalReserveDetail.phone}</p>
          </div>
+      <div class="row my-2">
+          <div class="col-3">
+            <h6 class="card-subtitle mb-2 text-muted">증상</h6>
+         </div>
+          <div class="col-3">
+            <p class="card-text">${hospitalReserveDetail.symptom}</p>
+         </div>
+      </div>
       </div>
    </div>
 </div>
+
 <c:if test="${hospitalReserveDetail.status eq 'S'}">
    <button type="button" class="btn btn-primary" name="confirm" onclick="acceptReservation('${hospitalReserveDetail.seq}')">확정</button>
    <button type="button" class="btn btn-primary" name="reject"  data-bs-toggle="modal" data-bs-target="#rejectReservation">반려</button>
@@ -145,11 +153,11 @@
 					  </div>
 					  <div class="form-group">
 						 <label for="reservedate">예약 일자:</label>
-						 <input type="date" class="form-control" id="modifyReservedate" name="modifyReservedate" value="${hospitalReserveDetail.reservedate}" >
+						 <input type="date" class="form-control" id="reservedate" name="reservedate" value="${hospitalReserveDetail.reservedate}" >
 					  </div>
 					  <div class="form-group">
 						 <label for="reservetime">예약 시간:</label>
-							<select class="form-select" aria-label="Default select example" name="modifyReservetime" id="modifyReservetime" onchange="modifyChk()">
+							<select class="form-select" aria-label="Default select example" name="reservetime" id="reservetime" onchange="modifyChk()">
 								<option value="modifyDefault" id="modifyDefault" selected="selected">선택</option>
 								<option id="09001100" value="09001100">09:00~11:00</option>
 								<option id="11001300" value="11001300">11:00~13:00</option>
@@ -191,12 +199,12 @@ window.onload = function(){
 	var reservetype = `${hospitalReserveDetail.reservetype}`
 	var reservedate = new Date(getdate);
 	console.log(reservedate);
+	console.log(getdate);
 	
 	var date = new Date();
 	console.log(date);
-
 	
-	if(reservedate < date && reservetype =='A'){
+	if(reservedate < date){
 		
 		document.getElementsByName("confirm")[0].style.display="none";
 		document.getElementsByName("reject")[0].style.display="none";

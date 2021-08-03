@@ -8,17 +8,15 @@
   <script src="https://uicdn.toast.com/tui.time-picker/v2.0.3/tui-time-picker.min.js"></script>
   <script src="https://uicdn.toast.com/tui.date-picker/v4.0.3/tui-date-picker.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
-  <script src="${path}/calendarjs/tui-calendar.js"></script>
-  <script src="${path}/calendarjs/calendars.js"></script>
-  <script src="${path}/calendarjs/schedules.js"></script>
+  <script src="https://uicdn.toast.com/tui-calendar/latest/tui-calendar.js"></script>
+  <script src="${path}/js/calendarjs/calendars.js"></script>
   <script src="${path}/js/mycalendar.js"></script>
-
  <!-- calendar -->
  <link rel="stylesheet" type="text/css" href="https://uicdn.toast.com/tui.time-picker/latest/tui-time-picker.css">
  <link rel="stylesheet" type="text/css" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css">
- <link rel="stylesheet" type="text/css" href="${path}/calendarcss/tui-calendar.css">
- <link rel="stylesheet" type="text/css" href="${path}/calendarcss/default.css">
- <link rel="stylesheet" type="text/css" href="${path}/calendarcss/icons.css">
+ <link rel="stylesheet" type="text/css" href="${path}/css/calendarcss/tui-calendar.css">
+ <link rel="stylesheet" type="text/css" href="${path}/css/calendarcss/default.css">
+  
   <div class="code-html">
     <div id="menu" style="height: 700px;">
       <span id="renderRange" class="render-range" style="padding-left:250px;"></span>
@@ -32,9 +30,8 @@
         </button>
       </span>
         <h3 style="margin-left: 470px;">${searchInfo.hospital_name} 예약 현황</h3>
-        <input type="hidden" id="hospital_seq" value="${searchInfo.hospital_seq}">
     </div>
-    <div id="calendar" style="width: 800px; top:200px; margin: 0 auto;">
+   	 	<div id="calendar" style="width: 800px; top:200px; margin: 0 auto;">
     </div>
 </div>	
 <input type="hidden" value="3" name="hospital_seq">
@@ -98,7 +95,8 @@
 					  <div class="form-group">
 						 <label for="phone">전화번호:</label>
 						 <input type="text" class="form-control" id="phone" name="phone" value="010-1234-0000" readonly="readonly">
-					  </div>	  
+					  </div>
+					 <input type="hidden" id="hospital_seq" name="hospital_seq" value="${searchInfo.hospital_seq}">	  
 	    </form>
 				</div>
 			 </div>

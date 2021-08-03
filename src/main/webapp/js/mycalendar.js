@@ -161,8 +161,8 @@ function rejectReservation(){
 
 function modifyReserve(){
 	
-	var reservedate = document.getElementById("modifyReservedate").value;
-	var reservetime = document.getElementById("modifyReservetime").value;
+	var reservedate = document.getElementById("reservedate").value;
+	var reservetime = document.getElementById("reservetime").value;
 	var symptom = document.getElementById("symptom").value;
 	var frm1 = document.forms[1];
 	console.log(reservedate);
@@ -255,8 +255,8 @@ function reserveChk(){
 
 function modifyChk(){
 	
-	var reservedate = document.getElementById("modifyReservedate").value;
-	var reservetime = document.getElementById("modifyReservetime").value;
+	var reservedate = document.getElementById("reservedate").value;
+	var reservetime = document.getElementById("reservetime").value;
 	console.log(reservedate);
 	console.log(reservetime);
 	

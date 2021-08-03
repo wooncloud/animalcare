@@ -177,7 +177,7 @@ SELECT r1.SEQ, r1.USER_EMAIL, (SELECT CODENAME FROM TYPECODE t  WHERE CODEID =r1
 	<!-- 예약 반려 -->
 	<update id="rejectStatusReserve" parameterType="java.util.Map">
 		UPDATE RESERVATION
-        SET STATUS='R',PAYNUM = '';
+        SET STATUS='R',PAYNUM = ''
         WHERE SEQ = #{seq} 
 	</update>
 	
@@ -200,7 +200,7 @@ SELECT r1.SEQ, r1.USER_EMAIL, (SELECT CODENAME FROM TYPECODE t  WHERE CODEID =r1
 	<!-- 예약  취소  -->
 	<update id="cancelReserve" parameterType="java.util.Map">
 	UPDATE RESERVATION 
-        SET STATUS = 'C', PAYNUM = '';
+        SET STATUS = 'C', PAYNUM = ''
         WHERE SEQ = #{seq}
 	</update>
 

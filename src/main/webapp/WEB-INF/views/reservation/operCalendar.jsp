@@ -8,16 +8,14 @@
   <script src="https://uicdn.toast.com/tui.time-picker/v2.0.3/tui-time-picker.min.js"></script>
   <script src="https://uicdn.toast.com/tui.date-picker/v4.0.3/tui-date-picker.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
-  <script src="${path}/calendarjs/tui-calendar.js"></script>
+  <script src="https://uicdn.toast.com/tui-calendar/latest/tui-calendar.js"></script>
   <script src="${path}/calendarjs/calendars.js"></script>
-  <script src="${path}/calendarjs/schedules.js"></script>
   <script src="${path}/js/mycalendar.js"></script>
  <!-- calendar -->
  <link rel="stylesheet" type="text/css" href="https://uicdn.toast.com/tui.time-picker/latest/tui-time-picker.css">
  <link rel="stylesheet" type="text/css" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css">
- <link rel="stylesheet" type="text/css" href="${path}/calendarcss/tui-calendar.css">
- <link rel="stylesheet" type="text/css" href="${path}/calendarcss/default.css">
- <link rel="stylesheet" type="text/css" href="${path}/calendarcss/icons.css">
+ <link rel="stylesheet" type="text/css" href="${path}/css/calendarcss/tui-calendar.css">
+ <link rel="stylesheet" type="text/css" href="${path}/css/calendarcss/default.css">
  <div class="code-html">
     <div id="menu" style="height: 700px;">
       <span id="renderRange" class="render-range" style="padding-left:250px;"></span>

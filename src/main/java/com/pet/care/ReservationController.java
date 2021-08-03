@@ -81,7 +81,7 @@ public class ReservationController {
 			return "reservation/operCalendar";
 		
 	}
-	
+
 	/*
 	 * 달력에 일정 2021.07.26
 	 */
@@ -117,14 +117,15 @@ public class ReservationController {
 	 * 예약 디비 입력 insert
 	 */
 	@RequestMapping(value = "/insertReservation.do", method = RequestMethod.POST)
-	public String insertReservation(Model model, ReservationDto rDto, @RequestParam Map<String, Object> map, String paynum) {
+	public String insertReservation(Model model, ReservationDto rDto, @RequestParam Map<String, Object> map, String paynum,HttpSession session) {
 		logger.info("ReservationController insertReservation 양식 입력 {} ", rDto );
-	
-		//병원 상세정보에서 seq 가져오면 된다
-		rDto.setHospital_seq(3);
-		
-		rService.insertReserve(rDto);
-		return "redirect:/reservation/userReserveList.do";
+
+
+		boolean isc = rService.insertReserve(rDto);
+		if(isc) {			
+			return "redirect:/reservation/userReserveList.do";
+		}
+			return "redirect:/error/error.do";
 	}
 	
 //	/*
@@ -147,6 +148,7 @@ public class ReservationController {
 //		
 //		return "reservation/index";
 //	}
+
 	
 	/*
 	 * 사용자 예약 목록 조회
@@ -168,7 +170,7 @@ public class ReservationController {
 		}
 		
 		int idx = Integer.parseInt(strIdx);
-		int allPageCnt = 0;
+		int allPageCnt = 0; 
 		
 		
 		allPageCnt = rService.userReserveListCount(uMap);
@@ -371,18 +373,18 @@ public class ReservationController {
 		logger.info("ReservationController modifyReserve 병원 예약 수정 {}", map );
 		//예약 seq , 병원변호 seq
 		String seq = (String)map.get("seq");
-		String reservedate = (String)map.get("modifyReservedate");
-		String reservetime = (String)map.get("modifyReservetime");
+		String reservedate = (String)map.get("reservedate");
+		String reservetime = (String)map.get("reservetime");
 
-//		Map<String, Object>rMap = new HashMap<String, Object>();
-//		rMap.put("seq", seq);
-//		rMap.put("modifyReservedate", reservedate);
-//		rMap.put("modifyReservetime", reservetime);
+		Map<String, Object>rMap = new HashMap<String, Object>();
+		rMap.put("seq", seq);
+		rMap.put("reservedate", reservedate);
+		rMap.put("reservetime", reservetime);
 		
-		 boolean isc = rService.modifyReserve(map);
+		boolean isc = rService.modifyReserve(map);
 		 
-		 model.addAttribute("seq", map.get("seq"));
-		 if(isc) {
+		model.addAttribute("seq", map.get("seq"));
+		if(isc) {
 			 return "redirect:/reservation/hospitalReserveDetail.do";
 		 }
 		

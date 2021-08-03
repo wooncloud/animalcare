@@ -61,7 +61,7 @@ a{
 				<div class="col-2">
 						<c:if test="${list.status eq 'S'}">
 							<p class="card-text">대기</p>
-						</c:if>
+						</c:if> 	
 						<c:if test="${list.status eq 'A'}">
 							<p class="card-text">확정</p>
 						</c:if>
