@@ -9,16 +9,16 @@
 
 ${surveyResultDetail[0].title}
 <div class="card my-1">
-	<div class="card-body">
-		설문 제목<br>
-		<input type="text" class="form-control" name="title" value="${surveyResultDetail[0].title}" disabled="disabled">
+   <div class="card-body">
+      설문 제목<br>
+      <input type="text" class="form-control" name="title" value="${surveyResultDetail[0].title}" disabled="disabled">
 
-		
-		<div id="formResult">
-		</div>
-<!-- 		<div id="chart"> -->
-<!-- 		</div> -->
-		
+      
+      <div id="formResult">
+      </div>
+<!--       <div id="chart"> -->
+<!--       </div> -->
+      
     </div>
 </div>
 

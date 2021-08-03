@@ -58,15 +58,23 @@
         WHERE EMAIL=#{email} AND DELFLAG ='N'
 	</select>
 	
-	<select id="selAllBoard" resultType="AnswerBoardDto">
-SELECT a.SEQ, a.TITLE, a.REGDATE, a.EMAIL, a.PASSWORD , a.ANSWERBOARD_NAME, a.REPLYSTATUS
-	FROM USERINFO u RIGHT JOIN
-			(SELECT SEQ, EMAIL, PASSWORD, TITLE, CONTENT, REGDATE, PARENT_SEQ, DELFLAG, ANSWERBOARD_NAME, REPLYSTATUS
+	<select id="selAllBoard" parameterType="java.util.Map" resultType="AnswerBoardDto">
+	SELECT a.SEQ, a.TITLE,TO_DATE(TO_CHAR(a.REGDATE),'YY-MM-DD') AS REGDATE, a.EMAIL, a.PASSWORD , a.ANSWERBOARD_NAME, a.REPLYSTATUS
+		FROM USERINFO u RIGHT JOIN
+			(SELECT SEQ, EMAIL, PASSWORD, TITLE, CONTENT, REGDATE, PARENT_SEQ, DELFLAG, ANSWERBOARD_NAME, REPLYSTATUS,ROW_NUMBER() OVER(ORDER BY REGDATE DESC) AS RN
 			        FROM ANSWERBOARD 
 			        WHERE DELFLAG ='N') a
-			        ON u.EMAIL = a.EMAIL 
-			        ORDER BY REGDATE DESC, PARENT_SEQ,SEQ
+			        ON u.EMAIL = a.EMAIL
+			       	WHERE RN BETWEEN #{first} AND #{last}
+			        ORDER BY REGDATE DESC
 	</select>
+	
+	<select id="boardPage" resultType="java.lang.Integer">
+	SELECT COUNT(*)
+		FROM ANSWERBOARD 
+		WHERE DELFLAG ='N'
+	</select>
+
 	
 	<select id="selUserDetail" parameterType="java.util.Map" resultType="AnswerBoardDto">
 	
@@ -96,15 +104,19 @@ SELECT a.SEQ, a.TITLE, a.REGDATE, a.EMAIL, a.PASSWORD , a.ANSWERBOARD_NAME, a.RE
 		 	WHERE EMAIL=#{email} AND PASSWORD= #{password} AND SEQ=#{seq}
 	</select>
 	
-	<select id="searchTitle" parameterType="java.util.Map" resultType="AnswerBoardDto">
-	SELECT TITLE,ANSWERBOARD_NAME ,REGDATE, SEQ
-  		FROM ANSWERBOARD a 
-  		WHERE TITLE LIKE '%'||#{title}||'%' AND DELFLAG='N'
+	<select id="searchName" parameterType="java.util.Map" resultType="AnswerBoardDto">
+	SELECT TITLE,ANSWERBOARD_NAME ,REGDATE, SEQ, REPLYSTATUS
+  		FROM 
+		(SELECT TITLE,ANSWERBOARD_NAME ,REGDATE, SEQ, ROW_NUMBER() OVER(ORDER BY REGDATE) AS RN, REPLYSTATUS
+  			FROM ANSWERBOARD a 
+  			WHERE ANSWERBOARD_NAME LIKE '%'||#{answerboard_name}||'%' AND DELFLAG='N')
+  			WHERE RN BETWEEN #{first} AND #{last}
 	</select>
 	
-	<select id="searchName" parameterType="java.util.Map" resultType="AnswerBoardDto">
-	SELECT TITLE,ANSWERBOARD_NAME ,REGDATE, SEQ
+	<select id="searchNamePage" parameterType="java.util.Map" resultType="java.lang.Integer">
+	SELECT COUNT(*)
   		FROM ANSWERBOARD a 
   		WHERE ANSWERBOARD_NAME LIKE '%'||#{answerboard_name}||'%' AND DELFLAG='N'
 	</select>
+
 </mapper>

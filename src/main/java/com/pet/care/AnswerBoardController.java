@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.pet.care.comm.PageUtil;
 import com.pet.care.dto.AnswerBoardDto;
 import com.pet.care.dto.MemberDto;
+import com.pet.care.dto.PageDto;
 import com.pet.care.model.service.answerboard.IAnswerBoardService;
 
 @Controller
@@ -182,11 +184,38 @@ public class AnswerBoardController {
 	
 	//전체 문의 게시글 목록
 	@RequestMapping(value="/selAllBoard.do", method = RequestMethod.GET)
-	public String selAllBoard(Model model) {
-		logger.info("AnswerBoardController selAllBoard {} ");
-		List<AnswerBoardDto> lists = aService.selAllBoard();
+	public String selAllBoard(@RequestParam Map<String,Object>bMap, Model model) {
+		logger.info("AnswerBoardController selAllBoard {} ",bMap);
 		
-		model.addAttribute("lists", lists);
+		Map<String, Object>map = new HashMap<String, Object>();
+
+		
+		PageDto page = new PageDto();
+		String strIdx = (String)bMap.get("page");
+		if(strIdx == null) {
+			strIdx = "1";
+		}
+		
+		int idx = Integer.parseInt(strIdx);
+		int allPageCnt = 0;
+		
+		
+		allPageCnt = aService.boardPage();
+		
+		//PageDto 셋팅
+		PageUtil.defaultPagingSetting(page, allPageCnt);
+		
+		page.setPage(idx);
+		page.setStartPage(idx);
+		page.setEndPage(page.getCountPage());
+		
+		map.put("first", page.getPage() * page.getCountList() - (page.getCountList() - 1));
+		map.put("last", page.getPage() * page.getCountList());
+		
+		List<AnswerBoardDto> lists = aService.selAllBoard(map);
+		
+		model.addAttribute("page",page);
+		model.addAttribute("lists",lists);
 		
 		return "answerboard/boardList";
 	}
@@ -245,25 +274,42 @@ public class AnswerBoardController {
 			return "redirect:/error/error.do";
 		}
 	
-	//게시판 제목 검색
-	@RequestMapping(value="/searchTitle.do", method = RequestMethod.POST)
-	public String searchTitle(@RequestParam Map<String,Object>map, Model model) {
-		logger.info("AnswerBoardController searchTitle {} ", map);
-		List<AnswerBoardDto> lists = aService.searchTitle(map);
-		model.addAttribute("lists",lists);
-		return "answerboard/boardList";
-	}
-	
 	
 	//게시판 이름 검색
 	@RequestMapping(value="/searchName.do", method = RequestMethod.POST)
 	public String searchName(@RequestParam Map<String,Object>map, Model model) {
 		logger.info("AnswerBoardController searchName {} ", map);
+		
+		String option = (String)map.get("searchOption");
+		
+		PageDto page = new PageDto();
+		String strIdx = (String)map.get("page");
+		if(strIdx == null) {
+			strIdx = "1";
+		}
+		
+		int idx = Integer.parseInt(strIdx);
+		int allPageCnt = 0;
+		
+		
+		allPageCnt = aService.searchNamePage(map);
+		
+		//PageDto 셋팅
+		PageUtil.defaultPagingSetting(page, allPageCnt);
+		
+		page.setPage(idx);
+		page.setStartPage(idx);
+		page.setEndPage(page.getCountPage());
+		
+		map.put("first", page.getPage() * page.getCountList() - (page.getCountList() - 1));
+		map.put("last", page.getPage() * page.getCountList());
 		List<AnswerBoardDto> lists = aService.searchName(map);
 		model.addAttribute("lists",lists);
+		model.addAttribute("page",page);
+		model.addAttribute("option",option);
 		return "answerboard/boardList";
 	}
-
+	
 }
 	
 

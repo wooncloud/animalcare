@@ -28,7 +28,7 @@ public interface IAnswerBoardService {
 		public List<AnswerBoardDto>  selNonUserBoard(Map<String, Object>map);
 		
 		//전체 1:1문의 게시글 조회
-		public List<AnswerBoardDto> selAllBoard();
+		public List<AnswerBoardDto> selAllBoard(Map<String, Object>map);
 		
 		//회원 작성글 상세 조회
 		public AnswerBoardDto selUserDetail(Map<String, Object>map);
@@ -50,5 +50,14 @@ public interface IAnswerBoardService {
 		
 		//제목 조회
 		public List<AnswerBoardDto> searchTitle(Map<String, Object>map);
+		
+		//페이징
+		public int boardPage();
+		
+		//제목검색
+		public int searchTitlePage(Map<String,Object>map);
+		
+		//이름검색
+		public int searchNamePage(Map<String,Object>map);
 		
 }

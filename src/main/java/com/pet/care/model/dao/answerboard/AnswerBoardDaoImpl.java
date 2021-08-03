@@ -59,8 +59,8 @@ public class AnswerBoardDaoImpl implements IAnswerBoardDao {
 	}
 
 	@Override
-	public List<AnswerBoardDto> selAllBoard() {
-		return session.selectList(NS+"selAllBoard");
+	public List<AnswerBoardDto> selAllBoard(Map<String, Object>map) {
+		return session.selectList(NS+"selAllBoard",map);
 	}
 
 	@Override
@@ -99,6 +99,21 @@ public class AnswerBoardDaoImpl implements IAnswerBoardDao {
 	@Override
 	public  List<AnswerBoardDto> searchTitle(Map<String, Object> map) {
 		return session.selectList(NS+"searchName", map);
+	}
+
+	@Override
+	public int boardPage() {
+		return session.selectOne(NS+"boardPage");
+	}
+
+	@Override
+	public int searchTitlePage(Map<String, Object> map) {
+		return session.selectOne(NS+"searchTitlePage",map);
+	}
+
+	@Override
+	public int searchNamePage(Map<String, Object> map) {
+		return session.selectOne(NS+"searchNamePage",map);
 	}
 	
 	

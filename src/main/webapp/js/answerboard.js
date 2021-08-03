@@ -29,6 +29,15 @@ function insertBoardChk(form){
 	}else if(form.content.value==""){
 		Swal.fire("알림", "내용을 입력하세요.", "warning");
 		return false;
+	}else if(form.name.value==""){
+		Swal.fire("알림", "이름을 입력하세요.", "warning");
+		return false;
+	}else if(form.email.value==""){
+		Swal.fire("알림", "이메일을 입력하세요.", "warning");
+		return false;
+	}else if(form.password.value==""){
+		Swal.fire("알림", "비밀번호를 입력하세요.", "warning");
+		return false;
 	}
 		
 
@@ -137,17 +146,3 @@ let replyBoard = {
 	}
 }
 
-function searchList(){
-	var opt = document.getElementById("searchOption");
-	console.log(opt);
-	var frm = document.forms[0];
-	
-	if(opt == "title"){
-		frm.action="./searchTitle.do";
-		frm.submit();
-	}else{
-		frm.action="./searchName.do";
-		frm.submit();		
-	}
-	
-}

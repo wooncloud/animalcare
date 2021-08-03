@@ -8,28 +8,26 @@ a{
 }
 </style>
   <script src="${path}/js/answerboard.js"></script>
+  ${option}
+  ${lists}
 <h1>문의 게시판</h1>
-<form method="post">
+<form action="./searchName.do" method="post">
 <select id="searchOption" name="searchOption" id="searchOption">
 	<option value="name">이름</option>
-	<option value="title">제목</option>
-</select>
+</select>		
 <input type="text" id="answerboard_name" name="answerboard_name">
-<input type="submit" id="searchMyList" name="searchMyList" onclick="searchList()" value="검색해볼래?">
+<input type="submit" id="searchMyList" name="searchMyList" value="검색해볼래?">
 </form>
 <div class="card my-1">
    <div class="card-body">
       <div class="row">
-          <div class="col-1">
-            <h5 class="card-title"> NO</h5>
-          </div>
           <div class="col-2">
             <h5 class="card-title"> 제목</h5>
           </div>
           <div class="col-2">
             <h5 class="card-title"> 작성자</h5>
           </div>
-          <div class="col-2">
+          <div class="col-4">
              <h5 class="card-title"> 등록일자</h5>
           </div>
              <div class="col-2">
@@ -42,9 +40,6 @@ a{
 	<div class="card my-1">
 		<div class="card-body">
 			<div class="row">
-				<div class="col-1">
-					<p class="card-text">${vs.count}</p>
-				</div>
 				<div class="col-2">
 					<p class="card-text">${list.title}</p>
 				</div>
@@ -80,7 +75,7 @@ a{
 				</c:if>
 				</div>
 				</c:if>
-				<div class="col-2">
+				<div class="col-4">
 					<p class="card-text">${list.regdate}</p>
 				</div>
 				<div class="col-2">
@@ -95,10 +90,56 @@ a{
 		</div>
 	</div>
 </c:forEach>
+<c:if test="${option eq null}">
+<ul class="mt-3 pagination justify-content-center">
+			<c:if test="${page.startPage > page.countPage}">
+				<li class="page-item">
+					<a class="page-link" href="./selAllBoard.do?page=${page.startPage-1}" aria-label="Previous">
+						<span aria-hidden="true"><i class="fas fa-chevron-left"></i></span>
+					</a>	
+				</li>
+				</c:if>
+			<c:forEach var="num" begin="${page.startPage}" end="${page.endPage}">
+				<li class="page-item ${num eq page.page ? 'active' : ''}">
+					<a class="page-link" href="./selAllBoard.do?page=${num}">${num}</a>	
+				</li>
+			</c:forEach>
+			<c:if test="${page.endPage < page.totalPage}">
+				<li class="page-item">
+					<a class="page-link" href="./selAllBoard.do?page=${page.endPage + 1}" aria-label="Next"> 
+						<span aria-hidden="true"><i class="fas fa-chevron-right"></i></span>
+					</a>
+				</li>
+			</c:if>		
+</ul>
+</c:if>
+<c:if test="${option eq 'name'}">
+<ul class="mt-3 pagination justify-content-center">
+			<c:if test="${page.startPage > page.countPage}">
+				<li class="page-item">
+					<a class="page-link" href="./searchName.do?page=${page.startPage-1}" aria-label="Previous">
+						<span aria-hidden="true"><i class="fas fa-chevron-left"></i></span>
+					</a>	
+				</li>
+				</c:if>
+			<c:forEach var="num" begin="${page.startPage}" end="${page.endPage}">
+				<li class="page-item ${num eq page.page ? 'active' : ''}">
+					<a class="page-link" href="./searchName.do?page=${num}">${num}</a>	
+				</li>
+			</c:forEach>
+			<c:if test="${page.endPage < page.totalPage}">
+				<li class="page-item">
+					<a class="page-link" href="./searchName.do?page=${page.endPage + 1}" aria-label="Next"> 
+						<span aria-hidden="true"><i class="fas fa-chevron-right"></i></span>
+					</a>
+				</li>
+			</c:if>		
+</ul>
+</c:if>
 <c:if test="${sessionScope.member.usertype eq 'ROLE_USER'}">
 <a class="btn btn-secondary" href="./moveInsert.do">회원 글작성</a>
 </c:if>
-<c:if test="${sessionScope.member.usertype != 'ROLE_USER'}">
+<c:if test="${sessionScope.member.usertype != 'ROLE_USER' && sessionScope.member.usertype != 'ROLE_ADMIN'}">
 <a class="btn btn-secondary" href="./moveInsert.do">비회원 글작성</a>
 </c:if>
 
@@ -123,6 +164,7 @@ a{
 			</div>
 		</div>
 	</div>
+	
 <script type="text/javascript">
 
 function checkNonUser(seq){

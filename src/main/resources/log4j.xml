@@ -15,30 +15,30 @@
 <!-- 	logger는 모든 Appender에 모두 적용되는 로그 설정 -->
 	<!-- Application Loggers -->
 	<logger name="com.pet.care">
-		<level value="INFO" />
+		<level value="TRACE" />
 	</logger>
 	
 	<!-- 3rdparty Loggers -->
 	<logger name="org.springframework.core">
-		<level value="INFO" />
+		<level value="TRACE" />
 	</logger>
 	
 	<logger name="org.springframework.beans">
-		<level value="INFO" />
+		<level value="TRACE" />
 	</logger>
 	
 	<logger name="org.springframework.context">
-		<level value="INFO" />
+		<level value="TRACE" />
 	</logger>
 
 	<logger name="org.springframework.web">
-		<level value="INFO" />
+		<level value="TRACE" />
 	</logger>
 
 	<!-- Root Logger -->
 <!-- 	설정 및 선언된 appender 객체의 사용 // 설정-> 선언 -->
 	<root>
-		<priority value="INFO" />
+		<priority value="TRACE" />
 		<appender-ref ref="console" />
 	</root>
 	
