@@ -3,9 +3,9 @@
 <!-- Step 1) Load D3.js --> 
 <script src="https://d3js.org/d3.v5.min.js"></script> 
 <!-- Step 2) Load billboard.js with style --> 
-<script src=".././js/billboard.js"></script> 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/billboard.js/3.1.3/billboard.min.js"></script> 
 <!-- Load with base style --> 
-<link rel="stylesheet" href=".././css/billboard.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/billboard.js/3.1.3/billboard.min.css">
 
 ${surveyResultDetail[0].title}
 <div class="card my-1">
