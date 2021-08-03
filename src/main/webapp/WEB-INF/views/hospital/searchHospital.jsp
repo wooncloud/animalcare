@@ -32,9 +32,9 @@
   								<div class="row">
   							</c:if>
 									<div class="col my-1" >
-  										<input class="form-check-input" value="${loc.codeid}" name="locChkBox" type="checkbox" value="${loc.codename}" onchange="chkBox(this)">
+  										<input class="form-check-input" id="${loc.codeid}" name="locChkBox" type="checkbox" value="${loc.codename}" onchange="chkBox(this)">
   										<label for="${loc.codeid}">${loc.codename}</label>
-  										<input type="hidden" id="${loc.codeid}">
+  										<input type="hidden" id="${loc.codename}">
 									</div>
 							<c:if test="${i%j==j-1}">
   								</div>

@@ -55,7 +55,7 @@
 					<span class="mx-2 fs-3 fw-bold">PET CARE</span>
 				</a>
 				<ul class="nav col-12 col-lg-auto me-lg-auto mb-2 ms-5 justify-content-center mb-md-0">
-					<c:if test="${(sessionScope.member eq null) or (sessionScope.member.usertype eq 'ROLE_USER')}">
+					<c:if test="${(sessionScope.member.usertype ne 'ROLE_OPER')}">
 						<li>
 							<a href="${path}/hospital/searchHospitalPage.do" class="nav-link px-4 link-dark">
 								<i class="fas fa-search"></i> 병원찾기

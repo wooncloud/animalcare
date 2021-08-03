@@ -98,7 +98,7 @@ public class HospitalInfoController {
 			
 			// 선택한 진료항목을 배열에 담음
 			String[] hiddenValue = req.getParameterValues("hiddenValue"); 		
-//			System.out.println("길이확인중@@@@@@@@ :"+hiddenValue.length);
+//			System.out.println("길이확인중 :"+hiddenValue.length);
 			
 			// 배열에 담은 진료항목을 길이만큼 돌려서 입력
 			for (int i = 0; i < hiddenValue.length; i++) {
@@ -169,6 +169,25 @@ public class HospitalInfoController {
 	@RequestMapping(value = "/searchHospital.do", method = RequestMethod.POST)
 	public String searchHospital(@RequestParam Map<String, Object> param, Model model, HttpServletRequest req) {
 		logger.info("[searchHospital] - {} :  병원찾기", model);
+
+		//선택한 지역 확인
+		String[] address1 = req.getParameterValues("hiddenLoc");
+		param.put("address1", address1);
+//		for (int i = 0; i < address1.length; i++) {
+//			System.out.println(address1[i]+"선택한 지역 확인");
+//		}
+		
+		//선택한 진료항목 확인  
+		String[] pettype = req.getParameterValues("hiddenValue");
+		param.put("pettype", pettype);
+//		for (int i = 0; i < pettype.length; i++) {
+//			System.out.println(pettype[i]+"선택한 진료항목 확인");
+//		}
+		
+		// 응급실 유무 선택 확인 
+		String emergency = req.getParameter("flexRadioDefault");				
+		param.put("emergency", emergency);
+//		System.out.println(emergency+"선택한 응급실 유무 값 확인");
 		
 		//페이징 
 				PageDto page = new PageDto();
@@ -181,7 +200,7 @@ public class HospitalInfoController {
 				int allPageCnt = 0;
 				
 				//볼수 있는 글의 총 갯수
-				allPageCnt = hiService.hospitalCount(param);
+				allPageCnt = hiService.searchCount(param);
 				
 				//PageDto 셋팅
 				PageUtil.defaultPagingSetting(page, allPageCnt);
@@ -192,18 +211,6 @@ public class HospitalInfoController {
 				
 				param.put("first", page.getPage() * page.getCountList() - (page.getCountList() - 1));
 				param.put("last", page.getPage() * page.getCountList());
-				
-				//선택한 지역 확인
-				String[] address1 = req.getParameterValues("hiddenLoc");
-				param.put("address1", address1);
-				
-				//선택한 진료항목 확인  
-				String[] pettype = req.getParameterValues("hiddenValue");
-				param.put("pettype", pettype);
-				
-				// 응급실 유무 선택 확인 
-				String emergency = req.getParameter("flexRadioDefault");				
-				param.put("emergency", emergency);
 				
 				//볼수 있는 병원 리스트
 				List<HospitalJoinDto> lists = hiService.searchHospital(param);
