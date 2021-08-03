@@ -30,6 +30,11 @@
           <i class="calendar-icon ic-arrow-line-right" data-action="move-next"></i>
         </button>
       </span>
+      
+		<div class="col d-grid gap-2 d-md-flex justify-content-md-end">	
+			<input type="button" class="btn btn-outline-primary" value="일정등록(병원)" onclick="insertSchedulePage()">
+		</div>
+		
     </div>
     <div id="calendar" style="width: 800px; top:200px; margin: 0 auto;">
     <input type="hidden" name="hospital_seq" id="hospital_seq" value="${hospital_seq}">
@@ -54,7 +59,7 @@ var cal = new tui.Calendar('#calendar', {
 		var schedule = event.schedule;
 		
 		if(schedule.calendarId =='병원일정'){
-//  			location.href="./detailSchedule.do?seq="+schedule.id; // 일정 상세
+ 			location.href="../hospital/detailSchedulePage.do";
 		} else if(schedule.calendarId =='예약완료'){
 		location.href="./hospitalReserveDetail.do?seq="+schedule.id;
 		}
@@ -83,6 +88,11 @@ var cal = new tui.Calendar('#calendar', {
 
 	    }
 	});
+	
+	// 병원 일정 등록 페이지 이동
+	function insertSchedulePage(){
+		location.href = "../hospital/insertSchedulePage.do";
+	}
 
 </script>
 <script src="${path}/calendarjs/default.js"></script>
