@@ -249,11 +249,16 @@ public class ReservationController {
 	 * 오늘의 예약 조회
 	 */
 	@RequestMapping(value = "/todayReserveList.do", method = RequestMethod.GET)
-	public String todayReserveList(Model model) {
+	public String todayReserveList(Model model, HttpSession session) {
 		logger.info("ReservationController todayReserveList 오늘의 예약 조회 " );
-		//seq는 병원번호 session
+		MemberDto mDto = (MemberDto)session.getAttribute("member");
+		String user_email = mDto.getEmail();
+		
+		int seq = hService.findSeq(user_email);
+		
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("seq",3);
+		map.put("hospital_seq",seq);
+		
 		
 		List<ReservationDto> lists = rService.todayReserveList(map);
 		model.addAttribute("tlists",lists);
@@ -267,11 +272,14 @@ public class ReservationController {
 	 * 병원 예약 목록 조회 2021.07.26
 	 */
 	@RequestMapping(value = "/hospitalReserveList.do", method = RequestMethod.GET)
-	public String hospitalReserveList(@RequestParam Map<String, Object>hMap, Model model) {
+	public String hospitalReserveList(@RequestParam Map<String, Object>hMap, Model model , HttpSession session) {
 		logger.info("ReservationController hospitalReserveList 병원 예약 목록 조회 " );
-		//seq 병원번호 session? request
-		Map<String, Object>map = new HashMap<String, Object>();
-		map.put("hospital_seq", 3);
+		MemberDto mDto = (MemberDto)session.getAttribute("member");
+		String user_email = mDto.getEmail();
+		
+		int seq = hService.findSeq(user_email);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("hospital_seq",seq);
 
 		//페이징
 				PageDto page = new PageDto();
@@ -309,11 +317,14 @@ public class ReservationController {
 	 * 병원 예약 미처리 목록 조회 2021.07.26
 	 */
 	@RequestMapping(value = "/hospitalStandReserveList.do", method=RequestMethod.GET)
-	public String hospitalStandReserveList(@RequestParam Map<String, Object>hMap, Model model) {
-		logger.info("ReservationController hospitalStandReserveList 병원 예약 미처리 목록 조회 {}");
-		Map<String, Object>map = new HashMap<String, Object>();
-		//병원 seq 임의 입력 session? reqeuest에서 가져오던가 해야함
-		map.put("hospital_seq",3);
+	public String hospitalStandReserveList(@RequestParam Map<String, Object>hMap, Model model, HttpSession session) {
+		logger.info("ReservationController hospitalStandReserveList 병원 예약 미처리 목록 조회 {}", hMap);
+		MemberDto mDto = (MemberDto)session.getAttribute("member");
+		String user_email = mDto.getEmail();
+		
+		int seq = hService.findSeq(user_email);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("hospital_seq",seq);
 		//페이징
 		PageDto page = new PageDto();
 		String strIdx = (String)hMap.get("page");
@@ -350,15 +361,16 @@ public class ReservationController {
 	 * 병원 예약 상세 조회 완료
 	 */
 	@RequestMapping(value = "/hospitalReserveDetail.do", method = RequestMethod.GET)
-	public String hospitalReserveDetail(@RequestParam Map<String,Object>map, Model model) {
+	public String hospitalReserveDetail(@RequestParam Map<String,Object>map, HttpSession session, Model model) {
 		logger.info("ReservationController hospitalReserveDetail 병원 예약 상세 조회 완료 {}", map );
-		String seq = (String)map.get("seq");
-		System.out.println("seq============hospitalReserveDetail=========="+seq);
-		Map<String, Object> hMap = new HashMap<String, Object>();
-		hMap.put("seq", seq);
-		hMap.put("hospital_seq", 3);
 		
-		ReservationDto rDto = rService.hospitalReserveDetail(hMap);
+		MemberDto mDto = (MemberDto)session.getAttribute("member");
+		String user_email = mDto.getEmail();
+		int hospital_seq = hService.findSeq(user_email);
+
+		map.put("hospital_seq", hospital_seq);
+		
+		ReservationDto rDto = rService.hospitalReserveDetail(map);
 	
 		System.out.println(rDto);
 		model.addAttribute("hospitalReserveDetail", rDto);
@@ -564,9 +576,11 @@ public class ReservationController {
 	
 	@RequestMapping(value = "/checkReservation.do", method = RequestMethod.GET)
 	@ResponseBody
-	public String checkReservation(@RequestParam Map<String,Object> map) {
+	public String checkReservation(@RequestParam Map<String,Object> map, String hospital_seq) {
 		logger.info("ReservationController checkReservation 예약 중복 확인   {}",map );
-		map.put("hospital_seq", 3);
+		map.put("hospital_seq", hospital_seq);
+		
+		System.out.println("12312312312312312312"+map);
 		boolean isc = rService.checkReservation(map);
 		
 		String resultIsc = String.valueOf(isc);

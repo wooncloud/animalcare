@@ -16,7 +16,6 @@
  <link rel="stylesheet" type="text/css" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css">
  <link rel="stylesheet" type="text/css" href="${path}/css/calendarcss/tui-calendar.css">
  <link rel="stylesheet" type="text/css" href="${path}/css/calendarcss/default.css">
-  
   <div class="code-html">
     <div id="menu" style="height: 700px;">
       <span id="renderRange" class="render-range" style="padding-left:250px;"></span>
@@ -31,7 +30,9 @@
       </span>
         <h3 style="margin-left: 470px;">${searchInfo.hospital_name} 예약 현황</h3>
     </div>
+     <div style="height: 200px">
    	 	<div id="calendar" style="width: 800px; top:200px; margin: 0 auto;">
+   	 </div>
     </div>
 </div>	
 <input type="hidden" value="3" name="hospital_seq">

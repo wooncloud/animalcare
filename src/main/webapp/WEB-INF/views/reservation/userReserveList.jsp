@@ -7,7 +7,6 @@ a{
  	text-decoration: none;
  	color: black;
 }
-
 </style>
 <div class="card my-1">
    <div class="card-body">
@@ -53,7 +52,7 @@ a{
 					<a href="./userReserveDetail.do?seq=${list.seq}">${list.pet_name}</a></p>
 				</div>
 				<div class="col-3">
-					<p class="card-text">${list.name}</p>
+					<p class="card-text"><a href="../hospital/detailHospital.do?seq=${list.hospital_seq}">${list.name}</a></p>
 				</div>
 				<div class="col-2">
 					<p class="card-text">${list.reservedate}</p>

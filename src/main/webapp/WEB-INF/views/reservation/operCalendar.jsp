@@ -32,10 +32,11 @@
 		<div class="col d-grid gap-2 d-md-flex justify-content-md-end">	
 			<input type="button" class="btn btn-outline-primary" value="일정등록(병원)" onclick="insertSchedulePage()">
 		</div>
-		
     </div>
-    <div id="calendar" style="width: 800px; top:200px; margin: 0 auto;">
-    <input type="hidden" name="hospital_seq" id="hospital_seq" value="${hospital_seq}">
+    <div style="height: 200px">
+	    <div id="calendar" style="width: 800px; top:200px; margin: 0 auto;">
+	    <input type="hidden" name="hospital_seq" id="hospital_seq" value="${hospital_seq}">
+	    </div>
     </div>
 </div>	
 <script type="text/javascript" class="code-js">

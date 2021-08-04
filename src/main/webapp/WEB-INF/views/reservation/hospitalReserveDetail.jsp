@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@include file="/header.jsp" %>
 <script type="text/javascript" src="${path}/js/mycalendar.js" ></script>
-${hospitalReserveDetail}
 <div class="card">
    <div class="card-body">
       <h5 class="card-title my-3">병원관계자 예약 상세 내역</h5>
@@ -85,14 +84,14 @@ ${hospitalReserveDetail}
 </div>
 
 <c:if test="${hospitalReserveDetail.status eq 'S'}">
-   <button type="button" class="btn btn-primary" name="confirm" onclick="acceptReservation('${hospitalReserveDetail.seq}')">확정</button>
-   <button type="button" class="btn btn-primary" name="reject"  data-bs-toggle="modal" data-bs-target="#rejectReservation">반려</button>
-   <button type="button" class="btn btn-primary" name="modify" data-bs-toggle="modal" data-bs-target="#modifyReservation">수정</button>
-   <button type="button" class="btn btn-primary" name="list" onclick="javascript:history.back(-1);">목록</button>
+   <button type="button" class="btn btn-primary" id="confirm" onclick="acceptReservation('${hospitalReserveDetail.seq}')">확정</button>
+   <button type="button" class="btn btn-primary" id="reject"  data-bs-toggle="modal" data-bs-target="#rejectReservation">반려</button>
+   <button type="button" class="btn btn-primary" id="modify1" data-bs-toggle="modal" data-bs-target="#modifyReservation">수정</button>
+   <button type="button" class="btn btn-primary" id="list" onclick="javascript:history.back(-1);">목록</button>
 </c:if>
 <c:if test="${hospitalReserveDetail.status eq 'A'}">
-   <button type="button" class="btn btn-primary" name="modify" data-bs-toggle="modal" data-bs-target="#modifyReservation">수정</button>
-    <button type="button" class="btn btn-primary"name="cancel"  onclick="operCancelReservation('${hospitalReserveDetail.seq}','${hospitalReserveDetail.status}','${hospitalReserveDetail.reservedate}')">취소</button>
+   <button type="button" class="btn btn-primary" id="modify2" data-bs-toggle="modal" data-bs-target="#modifyReservation">수정</button>
+    <button type="button" class="btn btn-primary"id="cancel"  onclick="operCancelReservation('${hospitalReserveDetail.seq}','${hospitalReserveDetail.status}','${hospitalReserveDetail.reservedate}')">취소</button>
    <button type="button" class="btn btn-primary" name="list" onclick="javascript:history.back(-1);">목록</button>
 </c:if>
 <c:if test="${hospitalReserveDetail.status eq 'R' or hospitalReserveDetail.status eq 'C'}">
@@ -127,7 +126,6 @@ ${hospitalReserveDetail}
       </div>
    </div>
 </div>
-
 <!-- 예약수정 모달 입력 -->
 <div class="modal fade" id="modifyReservation" tabindex="-1" aria-hidden="true">
    <div class="modal-dialog">
@@ -204,13 +202,19 @@ window.onload = function(){
 	var date = new Date();
 	console.log(date);
 	
+	var confirm = document.getElementById("confirm");
+	var reject = document.getElementById("reject");
+	var modify1 = document.getElementById("modify1");
+	var modify2 = document.getElementById("modify2");
+	var cancel = document.getElementById("cancel");
+	
 	if(reservedate < date){
 		
-		document.getElementsByName("confirm")[0].style.display="none";
-		document.getElementsByName("reject")[0].style.display="none";
-		document.getElementsByName("modify")[0].style.display="none";
-		document.getElementsByName("modify")[1].style.display="none";
-		document.getElementsByName("cancel")[0].style.display="none";
+		confirm.style.display='none';
+		reject.style.display='none';
+		modify1.style.display='none';
+		modify2.style.display='none';
+		cancel.style.display='none';
 	}
 }
 
