@@ -41,15 +41,10 @@ public class AnswerBoardDaoImpl implements IAnswerBoardDao {
 		return (cnt>0)?true:false;
 	}
 
-	@Override
-	public boolean deleteUserBoard(Map<String, Object> map) {
-		int cnt = session.delete(NS+"deleteUserBoard",map);
-		return (cnt>0)?true:false;
-	}
 
 	@Override
-	public boolean deleteNonUserBoard(Map<String, Object> map) {
-		int cnt = session.delete(NS+"deleteNonUserBoard",map);
+	public boolean deleterBoard(Map<String, Object> map) {
+		int cnt = session.delete(NS+"deleterBoard",map);
 		return (cnt>0)?true:false;
 	}
 
@@ -64,8 +59,8 @@ public class AnswerBoardDaoImpl implements IAnswerBoardDao {
 	}
 
 	@Override
-	public List<AnswerBoardDto> selAllBoard() {
-		return session.selectList(NS+"selAllBoard");
+	public List<AnswerBoardDto> selAllBoard(Map<String, Object>map) {
+		return session.selectList(NS+"selAllBoard",map);
 	}
 
 	@Override
@@ -104,6 +99,21 @@ public class AnswerBoardDaoImpl implements IAnswerBoardDao {
 	@Override
 	public  List<AnswerBoardDto> searchTitle(Map<String, Object> map) {
 		return session.selectList(NS+"searchName", map);
+	}
+
+	@Override
+	public int boardPage() {
+		return session.selectOne(NS+"boardPage");
+	}
+
+	@Override
+	public int searchTitlePage(Map<String, Object> map) {
+		return session.selectOne(NS+"searchTitlePage",map);
+	}
+
+	@Override
+	public int searchNamePage(Map<String, Object> map) {
+		return session.selectOne(NS+"searchNamePage",map);
 	}
 	
 	

@@ -38,13 +38,13 @@
 		    <div class="col-3">
 				<h6 class="card-subtitle mb-2 text-muted">이메일</h6>
 			</div>
-			<c:if test="${sessionScope.memeber != null}">
+			<c:if test="${sessionScope.member != null}">
 		    <div class="col-9">
-				${sessionScope.member.email}
+		    		<p class="card-text">${sessionScope.member.email}</p>
 				<input type="hidden" name="email" id="email" value="${sessionScope.member.email}">
 			</div>
 			</c:if>
-			<c:if test="${sessionScope.memeber eq null}">
+			<c:if test="${sessionScope.member eq null}">
 		    <div class="col-9">
 				<input type="text" class="form-control" name="email" id="email">
 			</div> 

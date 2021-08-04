@@ -45,15 +45,9 @@ public class AnswerBoardServiceImpl implements IAnswerBoardService {
 	}
 
 	@Override
-	public boolean deleteUserBoard(Map<String, Object> map) {
-		logger.info("AnswerBoardServiceImpl deleteUserBoard {} ", map);
-		return aDao.deleteUserBoard(map);
-	}
-
-	@Override
-	public boolean deleteNonUserBoard(Map<String, Object> map) {
-		logger.info("AnswerBoardServiceImpl deleteNonUserBoard {} ", map);
-		return aDao.deleteNonUserBoard(map);
+	public boolean deleterBoard(Map<String, Object> map) {
+		logger.info("AnswerBoardServiceImpl deleterBoard {} ", map);
+		return aDao.deleterBoard(map);
 	}
 
 	@Override
@@ -69,9 +63,9 @@ public class AnswerBoardServiceImpl implements IAnswerBoardService {
 	}
 
 	@Override
-	public List<AnswerBoardDto> selAllBoard() {
-		logger.info("AnswerBoardServiceImpl selAllBoard");
-		return aDao.selAllBoard();
+	public List<AnswerBoardDto> selAllBoard(Map<String, Object>map) {
+		logger.info("AnswerBoardServiceImpl selAllBoard {}",map);
+		return aDao.selAllBoard(map);
 	}
 
 	@Override
@@ -86,11 +80,6 @@ public class AnswerBoardServiceImpl implements IAnswerBoardService {
 		return aDao.selNonUserDetail(map);
 	}
 	
-//	@Override
-//	public boolean insertReply(ReservationDto dto) {
-//		logger.info("AnswerBoardServiceImpl insertReply {} ", dto);
-//		return aDao.insertReply(dto);
-//	}
 
 	@Override
 	public boolean insertReply(Map<String, Object> map) {
@@ -107,14 +96,33 @@ public class AnswerBoardServiceImpl implements IAnswerBoardService {
 	@Override
 	public List<AnswerBoardDto> searchName(Map<String, Object> map) {
 		logger.info("AnswerBoardServiceImpl searchName {} ", map);
-		return null;
+		return aDao.searchName(map);
 	}
 
 	@Override
 	public List<AnswerBoardDto> searchTitle(Map<String, Object> map) {
 		logger.info("AnswerBoardServiceImpl searchTitle {} ", map);
-		return null;
+		return aDao.searchTitle(map);
 	}
+
+	@Override
+	public int boardPage() {
+		logger.info("AnswerBoardServiceImpl boardPage");
+		return aDao.boardPage();
+	}
+
+	@Override
+	public int searchTitlePage(Map<String, Object> map) {
+		logger.info("AnswerBoardServiceImpl searchTitlePage");
+		return aDao.searchTitlePage(map);
+	}
+
+	@Override
+	public int searchNamePage(Map<String, Object> map) {
+		logger.info("AnswerBoardServiceImpl searchNamePage");
+		return aDao.searchNamePage(map);
+	}
+	
 	
 	
 
