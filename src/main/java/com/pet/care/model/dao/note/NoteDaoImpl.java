@@ -31,6 +31,12 @@ public class NoteDaoImpl implements INoteDao {
 		return sqlsession.selectOne(NS+"noteDetail", seq);
 	}
 
+	@Override
+	public boolean insertNote(NoteDto ndto) {
+		int n=sqlsession.insert(NS+"insertNote", ndto);
+		return n>0?true:false;
+	}
+
 
 
 }

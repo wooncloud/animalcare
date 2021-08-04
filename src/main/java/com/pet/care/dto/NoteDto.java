@@ -1,6 +1,6 @@
 package com.pet.care.dto;
 
-import java.util.Date;
+import java.sql.Date;
 
 public class NoteDto {
 	private int seq      ;
@@ -77,6 +77,9 @@ public class NoteDto {
 
 	public void setRegdate(Date regdate) {
 		this.regdate = regdate;
+	}
+	public void setRegdate(String regdate) {
+		this.regdate = Date.valueOf(regdate);
 	}
 
 	public PetDto getPdto() {

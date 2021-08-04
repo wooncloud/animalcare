@@ -113,4 +113,12 @@ public class HealthNoteController {
 		return nDto;
 	}
 
+	@RequestMapping(value = "/insertNote.do", method = RequestMethod.POST)
+	public String insertNote(HttpSession session, NoteDto ndto) {
+		log.info("HealthNoteController insertNote 받은 mdto : {}",ndto);
+		log.info(ndto.getPdto().getName());
+		return null;
+	}
+	
+	
 }

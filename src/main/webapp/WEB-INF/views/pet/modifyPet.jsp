@@ -26,13 +26,14 @@
 						<div class="row  border border-light">
 							<div class="col-md-2 py-2 border border-light text-center">이름*</div>
 							<div class="col-md-10 py-2 border border-light text-center">
-								<input class="text-center" type="text" id="name" name="name" value="${pdto.name}" required="required">
+							${pdto.name}
+								<input class="text-center" type="hidden" id="name" name="name" value="${pdto.name}" required="required">
 							</div>
 						</div>
 						<div class="row  border border-light">
 							<div class="col-md-2 py-2 border border-light text-center">생년월일*</div>
 							<div class="col-md-10 py-2 border border-light text-center">
-								<input class="text-center" type="date" id="birth" name="birth" value="${pdto.birth}" required="required">
+								<input class="text-center" type="date" id="birth" name="birth"  value="${pdto.birth}" required="required">
 							</div>
 						</div>
 						<div class="row  border border-light">

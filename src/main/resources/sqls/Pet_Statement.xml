@@ -28,7 +28,7 @@
 	</resultMap>
 	
 	<resultMap type="com.pet.care.dto.HospitalInfoDto" id="HospitalInfoDto">
-		<result property="seq" column="SEQ"/>
+		<result property="seq" column="HOSPITALSEQ"/>
 		<result property="name" column="HOSPITALNAME"/>
 	</resultMap>
 
@@ -55,7 +55,7 @@
 	<!-- 애완동물 수정 -->
 	<update id="modifyPet" parameterType="PetDto">
 		UPDATE PETINFO
-			SET NAME=#{name}, BIRTH=#{birth}, WEIGHT=#{weight}, 
+			SET  BIRTH=#{birth}, WEIGHT=#{weight}, 
 			        GENDER=#{gender}, "TYPE"=#{type}, TYPEINFO=#{typeinfo}, 
 			        NOTIFICATION=#{notification}, PROFILE=#{profile}
 			WHERE USER_EMAIL =#{user_email}
@@ -93,7 +93,7 @@
 	<!-- 진료내역 상세조회 -->
 	<select id="detailRecode" parameterType="java.lang.Integer" resultMap="MedicalRecodeJoinDto">
 		SELECT p.NAME , SYMPTOM, TREATMENT, PRESCRIPTION, 
-               TO_CHAR(TREATDATE,'YYYY-MM-DD'), h.NAME AS HOSPITAL_NAME
+               TREATDATE, h.NAME AS HOSPITALNAME, h.SEQ AS HOSPITALSEQ
 		FROM MEDICALRECODE m 
 			LEFT OUTER JOIN PETINFO p ON m.PET_ID = p.ID
 			LEFT OUTER JOIN HOSPITALINFO h ON m.HOSPITAL_SEQ =h.SEQ 
