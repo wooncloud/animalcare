@@ -1,6 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.pet.care.model.dao.pet.IPetDao">
+
+	<resultMap type="com.pet.care.dto.MedicalRecodeJoinDto" id="MedicalRecodeJoinDto">
+		<result property="seq" column="SEQ"/>
+		<result property="pet_name" column="PET_NAME"/>
+		<result property="symptom" column="SYMPTOM"/>
+		<result property="treatment" column="TREATMENT"/>
+		<result property="prescription" column="PRESCRIPTION"/>
+		<result property="treatdate" column="TREATDATE"/>
+		<result property="pet_id" column="PET_ID"/>
+		<result property="hospital_seq" column="HOSPITAL_SEQ"/>
+		<collection property="petdto" resultMap="PetDto"/>
+		<collection property="userdto" resultMap="UserDto"/>
+		<collection property="hospitalinfodto" resultMap="HospitalInfoDto"/>
+	</resultMap>
+
+	<resultMap type="com.pet.care.dto.PetDto" id="PetDto">
+		<result property="name" column="PETNAME"/>
+		<result property="id" column="ID"/>
+		<result property="user_email" column="USER_EMAIL "/>
+	</resultMap>
+	
+	<resultMap type="com.pet.care.dto.UserDto" id="UserDto">
+		<result property="name" column="NAME"/>
+		<result property="email" column="EMAIL"/>
+	</resultMap>
+	
+	<resultMap type="com.pet.care.dto.HospitalInfoDto" id="HospitalInfoDto">
+		<result property="seq" column="SEQ"/>
+		<result property="name" column="HOSPITALNAME"/>
+	</resultMap>
+
 	<!-- 애완동물조회 -->
 	<select id="petList" parameterType="java.lang.String" resultType="PetDto">
 		SELECT ID,NAME, GENDER, t.CODENAME AS TYPE, PROFILE
@@ -51,6 +82,23 @@
 	</select>
 
 	<!-- 동물별 진료내역조회 -->
-<!-- 	<select id="recodeList" parameterType="java.lang.String" resultType=""></select> -->
+	<select id="recodeList" parameterType="java.lang.String" resultMap="MedicalRecodeJoinDto">
+		SELECT m.SEQ, p2.NAME AS PETNAME, TREATMENT ,TREATDATE ,m.HOSPITAL_SEQ ,h.NAME AS HOSPITALNAME
+        FROM MEDICALRECODE m 
+	        LEFT OUTER JOIN PETINFO p2  ON m.PET_ID = p2.ID
+	        LEFT OUTER JOIN HOSPITALINFO h ON m.HOSPITAL_SEQ = h.SEQ
+		WHERE p2.USER_EMAIL =#{user_email}
+	</select>
+	
+	<!-- 진료내역 상세조회 -->
+	<select id="detailRecode" parameterType="java.lang.Integer" resultMap="MedicalRecodeJoinDto">
+		SELECT p.NAME , SYMPTOM, TREATMENT, PRESCRIPTION, 
+               TO_CHAR(TREATDATE,'YYYY-MM-DD'), h.NAME AS HOSPITAL_NAME
+		FROM MEDICALRECODE m 
+			LEFT OUTER JOIN PETINFO p ON m.PET_ID = p.ID
+			LEFT OUTER JOIN HOSPITALINFO h ON m.HOSPITAL_SEQ =h.SEQ 
+		WHERE m.SEQ=#{seq}
+	</select>
+	
 
 </mapper>

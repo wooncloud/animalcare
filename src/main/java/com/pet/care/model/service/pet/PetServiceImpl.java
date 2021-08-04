@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.pet.care.dto.MedicalRecodeJoinDto;
 import com.pet.care.dto.PetDto;
 import com.pet.care.model.dao.pet.IPetDao;
 
@@ -47,6 +48,18 @@ public class PetServiceImpl implements IPetService {
 	public PetDto detailPet(Map<String, Object> map) {
 		log.info("PetServiceImpl detailPet");
 		return pDao.detailPet(map);
+	}
+
+	@Override
+	public List<MedicalRecodeJoinDto> recodeList(String user_email) {
+		log.info("PetServiceImpl recodeList");
+		return pDao.recodeList(user_email);
+	}
+
+	@Override
+	public MedicalRecodeJoinDto detailRecode(int seq) {
+		log.info("PetServiceImpl detailRecode");
+		return pDao.detailRecode(seq);
 	}
 
 }

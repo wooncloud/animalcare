@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.pet.care.dto.MemberDto;
 import com.pet.care.dto.NoteDto;
 import com.pet.care.dto.PetDto;
 import com.pet.care.model.service.note.INoteService;
@@ -41,8 +42,8 @@ public class HealthNoteController {
 	@RequestMapping(value = "/healthNoteList.do", method = RequestMethod.GET)
 	public String healthNoteList(HttpSession session, Model model) {
 		log.info("HealthNoteController healthNote로 이동");
-
-		List<PetDto> pList = iPetService.petList((String) session.getAttribute("user_email"));
+		MemberDto mdto= (MemberDto)session.getAttribute("member");
+		List<PetDto> pList = iPetService.petList(mdto.getEmail());
 		log.info("-------------------------- {}", pList);
 		model.addAttribute("pList", pList);
 
@@ -55,8 +56,9 @@ public class HealthNoteController {
 	@ResponseBody
 	public JSONArray notePetList(HttpSession session, String name) {
 		log.info("HealthNoteController noteList조회 받은 name값 : {}", name);
+		MemberDto mdto= (MemberDto) session.getAttribute("member");
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("email", session.getAttribute("user_email"));
+		map.put("email", mdto.getEmail());
 		map.put("name", name);
 		log.info("map : {}", map);
 		List<NoteDto> lDto = iNoteService.noteList(map);
@@ -95,16 +97,17 @@ public class HealthNoteController {
 				jsonArray.add(jsonObject);
 			}
 		}
-
+		log.info("jsonArray값은!!!!!!!!!!!! : {}",jsonArray);
 		return jsonArray;
 	}
 
 	@RequestMapping(value = "/selDateList.do", method = RequestMethod.GET)
 	@ResponseBody
-	public List<NoteDto> selDateList(HttpSession session, Model model, @RequestParam Map<String,Object> map) {
+	public List<NoteDto> selDateList(HttpSession session, @RequestParam Map<String,Object> map) {
 		log.info("HealthNoteController selDateList조회 받은 name값 : {}", map);
 		log.info(map.toString());
-		map.put("email", session.getAttribute("user_email"));
+		MemberDto mdto= (MemberDto) session.getAttribute("member");
+		map.put("email", mdto.getEmail());
 		List<NoteDto> nDto= iNoteService.selDateList(map);
 		
 		return nDto;

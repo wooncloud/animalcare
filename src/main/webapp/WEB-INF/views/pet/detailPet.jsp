@@ -52,7 +52,7 @@
 				</div>
 			</div>
 		<div class="footer d-grid gap-2 d-md-flex justify-content-md-center">
-			<input type="button" value="수정" class="btn btn-lg btn-primary mx-2" onclick="location.href='./modifyPet.do?name=${pdto.name}'"> 
+			<input type="button" value="수정" class="btn btn-lg btn-primary mx-2" onclick="location.href='./modifyPage.do?name=${pdto.name}'"> 
 			<input type="button" value="삭제" class="btn btn-lg btn-secondary mx-2" onclick="delPet('${pdto.name}')">
 		</div>
 		</div>
