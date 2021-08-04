@@ -20,6 +20,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.pet.care.comm.JsonUtil;
 import com.pet.care.comm.PageUtil;
@@ -88,7 +89,7 @@ public class HospitalInfoController {
 		hiDto.setAddress2((String)param.get("address2"));
 		hiDto.setContent((String)param.get("insertContent"));
 		hiDto.setEmergency((String)param.get("emergencyRadio"));
-//		hiDto.setOpentime((String)param.get("opentime"));
+		// 운영시간 textarea에서 엔터입력시 DB에 <br>로 입력되도록
 		hiDto.setOpentime(opentime.replace("\r\n","<br>"));
 		
 //		먼저 병원정보를 입력 후 성공한다면 진료항목을 입력
@@ -411,13 +412,10 @@ public class HospitalInfoController {
 	@RequestMapping(value = "/detailSchedulePage.do", method = RequestMethod.GET)
 	public String detailSchedulePage(@RequestParam Map<String, Object> param, Model model) {
 		logger.info("[detailSchedulePage] : 병원 일정 상세보기 페이지 이동 요청 : ");
+		
+		//캘린더의 seq를 받아옴
 		String sequence = (String)param.get("seq");
 		int seq = Integer.parseInt(sequence); 
-		//@@@@@@@@캘린더에서 글 seq 가져올거임 병합 후 수정 필요 @@@@@@@@@@
-		//@@@@@@@@캘린더에서 글 seq 가져올거임 병합 후 수정 필요 @@@@@@@@@@
-		//@@@@@@@@캘린더에서 글 seq 가져올거임 병합 후 수정 필요 @@@@@@@@@@
-		//@@@@@@@@캘린더에서 글 seq 가져올거임 병합 후 수정 필요 @@@@@@@@@@
-		//@@@@@@@@캘린더에서 글 seq 가져올거임 병합 후 수정 필요 @@@@@@@@@@
 		
 		HospitalScheduleDto dto = hsService.detailSchedule(seq);
 		model.addAttribute("dto", dto);
@@ -426,34 +424,23 @@ public class HospitalInfoController {
 	}
 	
 	@RequestMapping(value = "/modifySchedulePage.do", method = RequestMethod.GET)
-	public String modifySchedulePage(Model model) {
+	public String modifySchedulePage(int seq, Model model) {
 		logger.info("[modifySchedulePage] : 병원 일정 수정하기 페이지 이동 요청 : ");
 		
-		//@@@@@@@@캘린더에서 글 seq 가져올거임 병합 후 수정 필요 @@@@@@@@@@
-		//@@@@@@@@캘린더에서 글 seq 가져올거임 병합 후 수정 필요 @@@@@@@@@@
-		//@@@@@@@@캘린더에서 글 seq 가져올거임 병합 후 수정 필요 @@@@@@@@@@
-		//@@@@@@@@캘린더에서 글 seq 가져올거임 병합 후 수정 필요 @@@@@@@@@@
-		HospitalScheduleDto dto = hsService.detailSchedule(81);
+		HospitalScheduleDto dto = hsService.detailSchedule(seq);
 		model.addAttribute("dto", dto);
 		
 		return "hospital/modifyHospitalSchedule";
 	}
 	
 	@RequestMapping(value = "/modifySchedule.do", method = RequestMethod.POST)
-	public void modifySchedule(@RequestParam Map<String, Object> param, HttpSession session, HttpServletResponse resp) throws ParseException, IOException {
+	public void modifySchedule(@RequestParam Map<String, Object> param, int seq, HttpSession session, HttpServletResponse resp) throws ParseException, IOException {
 		logger.info("[modifySchedule] - {} : 병원 일정 수정 요청 : ", param);
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		
 		HospitalScheduleDto hsDto = new HospitalScheduleDto();
-		
-//		MemberDto mDto = (MemberDto) session.getAttribute("member");
-		
-		//@@@@@@@@캘린더에서 글 seq 가져올거임 병합 후 수정 필요 @@@@@@@@@@
-		//@@@@@@@@캘린더에서 글 seq 가져올거임 병합 후 수정 필요 @@@@@@@@@@
-		//@@@@@@@@캘린더에서 글 seq 가져올거임 병합 후 수정 필요 @@@@@@@@@@
-		//@@@@@@@@캘린더에서 글 seq 가져올거임 병합 후 수정 필요 @@@@@@@@@@
+		hsDto.setSeq(seq);
 
-		hsDto.setSeq(81);
 		hsDto.setTitle((String)param.get("scheduleName"));
 		hsDto.setSchedule(dateFormat.parse((String)param.get("scheduleDate")));
 		hsDto.setCheck((String)param.get("reservationChk"));
@@ -469,14 +456,10 @@ public class HospitalInfoController {
 	}
 	
 	@RequestMapping(value = "/deleteHospitalSchedule.do", method = RequestMethod.GET)
-	public void deleteHospitalSchedule(HttpServletResponse resp) throws IOException {
+	public void deleteHospitalSchedule(int seq, HttpServletResponse resp) throws IOException {
 		logger.info("[deleteHospitalSchedule] - {} : 병원 일정 삭제 요청 : ");
 		
-		//@@@@@@@@캘린더에서 글 seq 가져올거임 병합 후 수정 필요 @@@@@@@@@@
-		//@@@@@@@@캘린더에서 글 seq 가져올거임 병합 후 수정 필요 @@@@@@@@@@
-		//@@@@@@@@캘린더에서 글 seq 가져올거임 병합 후 수정 필요 @@@@@@@@@@
-		//@@@@@@@@캘린더에서 글 seq 가져올거임 병합 후 수정 필요 @@@@@@@@@@
-		boolean isc = hsService.deleteSchedule(61);
+		boolean isc = hsService.deleteSchedule(seq);
 		if(isc) {
 			Util.PrintWriterMsg(resp, "삭제가 완료 되었습니다.", "PetCare/home.do");
 		}else {
@@ -546,13 +529,13 @@ public class HospitalInfoController {
 	}	
 	
 	@RequestMapping(value = "/insertRecodePage.do", method = RequestMethod.GET)
-	public String insertRecodePage(HttpSession session, Model model) {
+	public String insertRecodePage(String seq, Model model) {
 		logger.info("[insertRecodePage] - {} :  병원관계자 진료기록 입력하기 페이지로 이동", model);
-		
-		// 예약 내역 에서 진료기록 입력 누를 때 예약번호 가져와서 넣어줘야함
-		// 다른방식으로 입력하더라도 하여튼 넣어줘야함
-		HospitalJoinDto dto = hiService.insertsBasicData(301);
-		model.addAttribute("dto", dto);
+		// System.out.println(seq+"확인");
+
+		int sequence = Integer.parseInt(seq);
+		HospitalJoinDto dto = hiService.insertsBasicData(sequence);
+		model.addAttribute("dto", dto); 
 		
 		return "hospital/insertMedicalRecode";	
 	}
