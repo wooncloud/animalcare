@@ -7,9 +7,6 @@ a{
  	color: black;
 }
 </style>
-
-${lists}
-${slists}
   <script src="${path}/js/answerboard.js"></script>
 <h1>문의 게시판</h1>
 <form action="./searchName.do" method="post">

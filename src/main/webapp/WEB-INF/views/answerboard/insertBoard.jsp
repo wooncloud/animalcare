@@ -7,7 +7,6 @@
 <script type="text/javascript" src="${path}/js/answerboard.js" ></script>
 <input type="button" class="btn btn-outline-secondary btn-lg" onclick="javascript:history.back(-1);" value="목록"/>
 <form action="./insertUserBoard.do" method="post" onsubmit="return insertBoardChk(this)">
-${sessionScope.member.email}
 <div class="card">
 	<div class="card-body">
 		<h5 class="card-title my-3">문의하기 </h5>

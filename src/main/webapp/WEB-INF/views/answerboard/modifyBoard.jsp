@@ -5,7 +5,6 @@
 <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
 <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
 <script type="text/javascript" src="${path}/js/answerboard.js" ></script>
-${dto}
 <form action="./modifyUserBoard.do" method="post" onclick="return modifyBoardChk(this)">
 <div class="card">
 	<div class="card-body">
