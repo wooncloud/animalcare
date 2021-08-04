@@ -1,14 +1,14 @@
 @charset "UTF-8";
 .main-box{
-	width: 90%;
+	width: 80%;
 	margin: auto;
 }
 
 .background-01{
 	height: 600px;
-	color: white;
+	color: #f1f1f1;
 	font-weight: bolder;
-	font-size: 35px;
+	font-size: 40px;
 	background-repeat: no-repeat;
 	background-position: center;
 	background-size: 100%;
