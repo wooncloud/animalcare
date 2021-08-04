@@ -8,7 +8,7 @@
 <script type="text/javascript" src="${path}/js/hospital.js" ></script>
 
 <div class="container">
-	<form action="./modifySchedule.do" method="post" onsubmit="return modifyScheduleChk(this)">
+	<form action="./modifySchedule.do?seq=${dto.seq}" method="post" onsubmit="return modifyScheduleChk(this)">
 	<br><br>
 
 		<div class="row fs-3 my-2">

@@ -59,7 +59,7 @@ var cal = new tui.Calendar('#calendar', {
 		var schedule = event.schedule;
 		
 		if(schedule.calendarId =='병원일정'){
- 			location.href="../hospital/detailSchedulePage.do";
+ 		location.href="../hospital/detailSchedulePage.do?seq="+schedule.id;
 		} else if(schedule.calendarId =='예약완료'){
 		location.href="./hospitalReserveDetail.do?seq="+schedule.id;
 		}

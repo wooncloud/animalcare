@@ -48,8 +48,14 @@
 	</mvc:interceptors>
 	
 	<!-- 웹소켓을 위한 bean 등록 -->
+	<bean id="socketHandler" class="com.pet.care.comm.SocketHandler" />
+	<!-- httpSession에 접근하기 위한 인터셉터 -->
 	<websocket:handlers>
-		<websocket:mapping handler="wsChat.do" path="/wsChat.do"/>
+		<websocket:mapping handler="socketHandler" path="/socket.do"/>
+		<websocket:handshake-interceptors>
+			<bean class="org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor"/>
+		</websocket:handshake-interceptors>
+		<websocket:sockjs/>
 	</websocket:handlers>
 	
 	<!-- 들어오는 데이터를 처리해주는 multipartResolver 빈을 생성 -->    

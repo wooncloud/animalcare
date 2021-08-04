@@ -63,8 +63,8 @@
 		<br>
 		
 		<div class="d-grid gap-2 d-md-flex justify-content-md-center">
-			<input type="button" class="btn btn-outline-primary btn-lg" value="수정하기" onclick="modifySchedulePage('')"/>				 	
-    	 	<input type="button" class="btn btn-outline-secondary btn-lg" value="삭제하기" onclick="deleteSchedule('')"/>		
+			<input type="button" class="btn btn-outline-primary btn-lg" value="수정하기" onclick="modifySchedulePage('${dto.seq}')"/>				 	
+    	 	<input type="button" class="btn btn-outline-secondary btn-lg" value="삭제하기" onclick="deleteSchedule('${dto.seq}')"/>		
 		</div>
 
 	<br><br>

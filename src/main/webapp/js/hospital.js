@@ -453,8 +453,8 @@ function detailSchedulePage(){
 	location.href = "./detailSchedulePage.do";
 }
 //병원일정 수정하기 페이지 이동
-function modifySchedulePage(){
-	location.href = "./modifySchedulePage.do";
+function modifySchedulePage(seq){
+	location.href = "./modifySchedulePage.do?seq="+seq;
 }
 
 //병원일정 수정 에디터 설정
@@ -493,7 +493,7 @@ function modifyScheduleChk(form){
 }
 
 //병원일정 삭제하기
-function deleteSchedule(){
+function deleteSchedule(seq){
 	Swal.fire({
 		title: '병원 일정을 삭제 하시겠습니까?',
 		showCancelButton: true,
@@ -503,7 +503,7 @@ function deleteSchedule(){
 		cancelButtonText: '취소'
 	}).then((result) => {
 		if (result.isConfirmed) {
-			location.href = "./deleteHospitalSchedule.do";
+			location.href = "./deleteHospitalSchedule.do?seq="+seq;
 		}
 	});
 	
@@ -516,8 +516,9 @@ function medicalListPage(){
 }
 
 //병원 진료기록 입력 페이지 이동
-function insertRecodePage(){
-	location.href = "./insertRecodePage.do";
+function insertRecodePage(seq){
+	location.href = "../hospital/insertRecodePage.do?seq="+seq;
+	
 }
 
 //병원 진료기록 수정 에디터 설정
