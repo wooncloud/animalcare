@@ -79,6 +79,11 @@
 							</a>
 						</li>
 						<li>
+							<a href="${path}/payment/payList.do" class="nav-link px-4 link-dark">
+								<i class="fas fa-comment-dollar"></i> 결제내역
+							</a>
+						</li>
+						<li>
 							<a href="${path}/pet/petMedicalRecodeList.do" class="nav-link px-4 link-dark">
 								<i class="fas fa-notes-medical"></i> 진료내역
 							</a>

@@ -3,7 +3,7 @@
 	</section>
 	<footer class="footer mt-auto py-3">
 		<div class="container text-muted">
-			<div>동찬이의 동물병원 PET CARE</div>
+			<div>PET CARE</div>
 			<div>Copyright © JAVA Chip Team. 2021 All Rights Reserved.</div>
 		</div>
 	</footer>
