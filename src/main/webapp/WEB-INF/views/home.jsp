@@ -12,7 +12,6 @@
 	<a class="btn btn-secondary" href="./reservation/insertReservation.do">신청</a>
 	<a class="btn btn-secondary" href="./answerboard/selAllBoard.do">문의</a>
 	<a class="btn btn-secondary" href="./pet/petList.do">내 애완동물보기</a>
-	${sessionScope.member}
 	<c:choose>
 		<c:when test="${sessionScope.member.usertype eq 'ROLE_USER'}">
 			사용자
@@ -20,7 +19,13 @@
 		<c:when test="${sessionScope.member.usertype eq 'ROLE_OPER'}">
 			병원관계자
 		</c:when>
+		<c:when test="${sessionScope.member.usertype eq 'ROLE_ADMIN'}">
+			<script type="text/javascript">
+				location.href='${path}/admin/adminConsole.do';
+			</script>
+		</c:when>
 		<c:otherwise>
+
 			<div class="main-box my-3">
 				<div class="background-01 row" style="background-image: url(${path}/img/background01.jpg);">
 					<div>
@@ -32,6 +37,7 @@
 				</div>
 				<div class="row">반려동물의 건강을 체크할 수 있습니다.</div>
 			</div>
+
 		</c:otherwise>
 	</c:choose>
 	

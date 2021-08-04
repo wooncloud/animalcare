@@ -25,11 +25,15 @@
 	<context:component-scan base-package="com.pet.care" />
 	
 	<mvc:interceptors>
-<!-- 		<mvc:interceptor> -->
-			<!-- mvc:mapping -->
-			<!-- mvc:exclude-mapping -->
-<!-- 			<bean class="com.pet.care.interceptor.Interceptor" /> -->
-<!-- 		</mvc:interceptor> -->
+		<mvc:interceptor>
+			<mvc:mapping path="/*/*.do"/>
+			<mvc:exclude-mapping path="/login/*.do"/>
+			<mvc:exclude-mapping path="/answerboard/*.do"/>
+			<mvc:exclude-mapping path="/error/*.do"/>
+			<mvc:exclude-mapping path="/hospital/searchHospitalPage.do"/>
+			<mvc:exclude-mapping path="/hospital/detailHospital.do"/>
+			<bean class="com.pet.care.interceptor.AuthInterceptor" />
+		</mvc:interceptor>
 		<bean id="webContentInterceptor" class="org.springframework.web.servlet.mvc.WebContentInterceptor">
 			<property name="cacheSeconds" value="0" />
 			<property name="useExpiresHeader" value="true" />

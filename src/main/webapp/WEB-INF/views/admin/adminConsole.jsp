@@ -55,11 +55,64 @@
 	</div>
 	<div class="col-12">
 		<div id="grantDiv" class="my-3 card grant-div">
-			<div class="card-header">
-				설문조사
+			<div class="card-header d-flex justify-content-between align-items-center">
+				<div>설문조사</div>
+				<div>
+					<button type="button" class="btn btn-sm btn-primary" onclick="javascript:location.href='./surveyForm.do';">작성</button>
+					<input type="submit" class="btn btn-sm btn-danger" value="삭제">
+				</div>
 			</div>
 			<div class="card-body">
-				설문조사 관련 내용
+				<table class="table table-sm table-striped">
+					<thead>
+						<tr>
+							<td>
+								<input class="form-check-input" type="checkbox" onclick="deleteSurvey(this.checked)">
+							</td>
+							<td>NO</td>
+							<td>설문제목</td>
+							<td>응답기간</td>
+							<td>등록일</td>
+							<td>배포상태</td>
+							<td>삭제여부</td>
+						</tr>
+					</thead>
+					<tbody>
+						<c:forEach var="survey" items="${adminSurveyList}" varStatus="vs">
+							<tr>
+								<td><input class="form-check-input" type="checkbox" value="${survey.seq}" name="chkVal"></td>
+								<td>${fn:length(adminSurveyList)-vs.count+1}</td>
+								<td><a href="./surveyDetail.do?seq=${survey.seq}">${survey.title}</a></td>
+								<td>
+									<c:choose>
+										<c:when test="${survey.startdate eq null}">
+											-
+										</c:when>
+										<c:otherwise>
+											${survey.startdate} ~ ${survey.enddate}
+										</c:otherwise>
+									</c:choose>
+								</td>
+								<td>${survey.regdate}</td>
+								<td>
+									<c:choose>
+										<c:when test="${survey.surveyflag eq 'Y'}">
+											<span class="badge bg-primary" data-flag="${survey.surveyflag}">배포됨</span>
+										</c:when>
+										<c:when test="${survey.surveyflag eq 'N'}">
+											<span class="badge bg-secondary" data-flag="${survey.surveyflag}">배포안됨</span>
+										</c:when>
+									</c:choose>
+								</td>
+								<td>
+									<c:if test="${survey.delflag eq 'Y'}">
+										<span class="badge bg-danger" data-delflag="${survey.delflag}">삭제됨</span>
+									</c:if>
+								</td>
+							</tr>
+						</c:forEach>
+					</tbody>
+				</table>
 			</div>
 		</div>
 	</div>

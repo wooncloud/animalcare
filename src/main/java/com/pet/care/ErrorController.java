@@ -12,7 +12,7 @@ public class ErrorController {
 	@RequestMapping(value = "/error403.do", method = RequestMethod.GET)
 	public String error403(Model model) {
 		model.addAttribute("code", "403");
-		model.addAttribute("text", "권한이 없습니다.");
+		model.addAttribute("text", "세션이 만료되었습니다.<br>다시 로그인 하세요.");
 		return "error/error";
 	}
 
