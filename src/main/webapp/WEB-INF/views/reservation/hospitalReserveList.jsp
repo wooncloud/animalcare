@@ -8,7 +8,6 @@ a{
  	color: black;
 }
 </style>
-
 <ul class="nav nav-tabs" id="myTab" role="tablist">
   <li class="nav-item" role="presentation">
     <button class="nav-link active" id="standReservation-tab" data-bs-toggle="tab" data-bs-target="#standReservation" type="button" role="tab" aria-controls="standReservation" aria-selected="true" onclick="location.href='./hospitalStandReserveList.do'">미처리 예약</button>

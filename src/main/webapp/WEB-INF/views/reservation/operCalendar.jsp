@@ -8,16 +8,14 @@
   <script src="https://uicdn.toast.com/tui.time-picker/v2.0.3/tui-time-picker.min.js"></script>
   <script src="https://uicdn.toast.com/tui.date-picker/v4.0.3/tui-date-picker.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
-  <script src="${path}/calendarjs/tui-calendar.js"></script>
+  <script src="https://uicdn.toast.com/tui-calendar/latest/tui-calendar.js"></script>
   <script src="${path}/calendarjs/calendars.js"></script>
-  <script src="${path}/calendarjs/schedules.js"></script>
   <script src="${path}/js/mycalendar.js"></script>
  <!-- calendar -->
  <link rel="stylesheet" type="text/css" href="https://uicdn.toast.com/tui.time-picker/latest/tui-time-picker.css">
  <link rel="stylesheet" type="text/css" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css">
- <link rel="stylesheet" type="text/css" href="${path}/calendarcss/tui-calendar.css">
- <link rel="stylesheet" type="text/css" href="${path}/calendarcss/default.css">
- <link rel="stylesheet" type="text/css" href="${path}/calendarcss/icons.css">
+ <link rel="stylesheet" type="text/css" href="${path}/css/calendarcss/tui-calendar.css">
+ <link rel="stylesheet" type="text/css" href="${path}/css/calendarcss/default.css">
  <div class="code-html">
     <div id="menu" style="height: 700px;">
       <span id="renderRange" class="render-range" style="padding-left:250px;"></span>
@@ -34,10 +32,11 @@
 		<div class="col d-grid gap-2 d-md-flex justify-content-md-end">	
 			<input type="button" class="btn btn-outline-primary" value="일정등록(병원)" onclick="insertSchedulePage()">
 		</div>
-		
     </div>
-    <div id="calendar" style="width: 800px; top:200px; margin: 0 auto;">
-    <input type="hidden" name="hospital_seq" id="hospital_seq" value="${hospital_seq}">
+    <div style="height: 200px">
+	    <div id="calendar" style="width: 800px; top:200px; margin: 0 auto;">
+	    <input type="hidden" name="hospital_seq" id="hospital_seq" value="${hospital_seq}">
+	    </div>
     </div>
 </div>	
 <script type="text/javascript" class="code-js">

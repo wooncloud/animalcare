@@ -440,6 +440,7 @@ public class HospitalInfoController {
 		
 		HospitalScheduleDto hsDto = new HospitalScheduleDto();
 		hsDto.setSeq(seq);
+
 		hsDto.setTitle((String)param.get("scheduleName"));
 		hsDto.setSchedule(dateFormat.parse((String)param.get("scheduleDate")));
 		hsDto.setCheck((String)param.get("reservationChk"));

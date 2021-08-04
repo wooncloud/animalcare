@@ -161,8 +161,8 @@ function rejectReservation(){
 
 function modifyReserve(){
 	
-	var reservedate = document.getElementById("modifyReservedate").value;
-	var reservetime = document.getElementById("modifyReservetime").value;
+	var reservedate = document.getElementById("reservedate").value;
+	var reservetime = document.getElementById("reservetime").value;
 	var symptom = document.getElementById("symptom").value;
 	var frm1 = document.forms[1];
 	console.log(reservedate);
@@ -223,8 +223,10 @@ function reserveChk(){
 	
 	var reservedate = document.getElementById("reservedate").value;
 	var reservetime = document.getElementById("reservetime").value;
+	var hospital_seq = document.getElementById("hospital_seq").value;
 	console.log(reservedate);
 	console.log(reservetime);
+	console.log(hospital_seq);
 	
 	var frm = document.forms[0];
 	console.log(frm);
@@ -232,7 +234,7 @@ function reserveChk(){
 	$.ajax({
 		type:"get",
 		url:"./checkReservation.do",
-		data:"reservedate="+reservedate+"&reservetime="+reservetime,
+		data:"reservedate="+reservedate+"&reservetime="+reservetime+"&hospital_seq="+hospital_seq,
 		success:function(msg){
 			console.log("왔니"+msg);
 			
@@ -255,10 +257,13 @@ function reserveChk(){
 
 function modifyChk(){
 	
-	var reservedate = document.getElementById("modifyReservedate").value;
-	var reservetime = document.getElementById("modifyReservetime").value;
+	var reservedate = document.getElementById("reservedate").value;
+	var reservetime = document.getElementById("reservetime").value;
+	var hospital_seq = document.getElementById("hospital_seq").value;
 	console.log(reservedate);
 	console.log(reservetime);
+	console.log(hospital_seq);
+	
 	
 	var frm = document.forms[1];
 	console.log(frm);
@@ -266,7 +271,7 @@ function modifyChk(){
 	$.ajax({
 		type:"get",
 		url:"./checkReservation.do",
-		data:"reservedate="+reservedate+"&reservetime="+reservetime,
+		data:"reservedate="+reservedate+"&reservetime="+reservetime+"&hospital_seq="+hospital_seq,
 		success:function(msg){
 			console.log("왔니"+msg);
 			
