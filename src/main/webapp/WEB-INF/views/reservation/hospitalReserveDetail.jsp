@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@include file="/header.jsp" %>
 <script type="text/javascript" src="${path}/js/mycalendar.js" ></script>
+<script type="text/javascript" src="${path}/js/hospital.js" ></script>
 <div class="card">
    <div class="card-body">
       <h5 class="card-title my-3">병원관계자 예약 상세 내역</h5>
@@ -65,26 +66,33 @@
           <div class="col-3">
             <p class="card-text">${hospitalReserveDetail.user_email}</p>
          </div>
-      </div>
-      <div class="row my-2">
-          <div class="col-3">
+         <div class="col-3">
             <h6 class="card-subtitle mb-2 text-muted">연락처</h6>
          </div>
           <div class="col-3">
             <p class="card-text">${hospitalReserveDetail.phone}</p>
          </div>
+      <div class="row my-2">
+          <div class="col-3">
+            <h6 class="card-subtitle mb-2 text-muted">증상</h6>
+         </div>
+          <div class="col-3">
+            <p class="card-text">${hospitalReserveDetail.symptom}</p>
+         </div>
+      </div>
       </div>
    </div>
 </div>
+
 <c:if test="${hospitalReserveDetail.status eq 'S'}">
-   <button type="button" class="btn btn-primary" name="confirm" onclick="acceptReservation('${hospitalReserveDetail.seq}')">확정</button>
-   <button type="button" class="btn btn-primary" name="reject"  data-bs-toggle="modal" data-bs-target="#rejectReservation">반려</button>
-   <button type="button" class="btn btn-primary" name="modify" data-bs-toggle="modal" data-bs-target="#modifyReservation">수정</button>
-   <button type="button" class="btn btn-primary" name="list" onclick="javascript:history.back(-1);">목록</button>
+   <button type="button" class="btn btn-primary" id="confirm" onclick="acceptReservation('${hospitalReserveDetail.seq}')">확정</button>
+   <button type="button" class="btn btn-primary" id="reject"  data-bs-toggle="modal" data-bs-target="#rejectReservation">반려</button>
+   <button type="button" class="btn btn-primary" id="modify1" data-bs-toggle="modal" data-bs-target="#modifyReservation">수정</button>
+   <button type="button" class="btn btn-primary" id="list" onclick="javascript:history.back(-1);">목록</button>
 </c:if>
 <c:if test="${hospitalReserveDetail.status eq 'A'}">
-   <button type="button" class="btn btn-primary" name="modify" data-bs-toggle="modal" data-bs-target="#modifyReservation">수정</button>
-    <button type="button" class="btn btn-primary"name="cancel"  onclick="operCancelReservation('${hospitalReserveDetail.seq}','${hospitalReserveDetail.status}','${hospitalReserveDetail.reservedate}')">취소</button>
+   <button type="button" class="btn btn-primary" id="modify2" data-bs-toggle="modal" data-bs-target="#modifyReservation">수정</button>
+    <button type="button" class="btn btn-primary"id="cancel"  onclick="operCancelReservation('${hospitalReserveDetail.seq}','${hospitalReserveDetail.status}','${hospitalReserveDetail.reservedate}')">취소</button>
    <button type="button" class="btn btn-primary" name="list" onclick="javascript:history.back(-1);">목록</button>
 </c:if>
 <c:if test="${hospitalReserveDetail.status eq 'R' or hospitalReserveDetail.status eq 'C'}">
@@ -119,7 +127,6 @@
       </div>
    </div>
 </div>
-
 <!-- 예약수정 모달 입력 -->
 <div class="modal fade" id="modifyReservation" tabindex="-1" aria-hidden="true">
    <div class="modal-dialog">
@@ -145,11 +152,11 @@
 					  </div>
 					  <div class="form-group">
 						 <label for="reservedate">예약 일자:</label>
-						 <input type="date" class="form-control" id="modifyReservedate" name="modifyReservedate" value="${hospitalReserveDetail.reservedate}" >
+						 <input type="date" class="form-control" id="reservedate" name="reservedate" value="${hospitalReserveDetail.reservedate}" >
 					  </div>
 					  <div class="form-group">
 						 <label for="reservetime">예약 시간:</label>
-							<select class="form-select" aria-label="Default select example" name="modifyReservetime" id="modifyReservetime" onchange="modifyChk()">
+							<select class="form-select" aria-label="Default select example" name="reservetime" id="reservetime" onchange="modifyChk()">
 								<option value="modifyDefault" id="modifyDefault" selected="selected">선택</option>
 								<option id="09001100" value="09001100">09:00~11:00</option>
 								<option id="11001300" value="11001300">11:00~13:00</option>
@@ -181,6 +188,10 @@
 	   </div>
 </div>
 
+<!-- 진료기록은 예약 확정 되었을때만 입력 가능 -->
+<c:if test="${hospitalReserveDetail.status eq 'A'}">
+	<input type="button" class="btn btn-outline-primary" value="진료기록 추가(병원)" onclick="insertRecodePage(${hospitalReserveDetail.seq})">
+</c:if>
 
 <script type="text/javascript">
 
@@ -191,18 +202,24 @@ window.onload = function(){
 	var reservetype = `${hospitalReserveDetail.reservetype}`
 	var reservedate = new Date(getdate);
 	console.log(reservedate);
+	console.log(getdate);
 	
 	var date = new Date();
 	console.log(date);
-
 	
-	if(reservedate < date && reservetype =='A'){
+	var confirm = document.getElementById("confirm");
+	var reject = document.getElementById("reject");
+	var modify1 = document.getElementById("modify1");
+	var modify2 = document.getElementById("modify2");
+	var cancel = document.getElementById("cancel");
+	
+	if(reservedate < date){
 		
-		document.getElementsByName("confirm")[0].style.display="none";
-		document.getElementsByName("reject")[0].style.display="none";
-		document.getElementsByName("modify")[0].style.display="none";
-		document.getElementsByName("modify")[1].style.display="none";
-		document.getElementsByName("cancel")[0].style.display="none";
+		confirm.style.display='none';
+		reject.style.display='none';
+		modify1.style.display='none';
+		modify2.style.display='none';
+		cancel.style.display='none';
 	}
 }
 

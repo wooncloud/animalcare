@@ -6,7 +6,7 @@
 <div class="modal-body">
 	<h2>내 반려동물 보기</h2>
 	<div class="d-grid gap-2 d-md-flex justify-content-md-center">
-		<button type="button" class="btn btn-outline-success me-4" onclick="location.href=./petMedicalRecodeList.do">진료내역</button>
+		<button type="button" class="btn btn-outline-success me-4" onclick="location.href='./petMedicalRecodeList.do'">진료내역</button>
 		<button type="button" class="btn btn-outline-success ms-4" onclick="location.href='../healthNote/healthNoteList.do'">건강수첩</button>
 	</div>
 	<div class="row row-3 cols-2">

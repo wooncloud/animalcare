@@ -7,7 +7,7 @@
 function tree(name){
 	
 	var jsonData = $.ajax({
-		url : "noteList.do",
+		url : "./noteList.do",
 		method : "get",
 		data:{"name":name},
 		dataType : "json",

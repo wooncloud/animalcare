@@ -162,7 +162,7 @@
 		var enddate = document.getElementsByName("enddate").value;
 		
 		if(typeof startdate != "" && typeof enddate != ""){
-			updateDateForm();
+			updateDateForm();////////////////////////////////////////////////////////
 			console.log("날짜 업데이트 완료");
 			frm2.submit();
 		}else if(startdate==""){
@@ -186,7 +186,7 @@
 			type:"GET",
 // 			data: "startdate="+startdate+"&seq="+seq,
 			success:function(msg){
-				if(msg=="false"){
+				if(msg=="true"){
 					alert("현재 날짜보다 이후로 ");
 				}
 				console.log(msg);
@@ -208,7 +208,7 @@
 			type:"GET",
 // 			data: "enddate="+enddate+"&seq="+seq,
 			success:function(msg){
-				if(msg=="false"){
+				if(msg=="true"){
 					alert("시작일 보다 이후로 ");
 				}
 				console.log(msg);

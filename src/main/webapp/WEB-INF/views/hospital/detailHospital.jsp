@@ -7,18 +7,14 @@
 
 <div class="container">
 <br><br>
-	<c:if test="${sessionScope.member.usertype eq 'ROLE_OPER'}">
-	<div class="my-2">
-	- 다른곳에 뜯어붙일 친구들<br>
-		<input type="button" class="btn btn-outline-primary" value="일정등록(병원)" onclick="insertSchedulePage()">
-		<input type="button" class="btn btn-outline-primary" value="일정 상세정보 조회(병원)" onclick="detailSchedulePage()">
-		
-		<input type="button" class="btn btn-outline-primary" value="진료기록 조회(병원)" onclick="medicalListPage()">
-		<input type="button" class="btn btn-outline-primary" value="진료기록 추가(병원)" onclick="insertRecodePage()">
-	</div>
-	</c:if>
+	
 	<div class="row fs-3 my-2">
 		<div class="col">병원 상세 정보</div>
+		<c:if test="${sessionScope.member.usertype eq 'ROLE_OPER'}">
+			<div class="col d-grid gap-2 d-md-flex justify-content-md-end">	
+				<input type="button" class="btn btn-outline-primary" value="병원 진료기록 조회" onclick="medicalListPage()">
+			</div>
+		</c:if>
 		<c:if test="${(sessionScope.member.usertype ne 'ROLE_OPER')}">
 			<div class="col d-grid gap-2 d-md-flex justify-content-md-end">	
 				<input type="button" class="btn btn-outline-primary" value="이전페이지" onclick="location.href = './searchHospitalPage.do';">

@@ -5,18 +5,19 @@
 <script src="${path}/js/pet.js"></script>
 
 <div class="container">
-	<form action="./detailPet.do" method="post" id="pdto">
+	<form action="./modifyPet.do" method="post" id="pdto">
 		<div class="modal-body">
 			<h2 class="modal-title" id="detailModalLabel">정보수정</h2>
 			<div class="container-fluid">
 				<div class="row my-4">
 					<div class="col-md-4 border border-light px-auto text-center">
 						<c:choose>
-							<c:when test="${pdto.profile}">dd
+							<c:when test="${pdto.profile}">
 								<button type="button" class="btn btn-sm">사진변경</button>
 							</c:when>
 							<c:otherwise>
 								<img src="${path}/img/noImg.png" class="img-fluid row mx-auto">
+								<input type="hidden" id="profile" name="profile" value="">
 								<button type="button" class="btn btn-primary btn-sm row mx-auto mb-4">사진등록</button>
 							</c:otherwise>
 						</c:choose>
@@ -118,7 +119,7 @@
 				</div>
 			</div>
 		<div class="footer d-grid gap-2 d-md-flex justify-content-md-center">
-			<input type="button" value="수정" class="btn btn-lg btn-primary mx-2" onclick="location.href='./modifyPet.do?name=${pdto.name}'"> 
+			<input type="submit" value="수정" class="btn btn-lg btn-primary mx-2"> 
 			<input type="button" value="취소" class="btn btn-lg btn-secondary mx-2" onclick="history.back(-1)">
 		</div>
 		</div>

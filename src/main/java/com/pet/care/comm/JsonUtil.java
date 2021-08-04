@@ -106,10 +106,10 @@ public class JsonUtil {
 			j.put("id", String.valueOf(s.getSeq()));
 			j.put("calendarId", "병원일정");
 			j.put("title", s.getTitle());
-//			SimpleDateFormat sSchedule = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-//			String schedule = sSchedule.format(s.getSchedule());
-//			System.out.println("스케줄"+schedule);
-//			j.put("start", schedule);
+			SimpleDateFormat sSchedule = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+			String schedule = sSchedule.format(s.getSchedule());
+			System.out.println("스케줄"+schedule);
+			j.put("start", schedule);
 			j.put("category", "time");
 			j.put("color", "#ffffff");
 			j.put("bgColor", "#A569BD");
