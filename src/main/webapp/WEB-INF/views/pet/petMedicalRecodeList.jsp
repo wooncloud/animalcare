@@ -1,18 +1,20 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
 <%@include file="/header.jsp" %>
-<div id="container">
+<%-- <link href="${path}/css/healthNote.css" rel="stylesheet"> --%>
+<div class="container-fluid">
 <script type="text/javascript">
-function tree(name){
+window.onload = function(){
 	
 	var jsonData = $.ajax({
-		url : "recodeList.do",
+		url : "./recodeList.do",
 		method : "get",
-		data:{"name":name},
 		dataType : "json",
 		contentType : "application/json; charset=UTF-8",
 		async: false
 	}).responseText; // json object 중 responseText만 받아옴
 	console.log(jsonData);
+	
 	
 	var realJson = JSON.parse(jsonData);
 	console.log(realJson);
@@ -32,33 +34,31 @@ function tree(name){
 $(function(){
 	$("#jstree").on("changed.jstree", function(e, data){
 		console.log(data); // jsTree의 노드를 클릭 시 id값이 출력되게끔 함. 추후에 id값을 이용한 상호작용 가능한것으로 보임
-		var name = data.node.original.name;
-		var seldate= data.selected;
+		var seq = data.selected;
+		
 		console.log(data.selected);
-		if (name) {
+		if (seq) {
 			$.ajax({
 				type: "get",
-				url:"./selDateList.do?name="+name+"&seldate="+seldate,
-				dataType : "text",
+				url:"./detailRecode.do?seq="+seq,
 				contentType : "application/json; charset=UTF-8",
 				async: false,
 				success:function(result){
 					console.log("#######################result넘어오는값"+result);
-					var noteListJson = JSON.parse(result);
-					console.log(noteListJson);
-					console.log(seldate);
+// 					var detailRecodeJson = JSON.parse(result);
+					console.log(typeof(result));
+					console.log(result);
 					$("#notelist").text("");
-					$("#notelist").append("<div><h2>"+seldate+"</h2></div>");
-					$("#notelist").append("<a id='insertNote'><span><img src='${path}/img/plus.png'></span></a>");
+					$("#notelist").append("<div><h2>"+result.treatdate/(24*60*60)+"</h2></div>");
 					
-					for (var i = 0; i < noteListJson.length; i++) {
-					$("#notelist").append("<div onclick='modal("+noteListJson[i].seq+")'>"+noteListJson[i].title+"</div>");
+					
+					$("#notelist").append("<div onclick='modal("+detailRecodeJson.seq+")'>"+detailRecodeJson.title+"</div>");
 						
-					}
+					
 				},
-// 				error: function(){
-// 					alert("잘못된 요청");
-// 				}
+				error: function(){
+					alert("잘못된 요청");
+				}
 			})
 		}
 		
@@ -67,37 +67,21 @@ $(function(){
 	});
 });
 
-function modal(seq){
-	console.log(seq);
-	
-}
 
 
 
 </script>
 <div class="py-4">
-<h2>건강수첩</h2>
+<h2>진료 내역</h2>
 </div>
-<div class="petTab">
-<ul class="nav nav-pills">
-<c:forEach var="d" items="${pList}" varStatus="vs">
-	<li class="col-2">
-		<button class="btn btn-info" id="bt${vs.count}" onclick="tree('${d.name}')">${d.name}</button>
-	</li>
-</c:forEach>
-</ul>
-</div>
-<div>
-	<div id="jstree" class="d-inline-flex p-2 bd-highlight">
-	dd
+<div class="row">
+	<div id="jstree" class="col-5">
+	
 	</div>
-	<div id="notelist">
-	ddd
+	<div id="notelist" class="col-7">
+	
 	</div>
 	
 </div>
-<a id="insertNote" type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop" >
-  <img src='${path}/img/plus.png'>
-</a>
 </div>
 <%@include file="/footer.jsp" %>
