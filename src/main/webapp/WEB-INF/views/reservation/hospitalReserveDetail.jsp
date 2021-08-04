@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@include file="/header.jsp" %>
 <script type="text/javascript" src="${path}/js/mycalendar.js" ></script>
+<script type="text/javascript" src="${path}/js/hospital.js" ></script>
 <div class="card">
    <div class="card-body">
       <h5 class="card-title my-3">병원관계자 예약 상세 내역</h5>
@@ -181,6 +182,10 @@
 	   </div>
 </div>
 
+<!-- 진료기록은 예약 확정 되었을때만 입력 가능 -->
+<c:if test="${hospitalReserveDetail.status eq 'A'}">
+	<input type="button" class="btn btn-outline-primary" value="진료기록 추가(병원)" onclick="insertRecodePage(${hospitalReserveDetail.seq})">
+</c:if>
 
 <script type="text/javascript">
 
