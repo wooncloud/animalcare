@@ -51,7 +51,7 @@
 			</div>
 			<div class="modal-body">
 				<form action="./updateDateForm.do" method="post">
-					<input type="date" name="startdate"> ~ <input type="date" name="enddate">
+					<input type="date" name="startdate" onchange="compareStartDate()"> ~ <input type="date" name="enddate" onchange="compareEndDate()">
 				</form>
 			</div>
 			<div class="modal-footer">
@@ -127,6 +127,58 @@ function updateDateForm(){
 	frm.submit();
 }
 
+function compareStartDate(){
+// 	var seq = document.getElementsByName("seq")[0].value;
+	var startdate = document.getElementsByName("startdate")[0].value;
+	console.log(startdate+"startdate");
+	console.log(seq+"seq");
+	
+	$.ajax({
+		url:"./compareStartDate.do?startdate="+startdate+"&seq="+seq,
+		type:"GET",
+//			data: "startdate="+startdate+"&seq="+seq,
+		success:function(msg){
+			if(msg=="true"){
+				alert("현재 날짜보다 이후로 ");
+			}
+			console.log(msg);
+		},
+		error:function(){
+			alert("에러 발생")
+		}
+	})
+}
+
+function compareEndDate(){
+// 	var seq = document.getElementsByName("seq")[0].value;
+	var startdate = document.getElementsByName("startdate")[0].value;
+	var enddate = document.getElementsByName("enddate")[0].value;
+	console.log(enddate+"enddate");
+	console.log(seq+"seq");
+	$.ajax({
+		url:"./compareEndDate.do?startdate="+startdate+"&enddate="+enddate+"&seq="+seq,
+		type:"GET",
+//			data: "enddate="+enddate+"&seq="+seq,
+		success:function(msg){
+			if(msg=="true"){
+				alert("시작일 보다 이후로 ");
+			}
+			console.log(msg);
+		},
+		error:function(){
+			alert("wkfahtehalsdf")
+		}
+	})
+	
+}
+
+
+
+
+
+
+
+
 
 var answer = [];
 
@@ -141,8 +193,10 @@ function submitForm(){
 	
 	var choiceAnswerVal;
 	var essayAnswerVal;
-	var count =0 ;
+	var count = 0 ;
+	var total = 5;
 	
+	console.log(choiceAnswer.length+"==========================");
 	for (var i=0; i<choiceAnswer.length; i++) {
         if (choiceAnswer[i].checked == true) {
         	choiceAnswerVal = choiceAnswer[i].value;
@@ -153,7 +207,7 @@ function submitForm(){
     }
 	
 	//유효값처리 수정필요
-  	if(choiceAnswer.length == count){
+  	if(count == total){
   		alert("값을 선택해주세요");
   		return false;
   	}
@@ -202,6 +256,7 @@ function submitForm(){
 			console.log(data);
 			if(data == "true"){
 				alert("제출이 완료되었습니다. 설문에 응해주셔서 감사합니다.");
+				/////버튼 설문완료로 disabled 하면 될듯/////////////////////////////////////////////////
 				location.href="./userSurveyList.do";//사용자 리스트로 이동
 			}else{
 				alert("이미 작성한 설문입니다. 설문 리스트로 돌아갑니다");

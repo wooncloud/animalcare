@@ -22,9 +22,9 @@ public class SurveyServiceImpl implements ISurveyService {
 	private ISurveyDao iDao;
 	
 	@Override
-	public List<SurveyDto> adminSurveyList() {
-		logger.info("SurveyServiceImpl : adminSurveyList 설문 폼 리스트");
-		return iDao.adminSurveyList();
+	public List<SurveyDto> adminSurveyList(Map<String, Object> map) {
+		logger.info("SurveyServiceImpl : adminSurveyList 설문 폼 리스트 - {}", map);
+		return iDao.adminSurveyList(map);
 	}
 
 	@Override
@@ -43,6 +43,12 @@ public class SurveyServiceImpl implements ISurveyService {
 	public SurveyDto surveyDetail(Map<String, Object> map) {
 		logger.info("SurveyServiceImpl : surveyDetail 설문 폼 상세 - {}",map);
 		return iDao.surveyDetail(map);
+	}
+	
+	@Override
+	public SurveyDto userSurveyDetail() {
+		logger.info("SurveyServiceImpl : userSurveyDetail 사용자 설문 폼 상세");
+		return iDao.userSurveyDetail();
 	}
 
 	@Override
@@ -125,15 +131,39 @@ public class SurveyServiceImpl implements ISurveyService {
 	}
 
 	@Override
-	public List<SurveyDto> surveyResultList() {
-		logger.info("SurveyServiceImpl : surveyResultList 설문 결과 리스트");
-		return iDao.surveyResultList(); 
+	public List<SurveyDto> surveyResultList(Map<String, Object> map) {
+		logger.info("SurveyServiceImpl : surveyResultList 설문 결과 리스트 - {}", map);
+		return iDao.surveyResultList(map); 
 	}
 
 	@Override
 	public List<SurveyResultDto> surveyResultDetail(Map<String, Object> map) {
 		logger.info("SurveyServiceImpl : surveyResultDetail 설문 결과 리스트 상세 - {}", map);
 		return iDao.surveyResultDetail(map);
+	}
+
+	@Override
+	public int adminSurveyListCount() {
+		logger.info("SurveyServiceImpl : adminSurveyListCount 설문 폼 리스트 (페이징)");
+		return iDao.adminSurveyListCount();
+	}
+
+	@Override
+	public int ongoingSurveyCount(Map<String, Object> map) {
+		logger.info("SurveyServiceImpl : ongoingSurveyCount 진행중인 설문 폼 리스트 (페이징) - {}", map);
+		return iDao.ongoingSurveyCount(map);
+	}
+
+	@Override
+	public int outOfDateSurveyCount(Map<String, Object> map) {
+		logger.info("SurveyServiceImpl : outOfDateSurveyCount 날짜 지난 설문 폼 리스트 (페이징) - {}", map);
+		return iDao.outOfDateSurveyCount(map);
+	}
+
+	@Override
+	public int surveyResultListCount() {
+		logger.info("SurveyServiceImpl : surveyResultListCount 설문 결과 리스트 (페이징)");
+		return iDao.surveyResultListCount();
 	}
 
 

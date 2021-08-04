@@ -41,6 +41,29 @@ ${surveyResultList}
 
 <button class="btn btn-primary" onclick="javascript:history.back(-1);">목록</button>
 
+<div>
+	<ul class="mt-3 pagination justify-content-center">
+		<c:if test="${page.startPage > page.countPage}">
+			<li class="page-item">
+				<a class="page-link" href="./surveyResultList.do?page=${page.startPage-1}" aria-label="Previous">
+					<span aria-hidden="true"><i class="fas fa-chevron-left"></i></span>
+				</a>
+			</li>
+		</c:if>
+		<c:forEach var="num" begin="${page.startPage}" end="${page.endPage}">
+			<li class="page-item ${num eq page.page ? 'active' : ''}">
+				<a class="page-link" href="./surveyResultList.do?page=${num}">${num}</a>
+			</li>
+		</c:forEach>
+		<c:if test="${page.endPage < page.totalPage}">
+			<li class="page-item">
+				<a class="page-link" href="./surveyResultList.do?page=${page.endPage + 1}" aria-label="Next"> 
+					<span aria-hidden="true"><i class="fas fa-chevron-right"></i></span>
+				</a>
+			</li>
+		</c:if>
+	</ul>
+</div>
 
 <script type="text/javascript">
 
