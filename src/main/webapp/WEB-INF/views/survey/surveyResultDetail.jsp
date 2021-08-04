@@ -8,11 +8,7 @@
 <link rel="stylesheet" href=".././css/billboard.css">
 
 ${surveyResultDetail}
-<%-- ${surveyResultDetail[0].answer} --%>
-<%-- ${surveyResultDetail[0].title} --%>
-<c:set var="resultLength" value="${fn:length(surveyResultDetail)}" />
-${resultLength}
-${resultAnswer}
+<%-- ${resultAnswer} --%>
 
 
 <div class="card my-1">
@@ -54,6 +50,16 @@ ${resultAnswer}
 
 
 <script type="text/javascript">
+var json = ${resultAnswer}
+console.log(json)
+console.log(json.josn[0].answer)
+var ss = json.josn[0].answer
+console.log(ss.indexOf('},{'))
+console.log(ss.substr(1,ss.indexOf('},{')))
+console.log(ss.substr(ss.indexOf('},{')+2))
+
+
+
 window.onload = function(){
 
 // 	var answersLength = ${resultLength}

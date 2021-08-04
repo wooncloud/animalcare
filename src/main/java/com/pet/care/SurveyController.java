@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pet.care.comm.JsonUtil;
 import com.pet.care.comm.PageUtil;
 import com.pet.care.dto.MemberDto;
@@ -55,7 +58,7 @@ public class SurveyController {
 		allPageCnt = iService.adminSurveyListCount();
 		
 		//PageDto 셋팅
-		PageUtil.defaultPagingSetting(page, allPageCnt);
+		PageUtil.reserveDefaultPagingSetting(page, allPageCnt);
 		
 		page.setPage(idx);
 		page.setStartPage(idx);
@@ -189,7 +192,7 @@ public class SurveyController {
 		allPageCnt = iService.ongoingSurveyCount(map);
 		
 		//PageDto 셋팅
-		PageUtil.defaultPagingSetting(page, allPageCnt);
+		PageUtil.reserveDefaultPagingSetting(page, allPageCnt);
 		
 		page.setPage(idx);
 		page.setStartPage(idx);
@@ -213,7 +216,7 @@ public class SurveyController {
 		allPageCnt2 = iService.outOfDateSurveyCount(map);
 		
 		//PageDto 셋팅
-		PageUtil.defaultPagingSetting(page2, allPageCnt2);
+		PageUtil.reserveDefaultPagingSetting(page2, allPageCnt2);
 		
 		page2.setPage(idx2);
 		page2.setStartPage(idx2);
@@ -239,6 +242,10 @@ public class SurveyController {
 	public String surveyResultList(@RequestParam Map<String, Object> map, HttpSession session, Model model) {
 		logger.info("SurveyController : surveyResultList 설문 결과 리스트 - {}", map);
 		
+		
+		
+		
+		
 		//페이징
 		PageDto page = new PageDto();
 		String strIdx = (String)map.get("page");
@@ -253,7 +260,7 @@ public class SurveyController {
 		allPageCnt = iService.surveyResultListCount();
 		
 		//PageDto 셋팅
-		PageUtil.defaultPagingSetting(page, allPageCnt);
+		PageUtil.reserveDefaultPagingSetting(page, allPageCnt);
 		
 		page.setPage(idx);
 		page.setStartPage(idx);
@@ -264,6 +271,7 @@ public class SurveyController {
 		
 		List<SurveyDto> surveyResultList = iService.surveyResultList(map);
 	
+
 		model.addAttribute("surveyResultList",surveyResultList);
 		model.addAttribute("page", page);
 		
@@ -271,19 +279,14 @@ public class SurveyController {
 	}
 	
 	@RequestMapping(value="/surveyResultDetail.do", method=RequestMethod.GET)
-	public String surveyResultDetail(@RequestParam Map<String, Object> map, HttpSession session, Model model) {
+	public String surveyResultDetail(@RequestParam Map<String, Object> map, HttpSession session, Model model) throws JsonProcessingException {
 		String seq = (String)map.get("seq");
 		map.put("survey_seq", seq);
-		SurveyResultDto answers = null;
+//		SurveyResultDto answers = null;
 		List<SurveyResultDto> surveyResultDetail = iService.surveyResultDetail(map);
-		for (int i = 0; i < surveyResultDetail.size(); i++) {
-			answers = surveyResultDetail.get(i);
-		}
-//		JsonUtil util = new JsonUtil();
-//		JSONObject answer =  util.stringToJson(String.valueOf(surveyResultDetail));
-//		System.out.println(answer);
+		
 		model.addAttribute("surveyResultDetail",surveyResultDetail);
-		model.addAttribute("resultAnswer",answers);
+//		model.addAttribute("resultAnswer",json);
 		return "/survey/surveyResultDetail";
 	}
 	
