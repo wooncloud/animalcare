@@ -7,6 +7,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.pet.care.dto.MedicalRecodeJoinDto;
 import com.pet.care.dto.PetDto;
 
 @Repository
@@ -40,6 +41,16 @@ public class PetDaoImpl implements IPetDao {
 	@Override
 	public PetDto detailPet(Map<String, Object> map) {
 		return sqlsession.selectOne(NS+"detailPet", map);
+	}
+
+	@Override
+	public List<MedicalRecodeJoinDto> recodeList(String user_email) {
+		return sqlsession.selectList(NS+"recodeList", user_email);
+	}
+
+	@Override
+	public MedicalRecodeJoinDto detailRecode(int seq) {
+		return sqlsession.selectOne(NS+"detailRecode", seq);
 	}
 
 }
