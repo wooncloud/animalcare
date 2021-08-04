@@ -41,8 +41,8 @@ public class adminController {
 		List<OperatorDto> waitOpers = userService.grantWaitList();
 		model.addAttribute("operList", waitOpers);
 		
-		List<SurveyDto> list = surveyService.adminSurveyList();
-		model.addAttribute("adminSurveyList",list);
+		// List<SurveyDto> list = surveyService.adminSurveyList();
+		// model.addAttribute("adminSurveyList",list);
 
 		return "admin/adminConsole";
 	}
