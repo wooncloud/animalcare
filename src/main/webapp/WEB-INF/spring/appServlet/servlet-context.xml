@@ -32,6 +32,7 @@
 			<mvc:exclude-mapping path="/error/*.do"/>
 			<mvc:exclude-mapping path="/hospital/searchHospitalPage.do"/>
 			<mvc:exclude-mapping path="/hospital/detailHospital.do"/>
+			<mvc:exclude-mapping path="/hospital/searchHospital.do"/>
 			<bean class="com.pet.care.interceptor.AuthInterceptor" />
 		</mvc:interceptor>
 		<bean id="webContentInterceptor" class="org.springframework.web.servlet.mvc.WebContentInterceptor">
