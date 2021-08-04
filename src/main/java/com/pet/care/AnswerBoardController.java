@@ -304,9 +304,11 @@ public class AnswerBoardController {
 		map.put("first", page.getPage() * page.getCountList() - (page.getCountList() - 1));
 		map.put("last", page.getPage() * page.getCountList());
 		List<AnswerBoardDto> lists = aService.searchName(map);
-		model.addAttribute("lists",lists);
+		
+		model.addAttribute("slists",lists);
 		model.addAttribute("page",page);
 		model.addAttribute("option",option);
+		
 		return "answerboard/boardList";
 	}
 	

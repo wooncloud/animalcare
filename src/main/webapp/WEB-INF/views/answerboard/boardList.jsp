@@ -7,9 +7,10 @@ a{
  	color: black;
 }
 </style>
+
+${lists}
+${slists}
   <script src="${path}/js/answerboard.js"></script>
-  ${option}
-  ${lists}
 <h1>문의 게시판</h1>
 <form action="./searchName.do" method="post">
 <select id="searchOption" name="searchOption" id="searchOption">
@@ -36,6 +37,7 @@ a{
       </div>
    </div>
 </div>
+<c:if test="${slists eq null}">
 <c:forEach var="list" items="${lists}" varStatus="vs">
 	<div class="card my-1">
 		<div class="card-body">
@@ -76,7 +78,7 @@ a{
 				</div>
 				</c:if>
 				<div class="col-4">
-					<p class="card-text">${list.regdate}</p>
+					<p class="card-text"><fmt:formatDate value="${list.regdate}" pattern="yyyy-MM-dd"/></p>
 				</div>
 				<div class="col-2">
 				<c:if test="${list.replystatus eq 'Y'}">
@@ -90,7 +92,64 @@ a{
 		</div>
 	</div>
 </c:forEach>
-<c:if test="${option eq null}">
+</c:if>
+<c:if test="${lists eq null}">
+<c:forEach var="list" items="${slists}" varStatus="vs">
+	<div class="card my-1">
+		<div class="card-body">
+			<div class="row">
+				<div class="col-2">
+					<p class="card-text">${list.title}</p>
+				</div>
+				<c:if test="${sessionScope.member.usertype eq 'ROLE_USER'}">
+				<div class="col-2">
+				<c:if test="${sessionScope.member.name eq list.answerboard_name}"><!-- 어드민과 회원의 상세 조회 -->
+						<a href="./selUserDetail.do?seq=${list.seq}">${list.answerboard_name}</a>
+				</c:if>
+				<c:if test="${sessionScope.member.usertype eq 'ROLE_ADMIN' || list.password != null}"><!-- 어드민과 비회원 상세 조회 -->
+						<p class="card-text">${list.answerboard_name}</p>
+				</c:if>
+				</div>
+				</c:if>
+	
+				<c:if test="${sessionScope.member.usertype eq 'ROLE_ADMIN'}">
+				<div class="col-2">
+				<c:if test="${ list.password eq null}"><!-- 어드민과 회원의 상세 조회 -->
+						<a href="./selUserDetail.do?seq=${list.seq}">${list.answerboard_name}</a>
+				</c:if>
+				<c:if test="${list.password != null}"><!-- 어드민과 비회원 상세 조회 -->
+						<a href="./selNonUserDetail.do?seq=${list.seq}">${list.answerboard_name}</a>
+				</c:if>
+				</div>
+				</c:if>
+				
+				<c:if test="${sessionScope.member eq null }">
+				<div class="col-2">
+				<c:if test="${ list.password eq null}"><!-- 어드민과 회원의 상세 조회 -->
+					<p class="card-text">${list.answerboard_name}</p>
+				</c:if>
+				<c:if test="${list.password != null}"><!-- 어드민과 비회원 상세 조회 -->
+						<a href="javascript:checkNonUser(${list.seq});">${list.answerboard_name}</a>
+				</c:if>
+				</div>
+				</c:if>
+				<div class="col-4">
+					<p class="card-text"><fmt:formatDate value="${list.regdate}" pattern="yyyy-MM-dd"/></p>
+				</div>
+				<div class="col-2">
+				<c:if test="${list.replystatus eq 'Y'}">
+					<p class="card-text">답변 완료</p>
+				</c:if>
+				<c:if test="${list.replystatus eq 'N'}">
+					<p class="card-text">미답변</p>
+				</c:if>		
+				</div>
+			</div>
+		</div>
+	</div>
+</c:forEach>
+</c:if>
+<c:if test="${slists == null}">
 <ul class="mt-3 pagination justify-content-center">
 			<c:if test="${page.startPage > page.countPage}">
 				<li class="page-item">
@@ -113,7 +172,7 @@ a{
 			</c:if>		
 </ul>
 </c:if>
-<c:if test="${option eq 'name'}">
+<c:if test="${slists != null}">
 <ul class="mt-3 pagination justify-content-center">
 			<c:if test="${page.startPage > page.countPage}">
 				<li class="page-item">
@@ -142,7 +201,6 @@ a{
 <c:if test="${sessionScope.member.usertype != 'ROLE_USER' && sessionScope.member.usertype != 'ROLE_ADMIN'}">
 <a class="btn btn-secondary" href="./moveInsert.do">비회원 글작성</a>
 </c:if>
-
 <div class="modal fade" id="chkModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
 		aria-labelledby="chkModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
@@ -164,7 +222,6 @@ a{
 			</div>
 		</div>
 	</div>
-	
 <script type="text/javascript">
 
 function checkNonUser(seq){
@@ -200,22 +257,16 @@ function checkInfo(){
 // 		dataType:"text",
 		success:function(msg){
 			console.log(msg);
-			
 			if(msg == 'true'){
 				location.href="./selNonUserDetail.do?seq="+seq;
 			} else{
 				alert("입력하신 정보가 일치하지 않습니다.")
 			}
-			
-			
 		},
 		error:function(){
 			alert("잘못된 요청입니다.")
 		}
-		
 	})
-	
 }
-
 </script>
 <%@include file="/footer.jsp" %>

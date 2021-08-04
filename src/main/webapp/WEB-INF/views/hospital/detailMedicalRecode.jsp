@@ -7,9 +7,7 @@
 <script type="text/javascript" src="${path}/js/hospital.js" ></script>
 
 <div class="container">
-
 	<br><br>
-	
 		<div class="row fs-3 my-2">
 			<div class="col">진료기록 상세보기</div>
 			<div class="col d-grid gap-2 d-md-flex justify-content-md-end">	
