@@ -24,22 +24,98 @@
 				location.href='${path}/admin/adminConsole.do';
 			</script>
 		</c:when>
-		<c:otherwise>
-
-			<div class="main-box my-3">
-				<div class="background-01 row" style="background-image: url(${path}/img/background01.jpg);">
-					<div>
-						PETCARE<br>
-						아이들의<br>
-						건강을<br>
-						지켜주세요
+	</c:choose>	
+		
+		<c:if test="${sessionScope.member.usertype ne 'ROLE_USER'}">	
+		<!-- 사용자가 아닐경우(비회원, 시스템관리자, 병원관계자)로 구분하긴했는데 시스템관리자랑 병원관계자는 넣을거 생각하고 구분하면 좋긴할듯 -->
+			<div class="main-box my-5">
+				<div id="carouselExampleFade" class="carousel slide carousel-fade" data-bs-ride="carousel">
+					<div class="carousel-inner" style="height: 600px;">
+						<div class="background-01 carousel-item active" style="background-image: url(${path}/img/background01.jpg);">
+							<div class="m-3">
+								PETCARE로<br>
+								아이들의<br>
+								건강을<br>
+								지켜주세요
+							</div>
+						</div>
+						<div class="background-01 carousel-item" style="background-image: url(${path}/img/background03.jpg);">
+							<div class="m-3">
+								반려동물의<br>
+								건강을<br>
+								체크할 수<br>
+								있습니다
+							</div>
+						</div>
+						<div class="background-01 carousel-item" style="background-image: url(${path}/img/background02.jpg);">
+							<div class="m-3 float-end">
+								PETCARE와<br>
+								함께하는 행복한 내일
+							</div>
+						</div>
+					</div>
+					<button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="prev">
+						<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+						<span class="visually-hidden">Previous</span>
+					</button>
+					<button class="carousel-control-next" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="next">
+						<span class="carousel-control-next-icon" aria-hidden="true"></span>
+						<span class="visually-hidden">Next</span>
+					</button>
+				</div>
+			</div>
+		</c:if>
+	
+	
+	<c:if test="${sessionScope.member.usertype eq 'ROLE_USER'}">
+	<!-- 사용자가 로그인 했을 경우 -->
+		<div class="main-box my-5">
+			<div class="row">
+				<div class="col p-0">		
+					<div class="card">
+  						<div class="card-body">
+  							<div class="fw-bold fs-3">병원찾기</div>
+   							 병원찾기 넣을 곳
+  						</div>
 					</div>
 				</div>
-				<div class="row">반려동물의 건강을 체크할 수 있습니다.</div>
+				<div class="col p-0">
+					<div class="card">
+  						<div class="card-body">
+  							<div class="fw-bold fs-3">내 반려동물</div>
+   							 내 반려동물 넣을 곳
+  						</div>
+					</div>
+				</div>
 			</div>
-
-		</c:otherwise>
-	</c:choose>
+			<div class="row">
+				<div class="col p-0">
+					<div class="card">
+  						<div class="card-body">
+  							<div class="fw-bold fs-3">예약내역</div>
+   							 예약내역 넣을 곳
+  						</div>
+					</div>
+				</div>
+				<div class="col p-0">
+					<div class="card">
+  						<div class="card-body">
+  							<div class="fw-bold fs-3">건강수첩</div>
+   							건강수첩 넣을 곳
+  						</div>
+					</div>
+				</div>
+				<div class="col p-0">
+					<div class="card">
+  						<div class="card-body">
+  							<div class="fw-bold fs-3">진료내역</div>
+   							 진료내역 넣을 곳
+  						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</c:if>
 	
 <%@ include file="/footer.jsp" %>
 
