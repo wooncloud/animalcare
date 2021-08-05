@@ -21,17 +21,17 @@
       <span id="renderRange" class="render-range" style="padding-left:250px;"></span>
           <span id="menu-navi">
         <button type="button" class="btn btn-default btn-sm move-today" data-action="move-today">Today</button>
-        <button type="button" class="btn btn-default btn-sm move-day" data-action="move-prev">
+        <button type="button" class="btn btn-default btn-sm move-day" data-action="move-prev" value="이전달">
           <i class="calendar-icon ic-arrow-line-left" data-action="move-prev"></i>
         </button>
         <button type="button" class="btn btn-default btn-sm move-day" data-action="move-next">
           <i class="calendar-icon ic-arrow-line-right" data-action="move-next"></i>
         </button>
       </span>
-        <h3 style="margin-left: 470px;">${searchInfo.hospital_name} 예약 현황</h3>
+        <h3 style="margin-left: 450px;">${searchInfo.hospital_name} 예약 현황</h3>
     </div>
-     <div style="height: 200px">
-   	 	<div id="calendar" style="width: 800px; top:200px; margin: 0 auto;">
+     <div style="height: 100px">
+   	 	<div id="calendar" style="width: 800px; height:500px; top:200px; margin: 0 auto;">
    	 </div>
     </div>
 </div>	
@@ -95,7 +95,7 @@
 					  </div>
 					  <div class="form-group">
 						 <label for="phone">전화번호:</label>
-						 <input type="text" class="form-control" id="phone" name="phone" value="010-1234-0000" readonly="readonly">
+						 <input type="text" class="form-control" id="phone" name="phone" value="${phone}" readonly="readonly">
 					  </div>
 					 <input type="hidden" id="hospital_seq" name="hospital_seq" value="${searchInfo.hospital_seq}">	  
 	    </form>
@@ -108,6 +108,8 @@
 		  </div>
 	   </div>
 	</div>
+	 <input type="hidden" id="hospitalName" value="${searchInfo.hospital_name}" >
+	 <input type="hidden" id="phone" value="${phone}" >
 <script type="text/javascript" class="code-js">
 
 var cal = new tui.Calendar('#calendar', {
@@ -162,7 +164,7 @@ var cal = new tui.Calendar('#calendar', {
 			 insertModal.show();
 		 } else if(seldate <= today){
 			  Swal.fire("알림", "해당일은 예약이 가능한 날짜가 아닙니다.", "warning");
-		 } else if(calDay > 20){
+		 } else if(seldate - today > 20){
 			 Swal.fire("알림", "해당일은 예약이 가능한 날짜가 아닙니다.", "warning");
 		 }
 		 
@@ -172,7 +174,7 @@ var cal = new tui.Calendar('#calendar', {
 	});
 
 </script>
- <script src="${path}/calendarjs/default.js"></script>
+ <script src="${path}/js/calendarjs/default.js"></script>
  <script>
  window.onload = function(){
 	 setCal.init();

@@ -207,14 +207,13 @@ public class Util {
 	}
 	
 	
-	public static String sendReservation(ReservationDto dto) {
-		return smsReservation(dto);
+	public static void sendReservation(ReservationDto dto) {
+		smsReservation(dto);
 	}
 	
-	private static String smsReservation(ReservationDto dto) {
+	private static void smsReservation(ReservationDto dto) {
 		Util util = new Util();
 		Properties prop = util.readProperties("properties/sms.properties");
-		String numStr = randomNum(6);
 		String phoneNumber = dto.getPhone().replace("-", "");
 		String text = "[PET CARE] "+dto.getName()+"님"+dto.getReservedate()+""+dto.getReservetype()+"예약이 완료되었습니다.";
 		String api_key = prop.getProperty("key");
@@ -239,6 +238,5 @@ public class Util {
 			System.out.println(e.getCode());
 		}
 		
-		return numStr;
 	}
 }

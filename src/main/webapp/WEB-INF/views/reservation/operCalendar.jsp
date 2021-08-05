@@ -9,7 +9,7 @@
   <script src="https://uicdn.toast.com/tui.date-picker/v4.0.3/tui-date-picker.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
   <script src="https://uicdn.toast.com/tui-calendar/latest/tui-calendar.js"></script>
-  <script src="${path}/calendarjs/calendars.js"></script>
+  <script src="${path}/js/calendarjs/calendars.js"></script>
   <script src="${path}/js/mycalendar.js"></script>
  <!-- calendar -->
  <link rel="stylesheet" type="text/css" href="https://uicdn.toast.com/tui.time-picker/latest/tui-time-picker.css">
@@ -18,14 +18,14 @@
  <link rel="stylesheet" type="text/css" href="${path}/css/calendarcss/default.css">
  <div class="code-html">
     <div id="menu" style="height: 700px;">
-      <span id="renderRange" class="render-range" style="padding-left:250px;"></span>
+      <span id="renderRange" class="render-range" style="padding-left:200px;"></span>
           <span id="menu-navi">
         <button type="button" class="btn btn-default btn-sm move-today" data-action="move-today">Today</button>
         <button type="button" class="btn btn-default btn-sm move-day" data-action="move-prev">
-          <i class="calendar-icon ic-arrow-line-left" data-action="move-prev"></i>
+          <i class="calendar-icon ic-arrow-line-left" data-action="move-prev">&lg;</i>
         </button>
         <button type="button" class="btn btn-default btn-sm move-day" data-action="move-next">
-          <i class="calendar-icon ic-arrow-line-right" data-action="move-next"></i>
+          <i class="calendar-icon ic-arrow-line-right" data-action="move-next">&gt;</i>
         </button>
       </span>
       
@@ -34,7 +34,7 @@
 		</div>
     </div>
     <div style="height: 200px">
-	    <div id="calendar" style="width: 800px; top:200px; margin: 0 auto;">
+	    <div id="calendar" style="width: 800px; height:500px; top:200px; margin: 0 auto;">
 	    <input type="hidden" name="hospital_seq" id="hospital_seq" value="${hospital_seq}">
 	    </div>
     </div>
@@ -94,7 +94,7 @@ var cal = new tui.Calendar('#calendar', {
 	}
 
 </script>
-<script src="${path}/calendarjs/default.js"></script>
+<script src="${path}/js/calendarjs/default.js"></script>
  <script>
  window.onload = function(){
 	 setCal.init();

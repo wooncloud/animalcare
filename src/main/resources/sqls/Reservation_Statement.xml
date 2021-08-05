@@ -19,7 +19,7 @@
 	<select id="getUserPet" parameterType="java.util.Map" resultType="java.lang.String">
 	SELECT NAME
 		FROM PETINFO p 
-		WHERE USER_EMAIL =#{user_email}
+		WHERE USER_EMAIL =#{user_email} AND DELFLAG='N'
 	
 	</select>
 	<!-- 사용자 예약 목록 조회 -->
@@ -57,9 +57,9 @@
 	
 	<!-- 사용자 반려 상세 조회 -->
 	<select id="userRejectDetail" parameterType="java.util.Map" resultType="ReservationDto">
-	SELECT SEQ, r1.USER_EAMIL ,(SELECT CODENAME FROM TYPECODE t  WHERE CODEID =r1.RESERVETYPE) AS RESERVETYPE ,TO_CHAR(r1.RESERVEDATE,'YYYY-MM-DD')  AS RESERVEDATE ,r1.RESERVETIME , r1.PET_NAME ,r1.PAYNUM ,r1.STATUS, h.NAME ,r1.COMMNET ,h.ADDRESS1 
+	SELECT SEQ, r1.USER_EMAIL ,(SELECT CODENAME FROM TYPECODE t  WHERE CODEID =r1.RESERVETYPE) AS RESERVETYPE ,TO_CHAR(r1.RESERVEDATE,'YYYY-MM-DD')  AS RESERVEDATE ,r1.RESERVETIME , r1.PET_NAME ,r1.PAYNUM ,r1.STATUS, h.NAME ,r1.COMMNET ,h.ADDRESS1 
         FROM HOSPITALINFO h JOIN
-                        (SELECT r.RESERVETYPE , r.RESERVEDATE ,r.RESERVETIME , r.PET_NAME ,r.PAYNUM ,r.STATUS, r.COMMNET ,r.HOSPITAL_SEQ 
+                        (SELECT r.RESERVETYPE , r.RESERVEDATE ,r.RESERVETIME , r.PET_NAME ,r.PAYNUM ,r.STATUS, r.COMMNET ,r.HOSPITAL_SEQ, r.USER_EMAIL 
                                 FROM RESERVATION r 
                                 WHERE r.USER_EMAIL =#{user_email}
                                 AND r.STATUS ='R'
@@ -68,9 +68,9 @@
 	</select>
 
 	<select id="userAcceptDetail" parameterType="java.util.Map" resultType="ReservationDto">
-	SELECT SEQ, r1.USER_EAMIL ,(SELECT CODENAME FROM TYPECODE t  WHERE CODEID =r1.RESERVETYPE) AS RESERVETYPE ,TO_CHAR(r1.RESERVEDATE,'YYYY-MM-DD')  AS RESERVEDATE ,r1.RESERVETIME , r1.PET_NAME ,r1.PAYNUM ,r1.STATUS, h.NAME ,r1.COMMNET ,h.ADDRESS1 
+	SELECT SEQ, r1.USER_EMAIL ,(SELECT CODENAME FROM TYPECODE t  WHERE CODEID =r1.RESERVETYPE) AS RESERVETYPE ,TO_CHAR(r1.RESERVEDATE,'YYYY-MM-DD')  AS RESERVEDATE ,r1.RESERVETIME , r1.PET_NAME ,r1.PAYNUM ,r1.STATUS, h.NAME ,r1.COMMNET ,h.ADDRESS1 
         FROM HOSPITALINFO h JOIN
-                        (SELECT r.RESERVETYPE , r.RESERVEDATE ,r.RESERVETIME , r.PET_NAME ,r.PAYNUM ,r.STATUS, r.COMMNET ,r.HOSPITAL_SEQ 
+                        (SELECT r.RESERVETYPE , r.RESERVEDATE ,r.RESERVETIME , r.PET_NAME ,r.PAYNUM ,r.STATUS, r.COMMNET ,r.HOSPITAL_SEQ, r.USER_EMAIL
                                 FROM RESERVATION r 
                                 WHERE r.USER_EMAIL =#{user_email}
                                 AND r.STATUS ='A'
@@ -193,7 +193,7 @@ SELECT r1.SEQ, r1.HOSPITAL_SEQ ,r1.USER_EMAIL, (SELECT CODENAME FROM TYPECODE t 
 	<update id="acceptReserve" parameterType="java.util.Map">
 	UPDATE RESERVATION 
         SET STATUS = 'A'
-        WHERE SEQ=#{seq}
+        WHERE SEQ = #{seq}
 	
 	</update>
 	

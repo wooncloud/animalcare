@@ -1,6 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@include file="/header.jsp" %>
 <script type="text/javascript" src="${path}/js/mycalendar.js" ></script>
+	<div class="row fs-3 my-2">
+			<div class="col d-grid gap-2 d-md-flex justify-content-md-end">	
+				<input type="button" class="btn btn-outline-primary" value="이전페이지" onclick="javascript:history.back(-1);">
+			</div>
+		</div>
 <div class="card">
    <div class="card-body">
       <h5 class="card-title my-3">예약 상세 내역</h5>
@@ -31,7 +36,9 @@
             <h6 class="card-subtitle mb-2 text-muted">예약시간</h6>
          </div>
           <div class="col-3">
-            <p class="card-text">${reserveDto.reservetime}</p>
+            <p class="card-text">
+            ${fn:substring(reserveDto.reservetime,0,2)}:${fn:substring(reserveDto.reservetime,2,4)}~${fn:substring(reserveDto.reservetime,4,6)}:${fn:substring(reserveDto.reservetime,6,8)}
+            </p>
          </div>
       </div>
       <div class="row my-2">
@@ -88,11 +95,8 @@
 
 <c:if test="${reserveDto.status == 'S' or reserveDto.status =='A' }">
    <button name="cancelBtn" class="btn btn-primary" onclick="userCancelReservation('${reserveDto.seq}','${reserveDto.status}');">취소</button>
-   <button class="btn btn-primary" onclick="javascript:history.back(-1);">목록</button>
 </c:if>
-<c:if test="${reserveDto.status == 'R'or reserveDto.status == 'C'}">
-<button class="btn btn-primary" onclick="javascript:history.back(-1);">목록</button>
-</c:if>
+
 <script type="text/javascript">
 window.onload = function(){
 	
