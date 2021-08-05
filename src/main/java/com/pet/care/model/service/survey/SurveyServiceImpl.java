@@ -119,18 +119,6 @@ public class SurveyServiceImpl implements ISurveyService {
 	}
 
 	@Override
-	public List<SurveyDto> ongoingDateCheck() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<SurveyDto> outOfDateCheck() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public List<SurveyDto> surveyResultList(Map<String, Object> map) {
 		logger.info("SurveyServiceImpl : surveyResultList 설문 결과 리스트 - {}", map);
 		return iDao.surveyResultList(map); 

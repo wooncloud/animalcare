@@ -42,12 +42,6 @@ public interface ISurveyService {
 	//(사용자) 날짜 지난 설문 폼 리스트
 	public List<SurveyDto> outOfDateSurvey(Map<String, Object> map);
 	
-	//(사용자) 진행중인 설문 날짜 체크
-	public List<SurveyDto> ongoingDateCheck();
-	
-	//(사용자) 진행중인 설문 날짜 체크
-	public List<SurveyDto> outOfDateCheck();
-	
 	//설문 결과 리스트
 	public List<SurveyDto> surveyResultList(Map<String, Object> map);
 	//설문 결과 리스트 상세

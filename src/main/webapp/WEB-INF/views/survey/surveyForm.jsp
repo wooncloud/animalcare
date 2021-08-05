@@ -16,6 +16,7 @@
 	    </form>
     </div>
 </div>
+<button class="btn btn-primary" onclick="javascript:history.back(-1);">목록</button>
 
 <div class="modal fade" id="dateModal" tabindex="-1" aria-hidden="true">
 	<div class="modal-dialog">
@@ -31,7 +32,7 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-primary" onclick="updateDateForm()">Save</button>
+				<button type="button" class="btn btn-primary" onclick="checkDateForm()">Save</button>
 			</div>
 		</div>
 	</div>
@@ -150,21 +151,20 @@
 		console.log(JSON.stringify(question));
 	}
 	
+	//폼 초기화
 	function resetForm(){
 		 $("form>#formQuestion").empty();
 		 count =0;
 	}
 	
-	//수정필요!! updateDateForm()안에 updateDateForm()가 또있음
-	function updateDateForm(){
-		var frm2 = document.forms[1];
+	//배포날짜 설정 유효값
+	function checkDateForm(){
 		var startdate = document.getElementsByName("startdate").value;
 		var enddate = document.getElementsByName("enddate").value;
 		
 		if(typeof startdate != "" && typeof enddate != ""){
-			updateDateForm();////////////////////////////////////////////////////////
+			updateDateForm();
 			console.log("날짜 업데이트 완료");
-			frm2.submit();
 		}else if(startdate==""){
  			alert("설문 시작일을 선택해주세요");
 		}else if(enddate==""){
@@ -173,6 +173,12 @@
 			alert("날짜를 입력하거나 취소버튼을 누르세요");
 		}
 		
+	}
+	
+	//배포날짜 설정 submit
+	function updateDateForm(){
+		var frm2 = document.forms[1];
+		frm2.submit();
 	}
 	
 	function compareStartDate(){
@@ -187,7 +193,7 @@
 // 			data: "startdate="+startdate+"&seq="+seq,
 			success:function(msg){
 				if(msg=="true"){
-					alert("현재 날짜보다 이후로 ");
+					alert("현재 날짜보다 이후로 설정 / 이미 해당날짜에 배포된 설문이 존재합니다 ");
 				}
 				console.log(msg);
 			},
@@ -209,12 +215,12 @@
 // 			data: "enddate="+enddate+"&seq="+seq,
 			success:function(msg){
 				if(msg=="true"){
-					alert("시작일 보다 이후로 ");
+					alert("응답기간 시작일 보다 이후로 설정해주세요");
 				}
 				console.log(msg);
 			},
 			error:function(){
-				alert("wkfahtehalsdf")
+				alert("에러 발생")
 			}
 		})
 		

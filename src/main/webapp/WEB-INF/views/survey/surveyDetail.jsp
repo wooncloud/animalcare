@@ -56,7 +56,7 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-primary" onclick="updateDateForm()">Save</button>
+				<button type="button" class="btn btn-primary" onclick="checkDateForm()">Save</button>
 			</div>
 		</div>
 	</div>
@@ -117,12 +117,31 @@ window.onload = function(){
 
 }
 
-	var seq = ${detail.seq};
+//배포날짜 설정 유효값
+function checkDateForm(){
+	var startdate = document.getElementsByName("startdate").value;
+	var enddate = document.getElementsByName("enddate").value;
+	
+	if(typeof startdate != "" && typeof enddate != ""){
+		updateDateForm();
+		console.log("날짜 업데이트 완료");
+	}else if(startdate==""){
+			alert("설문 시작일을 선택해주세요");
+	}else if(enddate==""){
+		alert("설문 마감일을 선택해주세요");
+	}else{
+		alert("날짜를 입력하거나 취소버튼을 누르세요");
+	}
+}
+
+//배포날짜 설정 submit
+var seq = ${detail.seq};	
 function updateDateForm(){
 	var frm = document.forms[0];
 	
 	var emt = document.createElement("div");
 	emt.innerHTML = "<input type='hidden' name='seq' value='"+seq+"'>";
+	
 	frm.append(emt);
 	frm.submit();
 }
@@ -139,7 +158,7 @@ function compareStartDate(){
 //			data: "startdate="+startdate+"&seq="+seq,
 		success:function(msg){
 			if(msg=="true"){
-				alert("현재 날짜보다 이후로 ");
+				alert("현재 날짜보다 이후로 설정 / 이미 해당날짜에 배포된 설문이 존재합니다 ");
 			}
 			console.log(msg);
 		},
@@ -161,22 +180,16 @@ function compareEndDate(){
 //			data: "enddate="+enddate+"&seq="+seq,
 		success:function(msg){
 			if(msg=="true"){
-				alert("시작일 보다 이후로 ");
+				alert("응답기간 시작일 보다 이후로 설정해주세요");
 			}
 			console.log(msg);
 		},
 		error:function(){
-			alert("wkfahtehalsdf")
+			alert("에러 발생")
 		}
 	})
 	
 }
-
-
-
-
-
-
 
 
 
@@ -260,7 +273,7 @@ function submitForm(){
 				location.href="./userSurveyList.do";//사용자 리스트로 이동
 			}else{
 				alert("이미 작성한 설문입니다. 설문 리스트로 돌아갑니다");
-				location.href="./userSurveyList.do";//에러페이지
+				location.href="./userSurveyList.do";
 			}
 		},
 		error : function(msg2){
