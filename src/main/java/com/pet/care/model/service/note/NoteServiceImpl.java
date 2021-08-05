@@ -27,8 +27,12 @@ public class NoteServiceImpl implements INoteService {
 
 	@Override
 	public NoteDto noteDetail(int seq) {
-		// TODO Auto-generated method stub
 		return iNoteDao.noteDetail(seq);
+	}
+
+	@Override
+	public boolean insertNote(NoteDto ndto) {
+		return iNoteDao.insertNote(ndto);
 	}
 
 

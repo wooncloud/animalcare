@@ -15,4 +15,7 @@ public interface INoteService {
 	
 	//건강수첩 상세조회
 	public NoteDto noteDetail(int seq);
+	
+	//건강수첩 등록
+	public boolean insertNote(NoteDto ndto);
 }

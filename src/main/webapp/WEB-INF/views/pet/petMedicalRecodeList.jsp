@@ -49,10 +49,15 @@ $(function(){
 					console.log(typeof(result));
 					console.log(result);
 					$("#notelist").text("");
-					$("#notelist").append("<div><h2>"+result.treatdate/(24*60*60)+"</h2></div>");
+					$("#notelist").append("<div>");
+					$("#notelist").append("<h2>"+"이름 :"+result.userdto[0].name+"</h2>");
+					$("#notelist").append("<h2>"+"병원명 :"+result.hospitalinfodto[0].name+"</h2>");
+					$("#notelist").append("<h2>"+"증상 :"+result.symptom+"</h2>");
+					$("#notelist").append("<h2>"+"진료내용 :"+result.treatment+"</h2>");
+					$("#notelist").append("<h2>"+"처방 :"+result.prescription+"</h2>");
 					
+					$("#notelist").append("</div>");
 					
-					$("#notelist").append("<div onclick='modal("+detailRecodeJson.seq+")'>"+detailRecodeJson.title+"</div>");
 						
 					
 				},

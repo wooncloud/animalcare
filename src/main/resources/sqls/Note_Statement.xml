@@ -24,8 +24,7 @@
 	SELECT SEQ , TITLE ,REGDATE, PHOTO 
         FROM HEALTHNOTE h 
         LEFT OUTER JOIN PETINFO p ON h.PET_ID = p.ID 
-        WHERE p.USER_EMAIL =#{email}
-        AND h.PET_ID = (SELECT p.ID FROM PETINFO p WHERE p.NAME=#{name})
+        WHERE h.PET_ID = (SELECT p.ID FROM PETINFO p WHERE p.NAME=#{name} AND p.USER_EMAIL =#{email})
         ORDER BY h.REGDATE
 </select>
 
@@ -35,8 +34,7 @@
 	SELECT SEQ , TITLE ,REGDATE, PHOTO 
         FROM HEALTHNOTE h 
         LEFT OUTER JOIN PETINFO p ON h.PET_ID = p.ID 
-    WHERE p.USER_EMAIL =#{email}
-    AND h.PET_ID = (SELECT p.ID FROM PETINFO p WHERE p.NAME=#{name})
+    WHERE h.PET_ID = (SELECT p.ID FROM PETINFO p WHERE p.NAME=#{name} AND p.USER_EMAIL =#{email})
         AND h.REGDATE >TO_DATE(#{seldate},'YYYY-MM-DD')
     AND h.REGDATE <TO_DATE(#{seldate},'YYYY-MM-DD')+1
 ]]>
@@ -49,6 +47,15 @@
         FROM HEALTHNOTE h 
         LEFT OUTER JOIN PETINFO p  ON h.PET_ID = p.ID 
         WHERE h.SEQ =#{seq}
+</select>
+
+<!-- 건강수첩 등록 -->
+<select id="insertNote" parameterType="NoteDto">
+	INSERT INTO HEALTHNOTE
+        (SEQ, PET_ID, TITLE, 
+        CONTENT, PHOTO, DELFLAG, REGDATE, NAME)
+	VALUES(HEALTHNOTE_SEQ.NEXTVAL, #{pet_id}, #{title}, 
+        #{content}, #{photo}, 'N', #{regdate}, #{name})
 </select>
 
 </mapper>
