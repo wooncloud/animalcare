@@ -179,7 +179,7 @@
 						 <label for="phone">전화번호:</label>
 						 <input type="text" class="form-control" id="phone" name="phone" value="${hospitalReserveDetail.phone}" readonly="readonly">
 					  </div>
-					  <input type="hidden" value="${hospitalReserveDetail.seq}" name="seq" id="seq">
+					  <input type="hidden" value="${hospitalReserveDetail.hospital_seq}" name="hospital_seq" id="hospital_seq">
 	    </form>
 				</div>
 			 </div>

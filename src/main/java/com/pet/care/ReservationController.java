@@ -68,7 +68,7 @@ public class ReservationController {
 		
 		String user_email = mDto.getEmail();//세션 이메일
 		UserDto dto = uService.detailUser(user_email);//세션 이메일로
-		String phone = dto.getPhone();// 유저 핸드폰 번호
+		
 		map.put("user_email", user_email);
 		List<String>petLists = rService.getUserPet(map);
 	    model.addAttribute("userPet",petLists);
@@ -76,9 +76,11 @@ public class ReservationController {
 		int hospital_seq = hService.findSeq(user_email);
 		model.addAttribute("hospital_seq",hospital_seq);
 		model.addAttribute("searchInfo",map);
-		model.addAttribute("phone",phone);
+		
 		
 		if(usertype.equals("ROLE_USER")) {	
+			String phone = dto.getPhone();// 유저 핸드폰 번호
+			model.addAttribute("phone",phone);
 			return "reservation/userCalendar";
 			
 		} 

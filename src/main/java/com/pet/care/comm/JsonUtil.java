@@ -85,13 +85,9 @@ public class JsonUtil {
 			JSONObject j = new JSONObject();
 			j.put("id", String.valueOf(r.getSeq()));
 			j.put("calendarId", "예약완료");
-			j.put("title", r.getReservetype()+"/"+r.getReservetime().substring(0,2)+":"+r.getReservetime().substring(2,4)); // 제목 어떻게 할지 정해야 함.
+			j.put("title", r.getReservetype()+"/"+r.getReservetime().substring(0,2)+":"+r.getReservetime().substring(2,4));
 			j.put("start",r.getReservedate()+"T"+ r.getReservetime().substring(0,2)+":"+r.getReservetime().substring(2,4)+":00");
-//			SimpleDateFormat rReserve = new SimpleDateFormat("YYYY-MM-DD HH:mm:ss");
-//			String reserve = rReserve.format(r.getReservedate()+r.getReservetime());
-//			j.put("start", reserve);
 			j.put("end", r.getReservedate()+"T"+ r.getReservetime().substring(4,6)+":"+r.getReservetime().substring(6,8)+":00");
-			// 예약 상태에 따른 다른 색깔
 			j.put("category", "time");
 			j.put("color", "#ffffff");
 			j.put("bgColor", "#28B463");
