@@ -35,9 +35,11 @@ import com.pet.care.dto.HospitalScheduleDto;
 import com.pet.care.dto.MemberDto;
 import com.pet.care.dto.PageDto;
 import com.pet.care.dto.ReservationDto;
+import com.pet.care.dto.UserDto;
 import com.pet.care.model.service.hospital.IHospitalInfoService;
 import com.pet.care.model.service.hospital.IHospitalScheduleService;
 import com.pet.care.model.service.reservation.IReservationService;
+import com.pet.care.model.service.user.IUserService;
 
 @Controller
 @RequestMapping("/reservation")
@@ -49,6 +51,9 @@ public class ReservationController {
 	@Autowired
 	private IHospitalScheduleService hService;
 	
+	@Autowired
+	private IUserService uService;
+	
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	/*
@@ -59,27 +64,27 @@ public class ReservationController {
 		logger.info("ReservationController Calendar 달력 이동 {} ", map);
 		MemberDto mDto = (MemberDto)session.getAttribute("member");
 		String usertype = mDto.getUsertype();
-		String user_email = mDto.getEmail();
+			
 		
-		//사용자
+		String user_email = mDto.getEmail();//세션 이메일
+		UserDto dto = uService.detailUser(user_email);//세션 이메일로
+		String phone = dto.getPhone();// 유저 핸드폰 번호
 		map.put("user_email", user_email);
-		model.addAttribute("searchInfo",map);
 		List<String>petLists = rService.getUserPet(map);
-	    //반려 동물 목록
 	    model.addAttribute("userPet",petLists);
-	    
-	    
-	    //병원 관계자
-	    int hospital_seq = hService.findSeq(user_email);
-	    model.addAttribute("hospital_seq",hospital_seq);
-//	    HospitalJoinDto hDto = hiService.detailHospital(hospital_seq);
-//	    model.addAttribute("hospital_info",hDto);
-	    
-		if(usertype.equals("ROLE_USER")) {			
-			return "reservation/userCalendar";
-		}
-			return "reservation/operCalendar";
+
+		int hospital_seq = hService.findSeq(user_email);
+		model.addAttribute("hospital_seq",hospital_seq);
+		model.addAttribute("searchInfo",map);
+		model.addAttribute("phone",phone);
 		
+		if(usertype.equals("ROLE_USER")) {	
+			return "reservation/userCalendar";
+			
+		} 
+		 
+		 	return "reservation/operCalendar";
+
 	}
 
 	/*
@@ -90,12 +95,10 @@ public class ReservationController {
 	@ResponseBody
 	public String Calendar(String hospital_seq, Model model) {
 		logger.info("ReservationController Calendar 달력 {} ",hospital_seq );
-		System.out.println(hospital_seq);
 		
 		//세션
 		Map<String, Object> rMap = new HashMap<String, Object>();
 		rMap.put("hospital_seq",hospital_seq);
-		System.out.println("병원번호======================"+ hospital_seq);
 		
 		Map<String, Object>hMap = new HashMap<String, Object>();
 		hMap.put("hospital_seq", hospital_seq);
@@ -492,14 +495,15 @@ public class ReservationController {
 	 * 병원 관계자 예약 확정
 	 */
 	@RequestMapping(value = "/acceptReserve.do", method = RequestMethod.GET)
-	public String acceptReserve(@RequestParam Map<String, Object>map) {
+	public String acceptReserve(@RequestParam Map<String, Object>map, HttpSession session) {
 		logger.info("ReservationController acceptReserve 병원 관계자 예약 확정 {}", map );
 		
 		String seq = (String)map.get("seq");
 		boolean isc = rService.acceptReserve(map);
-//		ReservationDto rDto = rService.userAcceptDetail(map);
 		
 		if(isc) {
+//			ReservationDto rDto = rService.userAcceptDetail(map);
+//			System.out.println("받아온 값==========="+rDto);
 //			Util.sendReservation(rDto);
 			return "redirect:/reservation/hospitalReserveDetail.do?seq="+seq;
 		}else {
@@ -516,6 +520,7 @@ public class ReservationController {
 		logger.info("ReservationController rejectCommnetReserve 예약 반려 코멘트 업데이트 {}", map );
 		String seq = (String)map.get("seq");
 		String status =(String) map.get("status");
+	
 		
 		boolean isc = rService.rejectCommnetReserve(map);
 		
@@ -561,14 +566,14 @@ public class ReservationController {
 
 		
 		String msg = "일요일은 휴무입니다.";
-		String redirectUri = "./moveCalendar.do?hospital_seq="+(map.get("hospital_seq")+"&hospital_name="+map.get("hospital_name)"));
+		String redirectUri = "./moveCalendar.do";
 		
 		model.addAttribute("searchInfo",map);
 		if(isc) {
 			Util.PrintWriterMsg(resp, msg ,redirectUri);
 		}	
 //			model.addAttribute("reservedate",date);
-			return "redirect:/reservation/moveCalendar.do";
+			return "redirect:/reservation/calendar.do";
 //			return "redirect:/reservation/selectdayReserveList.do";
 		
 	}
@@ -580,7 +585,6 @@ public class ReservationController {
 		logger.info("ReservationController checkReservation 예약 중복 확인   {}",map );
 		map.put("hospital_seq", hospital_seq);
 		
-		System.out.println("12312312312312312312"+map);
 		boolean isc = rService.checkReservation(map);
 		
 		String resultIsc = String.valueOf(isc);

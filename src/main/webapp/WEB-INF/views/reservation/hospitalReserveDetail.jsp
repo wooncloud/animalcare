@@ -2,6 +2,12 @@
 <%@include file="/header.jsp" %>
 <script type="text/javascript" src="${path}/js/mycalendar.js" ></script>
 <script type="text/javascript" src="${path}/js/hospital.js" ></script>
+	<div class="row fs-3 my-2">
+			<div class="col">병원 일정 상세보기</div>
+			<div class="col d-grid gap-2 d-md-flex justify-content-md-end">	
+				<input type="button" class="btn btn-outline-primary" value="이전페이지" onclick="javascript:history.back(-1);">
+			</div>
+		</div>
 <div class="card">
    <div class="card-body">
       <h5 class="card-title my-3">병원관계자 예약 상세 내역</h5>
@@ -30,7 +36,9 @@
             <h6 class="card-subtitle mb-2 text-muted">예약시간</h6>
          </div>
           <div class="col-3">
-            <p class="card-text">${hospitalReserveDetail.reservetime}</p>
+            <p class="card-text">
+             ${fn:substring(hospitalReserveDetail.reservetime,0,2)}:${fn:substring(hospitalReserveDetail.reservetime,2,4)}~${fn:substring(hospitalReserveDetail.reservetime,4,6)}:${fn:substring(hospitalReserveDetail.reservetime,6,8)}
+            </p>
          </div>
       </div>
       
@@ -88,15 +96,10 @@
    <button type="button" class="btn btn-primary" id="confirm" onclick="acceptReservation('${hospitalReserveDetail.seq}')">확정</button>
    <button type="button" class="btn btn-primary" id="reject"  data-bs-toggle="modal" data-bs-target="#rejectReservation">반려</button>
    <button type="button" class="btn btn-primary" id="modify1" data-bs-toggle="modal" data-bs-target="#modifyReservation">수정</button>
-   <button type="button" class="btn btn-primary" id="list" onclick="javascript:history.back(-1);">목록</button>
 </c:if>
 <c:if test="${hospitalReserveDetail.status eq 'A'}">
    <button type="button" class="btn btn-primary" id="modify2" data-bs-toggle="modal" data-bs-target="#modifyReservation">수정</button>
     <button type="button" class="btn btn-primary"id="cancel"  onclick="operCancelReservation('${hospitalReserveDetail.seq}','${hospitalReserveDetail.status}','${hospitalReserveDetail.reservedate}')">취소</button>
-   <button type="button" class="btn btn-primary" name="list" onclick="javascript:history.back(-1);">목록</button>
-</c:if>
-<c:if test="${hospitalReserveDetail.status eq 'R' or hospitalReserveDetail.status eq 'C'}">
-   <button type="button" class="btn btn-primary"name="list" onclick="javascript:history.back(-1);">목록</button>
 </c:if>
 
 <!-- 예약 반려 모달 -->

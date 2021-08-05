@@ -5,7 +5,10 @@ function makeReserve(user_email,user_name) {
 		var reservetype = document.getElementsByName("reservetype")[0].value;
 		var reservetime = document.getElementsByName("reservetime")[0].value;
 		var petname = document.getElementsByName("pet_name")[0].value;
-
+		var user_phone = document.getElementById("phone").value;
+		var hospital_Name = document.getElementById("hospitalName").value;
+		console.log(hospital_Name)
+		console.log(user_phone)
 		if (reservetype == "default") {
 			Swal.fire("알림", "예약 종류를 선택해주세요.", "warning");
 		} else if (petname == "default") {
@@ -15,9 +18,9 @@ function makeReserve(user_email,user_name) {
 		} else {
 			var email = user_email; //ex) ${userInfo.email};
 			var name = user_name; //ex) ${userInfo.name};
-			var phone = '010-1234-1111'; //ex) ${userInfo.phone};
+			var phone = user_phone; //ex) ${userInfo.phone};
 // 			var address = '서울특별시 금천구'; //ex) ${userInfo.address};
-			var hospitalName = 'CDC 동물병원 '; //ex) ${hospitalInfo.name};
+			var hospitalName = hospital_Name; //ex) ${hospitalInfo.name};
 
 			console.log('왜 안될까');
 			var IMP = window.IMP; // 생략가능
@@ -96,7 +99,7 @@ function acceptReservation(seq){
 			cancelButtonText: '취소',
 		}).then((result) => {
 		if (result.isConfirmed) {
-			  location.href="./acceptReserve.do?seq="+seq+"&status="+status;
+			  location.href="./acceptReserve.do?seq="+seq;
 		}
 		});
 

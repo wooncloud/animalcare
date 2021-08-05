@@ -81,7 +81,9 @@ a{
 							<p class="card-text">${list.reservedate}</p>
 						</div>
 						<div class="col-2">
-							<p class="card-text">${list.reservetime}</p>
+							<p class="card-text">
+							${fn:substring(list.reservetime,0,2)}:${fn:substring(list.reservetime,2,4)}~${fn:substring(list.reservetime,4,6)}:${fn:substring(list.reservetime,6,8)}
+							</p>
 						</div>
 						<div class="col-2">
 								<c:if test="${list.status eq 'S'}">
