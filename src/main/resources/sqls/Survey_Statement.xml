@@ -25,7 +25,7 @@ FROM (
 	ORDER BY REGDATE DESC)
 </select>
 
-<!-- 관리자 설문 상세 --><!-- 문제 발생 :::::: HOSPITAL_SEQ가 관리자는 필요가 없음 그냥 '0'으로 입력되던지 해야할듯 ㅡㅡ -->
+<!-- 관리자 설문 상세 -->
 <select id="surveyDetail" parameterType="java.util.Map" resultType="SurveyDto">
 	SELECT SEQ,TITLE, QUESTION, TO_CHAR(REGDATE,'yyyy-mm-dd') AS REGDATE, TO_CHAR(STARTDATE,'yyyy-mm-dd') AS STARTDATE, TO_CHAR(ENDDATE,'yyyy-mm-dd') AS ENDDATE, SURVEYFLAG, DELFLAG
 		FROM SURVEY
@@ -45,13 +45,7 @@ FROM (
 </select>
 
 
-
-
-
-
-
-
-<!--  -->
+<!-- 설문 등록 -->
 <insert id="insertSurveyForm" parameterType="java.util.Map">
 	<selectKey keyProperty="seq" resultType="java.lang.Integer" order="BEFORE">
 			SELECT SURVEY_SEQ.NEXTVAL AS SEQ FROM DUAL
@@ -68,6 +62,7 @@ FROM (
 		WHERE SEQ=#{seq}
 </update>
 
+<!-- 설문 다중삭제 -->
 <update id="delflagForm" parameterType="java.util.Map">
 	UPDATE SURVEY SET DELFLAG ='Y'
 		WHERE DELFLAG='N'
@@ -201,18 +196,17 @@ SELECT SEQ, QUESTION, TITLE, HOSPITAL_SEQ, TO_CHAR(STARTDATE ,'yyyy-mm-dd') AS S
 
 
 
-<!-- 아마필요없음 -->
 <select id="ongoingDateCheck" resultType="SurveyDto">
 <![CDATA[SELECT SEQ, QUESTION, TITLE, HOSPITAL_SEQ, TO_CHAR(STARTDATE ,'yyyy-mm-dd') AS STARTDATE , TO_CHAR(ENDDATE,'yyyy-mm-dd') AS ENDDATE, SURVEYFLAG
 		FROM SURVEY s 
 		WHERE DELFLAG = 'N' AND SURVEYFLAG='Y' AND (TO_CHAR(SYSDATE,'yyyy-mm-dd') BETWEEN TO_CHAR(STARTDATE ,'yyyy-mm-dd') AND TO_CHAR(ENDDATE,'yyyy-mm-dd'))]]>
 </select>
+
 <select id="outOfDateCheck" resultType="SurveyDto">
 <![CDATA[SELECT SEQ, QUESTION, TITLE, HOSPITAL_SEQ, TO_CHAR(STARTDATE ,'yyyy-mm-dd') AS STARTDATE , TO_CHAR(ENDDATE,'yyyy-mm-dd') AS ENDDATE, SURVEYFLAG
 		FROM SURVEY s 
 		WHERE DELFLAG = 'N' AND SURVEYFLAG='Y' AND (TO_CHAR(ENDDATE,'yyyy-mm-dd') <= TO_CHAR(SYSDATE,'yyyy-mm-dd'))]]>
 </select>
-
 
 
 <!-- 설문 결과 뿌릴 설문리스트 -->
@@ -223,7 +217,7 @@ SELECT SEQ, QUESTION, TITLE, HOSPITAL_SEQ, TO_CHAR(STARTDATE ,'yyyy-mm-dd') AS S
 	FROM SURVEY s 
 	WHERE DELFLAG = 'N' AND SURVEYFLAG='Y' AND (TO_CHAR(ENDDATE,'yyyy-mm-dd') < TO_CHAR(SYSDATE,'yyyy-mm-dd'))
 )
-WHERE RN BETWEEN 1 AND 5]]>
+WHERE RN BETWEEN #{first} AND #{last}]]>
 </select>
 
 <!-- 설문 결과 뿌릴 설문리스트 (페이징) -->

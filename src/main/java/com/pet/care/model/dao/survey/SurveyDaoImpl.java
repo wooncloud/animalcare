@@ -119,13 +119,12 @@ public class SurveyDaoImpl implements ISurveyDao {
 		return sqlSession.selectList(NS+"outOfDateSurvey", map);
 	}
 
-	//아마 필요 없음ㅠ
 	@Override
 	public List<SurveyDto> ongoingDateCheck() {
 		logger.info("SurveyDaoImpl : ongoingDateCheck (사용자) 진행중인 설문 날짜 체크");
 		return sqlSession.selectList(NS+"ongoingDateCheck");
 	}
-	//이아이도 아마 필요 없음ㅠ
+
 	@Override
 	public List<SurveyDto> outOfDateCheck() {
 		logger.info("SurveyDaoImpl : outOfDateCheck (사용자) 진행중인 설문 날짜 체크");
