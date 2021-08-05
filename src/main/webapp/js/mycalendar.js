@@ -268,8 +268,8 @@ function modifyChk(){
 	console.log(hospital_seq);
 	
 	
-	var frm = document.forms[1];
-	console.log(frm);
+	var frm1 = document.forms[1];
+	console.log(frm1);
 		
 	$.ajax({
 		type:"get",
@@ -279,7 +279,7 @@ function modifyChk(){
 			console.log("왔니"+msg);
 			
 			if(msg=='false'){
-				frm1.submit();
+//				frm1.submit();
 			}else{
 				Swal.fire("알림", "예약이 있습니다. 다른 시간을 선택해주세요", "warning");
 				document.getElementById("modifyReservetime").value=document.getElementById("modifyDefault").value
