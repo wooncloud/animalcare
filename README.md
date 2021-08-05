@@ -38,9 +38,7 @@
 
 # 🏦 아키텍쳐
 
-(예쁜 이미지로 수정 필요)
-
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/b039b99d-302a-473c-9f9c-595a1a07ddad/시스템_아키텍쳐.jpg](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/b039b99d-302a-473c-9f9c-595a1a07ddad/%EC%8B%9C%EC%8A%A4%ED%85%9C_%EC%95%84%ED%82%A4%ED%85%8D%EC%B3%90.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20210803%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20210803T143045Z&X-Amz-Expires=86400&X-Amz-Signature=66814dfedcf7cc53e837549d577ed7c60228caf051cbaa0604c4796151b54f90&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22%25EC%258B%259C%25EC%258A%25A4%25ED%2585%259C_%25EC%2595%2584%25ED%2582%25A4%25ED%2585%258D%25EC%25B3%2590.jpg%22)
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/b039b99d-302a-473c-9f9c-595a1a07ddad/시스템_아키텍쳐.jpg](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/7e9bf4fc-d6aa-4065-a58b-5b39ae3913a4/%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98_f.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20210805%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20210805T055035Z&X-Amz-Expires=86400&X-Amz-Signature=e45816de8ef115b030b59455d7a2a99ae6ca7b9813337631142524f97fcb59c3&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22%25EC%2595%2584%25ED%2582%25A4%25ED%2585%258D%25EC%25B2%2598_f.jpg%22)
 
 # 📚 사용 API
 
