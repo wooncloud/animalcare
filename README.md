@@ -4,15 +4,21 @@
 
 2021.07.02 ~ 2021.08.07
 
-### 🔗 배포 링크
+<!-- ### 🔗 배포 링크 -->
 
-[http://javachips.iptime.org/PetCare/](http://javachips.iptime.org/PetCare/)
+<!-- [http://javachips.iptime.org/PetCare/](http://javachips.iptime.org/PetCare/) -->
 
 ### ⏩ 설명
 
-**구디아카데미 빅데이터UI 3차 팀프로젝트**
+**[TEAM JavaChip Project]**
 
-(설명 더 추가 필요)
+사용자, 병원관계자, 관리자 등 3가지의 유스케이스로 각 회원에 따른 다양한 기능이 제공되는 동물병원 예약 관리 시스템입니다.
+
+사용자의 반려동물 건강을 위해 병원을 예약 및 결제 등록하고, 예약, 진료, 진료 및 처방 결과 등 관리할 수 있습니다.
+
+병원의 일정과 받은 예약을 처리 및 관리를 할 수 있고 사용자의 반려동물에 대한 진료와 처방을 작성할 수 있으며, 사용자 만족도 설문결과를 통해 Needs 파악할 수 있습니다.
+
+관리자는 공통 설문을 작성하고 시스템 문의에 답할 수 있으며 병원관계자 가입에 대한 승인/반려 처리를 할 수 있는 시스템입니다.
 
 # 👨‍💻 팀원
 
@@ -38,12 +44,12 @@
 
 # 🏦 아키텍쳐
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/b039b99d-302a-473c-9f9c-595a1a07ddad/시스템_아키텍쳐.jpg](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/7e9bf4fc-d6aa-4065-a58b-5b39ae3913a4/%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98_f.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20210805%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20210805T055035Z&X-Amz-Expires=86400&X-Amz-Signature=e45816de8ef115b030b59455d7a2a99ae6ca7b9813337631142524f97fcb59c3&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22%25EC%2595%2584%25ED%2582%25A4%25ED%2585%258D%25EC%25B2%2598_f.jpg%22)
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/b039b99d-302a-473c-9f9c-595a1a07ddad/시스템_아키텍쳐.jpg](https://1.bp.blogspot.com/--6z4LrdWdDk/YQ0_TL_aETI/AAAAAAAAG7E/l-pUvPOiGHg59bvyHwcmPXvj8paWxpsPgCLcBGAsYHQ/s1280/%25EC%2595%2584%25ED%2582%25A4%25ED%2585%258D%25EC%25B2%2598_f.jpg)
 
 # 📚 사용 API
 
 - OAuth (Naver, Kakao, Google)
-- Spring Security Password Encoding
+- Spring Security
 - Toast Calender
 - Toast Editor
 - Kakao Map API
